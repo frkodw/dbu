@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Klubmarked — Sponsor &amp; Fundraising</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .p-spon .cat-body { display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start; }
+    .p-spon .cat-title h1 { font-family: var(--font-primary); font-size: 34px; font-weight: 700; margin: 0; }
+    .p-spon .sidebar { display: flex; flex-direction: column; gap: 8px; }
+    .p-spon .side-head { font-family: var(--font-primary); font-size: 13px; font-weight: 600; letter-spacing: 1px; color: var(--muted-foreground); }
+    .p-spon .side-menu { display: flex; flex-direction: column; }
+    .p-spon .side-menu a { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-radius: var(--radius-s); font-size: 14px; color: var(--foreground); }
+    .p-spon .side-menu a:hover { background: var(--background); }
+    .p-spon .side-menu a.is-active { background: var(--accent); color: var(--primary); font-family: var(--font-primary); font-weight: 600; }
+    .p-spon .side-menu a.is-active .icon { width: 16px; height: 16px; }
+    .p-spon .side-menu a .count { font-size: 12px; color: var(--muted-foreground); }
+    .p-spon .side-div { height: 1px; background: var(--border); margin: 8px 0; }
+    .p-spon .filter-bar { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .p-spon .filter-pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: var(--radius-pill); background: var(--card); border: 1px solid var(--border); font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--foreground); cursor: pointer; }
+    .p-spon .filter-pill .icon { width: 16px; height: 16px; color: var(--muted-foreground); }
+    .p-spon .filter-pill--dark { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+    .p-spon .filter-pill--dark .icon { color: #fff; }
+
+    .p-spon .spon-cards { display: flex; flex-direction: column; gap: 20px; margin-top: 20px; }
+    .p-spon .spon-card { display: grid; grid-template-columns: 300px 1fr; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden; }
+    .p-spon .spon-visual { position: relative; display: flex; flex-direction: column; justify-content: flex-end; padding: 28px; min-height: 320px; background-size: cover; background-position: center; }
+    .p-spon .spon-visual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.78) 100%); }
+    .p-spon .spon-company { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 4px; }
+    .p-spon .spon-company b { font-family: var(--font-primary); font-size: 20px; font-weight: 700; color: #fff; }
+    .p-spon .spon-company span { font-size: 13px; color: rgba(255,255,255,.7); }
+    .p-spon .spon-content { display: flex; flex-direction: column; gap: 18px; padding: 32px; }
+    .p-spon .spon-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .p-spon .spon-header h2 { font-family: var(--font-primary); font-size: 24px; font-weight: 700; margin: 0; }
+    .p-spon .spon-header p { font-size: 14px; color: var(--muted-foreground); margin: 4px 0 0; }
+    .p-spon .spon-value { font-family: var(--font-primary); font-size: 22px; font-weight: 700; color: var(--primary); white-space: nowrap; }
+    .p-spon .spon-desc { font-size: 15px; line-height: 1.6; color: var(--foreground); margin: 0; }
+    .p-spon .benefits-head { font-family: var(--font-primary); font-size: 13px; font-weight: 600; letter-spacing: 1px; color: var(--muted-foreground); }
+    .p-spon .benefits { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 32px; }
+    .p-spon .benefit { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+    .p-spon .benefit .icon { width: 18px; height: 18px; color: var(--primary); flex-shrink: 0; }
+    .p-spon .spon-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .p-spon .spon-actions { display: flex; align-items: center; gap: 12px; }
+    @media (max-width: 1100px) { .p-spon .cat-body { grid-template-columns: 1fr; } .p-spon .spon-card { grid-template-columns: 1fr; } .p-spon .benefits { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body data-active="udforsk" class="p-spon">
+  <div class="page">
+    <div data-include="header"></div>
+
+    <!-- Group strip: category switch -->
+    <div class="strip">
+      <span class="strip__pill"><i data-lucide="layers" class="icon"></i> ALLE KATEGORIER</span>
+      <span class="strip__sep"></span>
+      <a href="category-shirts.html">Tøj</a>
+      <a href="#">Sko</a>
+      <a href="category-sportstech.html">Udstyr</a>
+      <a href="category-sportstech.html">Tech</a>
+      <a href="#">Digitale værktøjer</a>
+      <a href="category-sponsor.html" class="is-active">Sponsor &amp; fundraising</a>
+      <a href="#">Faciliteter &amp; drift</a>
+      <a href="#">Events &amp; rejser</a>
+      <a href="#">Uddannelse</a>
+      <a href="#">Sundhed &amp; trivsel</a>
+    </div>
+
+    <section class="section" style="padding:28px 40px 40px">
+      <!-- Breadcrumb -->
+      <div class="crumb" style="margin-bottom:18px">
+        <a href="index.html">Alle</a>
+        <i data-lucide="chevron-right" class="icon"></i>
+        <span style="color:var(--primary);font-weight:600">Sponsor &amp; Fundraising</span>
+      </div>
+
+      <div class="cat-body">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="side-head">SPONSORATER</div>
+          <nav class="side-menu">
+            <a href="#">Alle aftaler</a>
+            <a href="#" class="is-active">Fondestøtte <i data-lucide="chevron-right" class="icon"></i></a>
+            <a href="#">Trøjesponsorat</a>
+            <a href="#">Stadion &amp; bander</a>
+            <a href="#">Event-sponsorat</a>
+            <a href="#">Ungdom &amp; talent</a>
+            <a href="#">Crowdfunding</a>
+            <a href="#">Lotteri &amp; tombola</a>
+            <a href="#">Erhvervsklub</a>
+          </nav>
+          <div class="side-div"></div>
+          <div class="side-head">FORMÅL</div>
+          <nav class="side-menu">
+            <a href="#">Klubdrift <span class="count">12</span></a>
+            <a href="#">Ungdomsafdeling <span class="count">9</span></a>
+            <a href="#">Nyt udstyr <span class="count">8</span></a>
+            <a href="#">Stadion &amp; faciliteter <span class="count">6</span></a>
+            <a href="#">Rejser &amp; stævner <span class="count">7</span></a>
+            <a href="#">Tøj &amp; materiel <span class="count">6</span></a>
+          </nav>
+        </aside>
+
+        <!-- Main -->
+        <div>
+          <div class="cat-title">
+            <h1>Sponsor &amp; Fundraising</h1>
+          </div>
+
+          <div class="filter-bar">
+            <button class="filter-pill">Sortér efter <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Niveau <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Formål <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Pris <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Branche <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Varighed <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Synlighed <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Lokation <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill filter-pill--dark"><i data-lucide="sliders-horizontal" class="icon"></i> Alle filtre</button>
+          </div>
+
+          <div class="spon-cards">
+
+            <!-- Sponsor Card 1 -->
+            <article class="spon-card">
+              <div class="spon-visual" style="background-image:url('assests/salling1.webp')">
+                <div class="spon-company">
+                  <b>Salling Fondene</b>
+                  <span>Almennyttig erhvervsfond · ejer af Salling Group</span>
+                </div>
+              </div>
+              <div class="spon-content">
+                <div class="spon-header">
+                  <div>
+                    <h2>Fondsstøtte</h2>
+                    <p>Søg støtte til klubbens projekter</p>
+                  </div>
+                  <div class="spon-value">161,9 mio. kr. uddelt i 2025</div>
+                </div>
+                <p class="spon-desc">Salling Fondene er en almennyttig erhvervsfond, der ejer Salling Group og deler ud af overskuddet til samfundet. Fondene støtter idræt, kultur, sociale indsatser og lokale fællesskaber — med særligt fokus på børn og unges trivsel. Klubber og foreninger kan søge støtte til fx nye faciliteter, udstyr og ungdomsprojekter. Siden 2012 har fondene doneret over 2,5 mia. kr. til formål i hele Danmark.</p>
+                <div class="benefits-head">DET KAN I SØGE STØTTE TIL</div>
+                <div class="benefits">
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Nye idrætsanlæg &amp; faciliteter</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Klima- &amp; bæredygtige tiltag</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Udstyr til ungdomshold</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Sociale &amp; værdige formål</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Børn &amp; unges trivsel</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Kultur &amp; fritidsaktiviteter</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Lokale fællesskaber</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Uddannelse &amp; talentudvikling</div>
+                </div>
+                <div class="spon-chips">
+                  <span class="chip">Ansøgningsfrist: 1. sep. 2026</span>
+                  <span class="chip">276 donationer i 2025</span>
+                  <span class="chip">2,5 mia. kr. siden 2012</span>
+                </div>
+                <div class="spon-actions">
+                  <a class="btn" href="#">Læs om fonden <i data-lucide="arrow-right" class="icon"></i></a>
+                  <a class="btn btn--ghost" href="#">Ansøg om støtte</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Sponsor Card 2 -->
+            <article class="spon-card">
+              <div class="spon-visual" style="background-image:url('assests/stark1.webp')">
+                <div class="spon-company">
+                  <b>STARK Fonden</b>
+                  <span>Almennyttig fond · etableret 1946</span>
+                </div>
+              </div>
+              <div class="spon-content">
+                <div class="spon-header">
+                  <div>
+                    <h2>Fondsstøtte</h2>
+                    <p>Søg støtte til byggeri &amp; udvikling</p>
+                  </div>
+                  <div class="spon-value">Bevillinger 2 gange årligt</div>
+                </div>
+                <p class="spon-desc">STARK Fonden er en almennyttig fond fra 1946, der støtter uddannelse og projekter med relation til byggeri og trælastbranchen — med særligt fokus på unge håndværkere og handelsfolk. Klubber kan søge støtte til konkrete bygge- og facilitetsprojekter som klubhus, renovering og bæredygtige anlæg, samt til uddannelses- og talentinitiativer. Bestyrelsen behandler ansøgninger og uddeler bevillinger to gange om året.</p>
+                <div class="benefits-head">DET KAN I SØGE STØTTE TIL</div>
+                <div class="benefits">
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Klubhus &amp; nybyggeri</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Håndværk &amp; materialer</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Renovering af faciliteter</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Uddannelse af unge</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Bæredygtige byggeprojekter</div>
+                  <div class="benefit"><i data-lucide="circle-check" class="icon"></i> Talent- &amp; rejselegater</div>
+                </div>
+                <div class="spon-chips">
+                  <span class="chip">Bevilling: 2 gange årligt</span>
+                  <span class="chip">Frister: april &amp; september</span>
+                  <span class="chip">Etableret 1946</span>
+                </div>
+                <div class="spon-actions">
+                  <a class="btn" href="#">Læs om fonden <i data-lucide="arrow-right" class="icon"></i></a>
+                  <a class="btn btn--ghost" href="#">Ansøg om støtte</a>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div data-include="footer"></div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/store.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tweaks.js"></script>
+</body>
+</html>

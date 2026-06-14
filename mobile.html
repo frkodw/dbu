@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Klubmarked — Støt FC Duckwise med OK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .phone-bg { min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 32px 0; background: #E9E7E4; }
+    .phone { width: 390px; background: var(--background); min-height: 800px; position: relative; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.18); border-radius: 28px; }
+    .m-status { display: flex; align-items: center; justify-content: space-between; height: 62px; padding: 0 24px; }
+    .m-status .time { font-size: 15px; font-weight: 600; }
+    .m-status .icons { display: flex; align-items: center; gap: 7px; }
+    .m-status .icons .icon { width: 17px; height: 17px; color: var(--foreground); }
+    .m-nav { display: flex; align-items: center; gap: 12px; background: var(--primary); padding: 8px 16px 14px; }
+    .m-nav .icon { color: #fff; width: 26px; height: 26px; }
+    .m-nav .search { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--card); border: none; border-radius: var(--radius-pill); padding: 10px 14px; height: auto; }
+    .m-nav .search .icon { width: 16px; height: 16px; color: var(--muted-foreground); }
+    .m-nav .search span { font-size: 14px; color: var(--foreground); }
+    .m-content { padding: 16px; display: flex; flex-direction: column; gap: 22px; padding-bottom: 96px; }
+
+    .m-clubcard { display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); padding: 16px; }
+    .m-clubcard .crest { width: 56px; height: 56px; border-radius: var(--radius-pill); background: var(--primary); color: #fff; display: grid; place-items: center; font-family: var(--font-primary); font-size: 18px; font-weight: 700; }
+    .m-clubcard b { font-family: var(--font-primary); font-size: 20px; font-weight: 700; }
+    .m-clubcard .meta { font-size: 13px; color: var(--muted-foreground); margin-top: 3px; }
+    .m-clubcard .verify { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted-foreground); margin-top: 4px; }
+    .m-clubcard .verify .icon { width: 14px; height: 14px; color: var(--pitch-green); }
+
+    .m-hero { position: relative; height: 184px; border-radius: var(--radius-l); overflow: hidden; }
+    .m-hero img { width: 100%; height: 100%; object-fit: cover; }
+    .m-hero .scrim { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.85) 100%); }
+    .m-hero .ok-chip { position: absolute; top: 16px; left: 16px; background: var(--yellow); color: #1A1A1A; border-radius: var(--radius-s); padding: 6px 11px; font-family: var(--font-primary); font-weight: 700; letter-spacing: 1px; font-size: 16px; }
+    .m-hero .htext { position: absolute; left: 16px; bottom: 16px; right: 16px; }
+    .m-hero .eyebrow { color: rgba(255,255,255,.9); font-family: var(--font-primary); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; }
+    .m-hero h1 { color: #fff; font-family: var(--font-primary); font-size: 22px; font-weight: 700; line-height: 1.15; margin: 5px 0 0; }
+
+    .m-body { font-size: 14px; line-height: 1.5; }
+    .m-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .m-stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 14px 8px; text-align: center; }
+    .m-stat .val { font-family: var(--font-primary); font-size: 20px; font-weight: 700; color: var(--primary); }
+    .m-stat .lab { font-size: 11px; line-height: 1.3; color: var(--muted-foreground); margin-top: 3px; }
+
+    .m-steps-title { font-family: var(--font-primary); font-size: 18px; font-weight: 700; margin: 0; }
+    .m-steps { display: flex; flex-direction: column; gap: 14px; }
+    .m-step { display: flex; align-items: center; gap: 12px; }
+    .m-step .num { flex: 0 0 28px; width: 28px; height: 28px; border-radius: var(--radius-pill); background: var(--yellow); display: grid; place-items: center; font-family: var(--font-primary); font-weight: 700; font-size: 14px; color: #1A1A1A; }
+    .m-step .t { font-size: 14px; line-height: 1.35; }
+
+    .m-cta { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--yellow); color: #1A1A1A; border-radius: var(--radius-pill); padding: 16px; font-family: var(--font-primary); font-size: 16px; font-weight: 700; }
+    .m-cta .icon { width: 18px; height: 18px; }
+    .m-link { text-align: center; color: var(--primary); font-family: var(--font-primary); font-size: 14px; font-weight: 600; }
+
+    .m-tabbar { position: absolute; left: 16px; right: 16px; bottom: 12px; display: flex; gap: 4px; height: 56px; padding: 6px; background: rgba(255,255,255,.7); backdrop-filter: blur(12px); border-radius: 28px; box-shadow: 0 4px 18px rgba(0,0,0,.15); }
+    .m-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 22px; color: var(--muted-foreground); }
+    .m-tab .icon { width: 22px; height: 22px; }
+    .m-tab span { font-size: 10px; }
+    .m-tab.is-active { background: var(--accent); color: var(--primary); }
+    .m-tab.is-active span { font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="phone-bg">
+    <div class="phone">
+      <div class="m-status">
+        <span class="time">9:41</span>
+        <span class="icons"><i data-lucide="signal-high" class="icon"></i><i data-lucide="wifi" class="icon"></i><i data-lucide="battery-full" class="icon"></i></span>
+      </div>
+      <div class="m-nav">
+        <i data-lucide="chevron-left" class="icon"></i>
+        <span class="search"><i data-lucide="search" class="icon"></i><span>FC Duckwise</span></span>
+        <i data-lucide="heart" class="icon"></i>
+      </div>
+      <div class="m-content">
+        <div class="m-clubcard">
+          <span class="crest">FCD</span>
+          <div>
+            <b>FC Duckwise</b>
+            <div class="meta">Fodboldklub · Andeby</div>
+            <div class="verify"><i data-lucide="badge-check" class="icon"></i> Verificeret · 1.248 medlemmer</div>
+          </div>
+        </div>
+
+        <div class="m-hero">
+          <img src="assests/ok2.jpg" alt="OK tankstation" />
+          <div class="scrim"></div>
+          <span class="ok-chip">OK</span>
+          <div class="htext"><div class="eyebrow">STØT LOKALT MED OK</div><h1>Støt FC Duckwise hver gang du tanker</h1></div>
+        </div>
+
+        <p class="m-body" style="margin:0">Når du tanker eller lader elbil med OK, donerer OK automatisk et beløb til FC Duckwise — helt uden det koster dig en krone ekstra.</p>
+
+        <div class="m-stats">
+          <div class="m-stat"><div class="val">5 øre</div><div class="lab">pr. liter brændstof</div></div>
+          <div class="m-stat"><div class="val">1 øre</div><div class="lab">pr. kWh el hjemme</div></div>
+          <div class="m-stat"><div class="val">4.000+</div><div class="lab">klubber støttes</div></div>
+        </div>
+
+        <h2 class="m-steps-title">Kom i gang på 3 trin</h2>
+        <div class="m-steps">
+          <div class="m-step"><span class="num">1</span><span class="t">Hent OK-appen eller bestil et OK Kort</span></div>
+          <div class="m-step"><span class="num">2</span><span class="t">Opret en bruger med din e-mail</span></div>
+          <div class="m-step"><span class="num">3</span><span class="t">Vælg FC Duckwise som din klub under “Mig”</span></div>
+        </div>
+
+        <a class="m-cta" href="#"><i data-lucide="fuel" class="icon"></i> Støt FC Duckwise med OK</a>
+        <a class="m-link" href="#">Læs mere om Støt Lokalt</a>
+      </div>
+
+      <div class="m-tabbar">
+        <a class="m-tab" href="#"><i data-lucide="house" class="icon"></i><span>Hjem</span></a>
+        <a class="m-tab" href="#"><i data-lucide="search" class="icon"></i><span>Søg</span></a>
+        <a class="m-tab is-active" href="#"><i data-lucide="shield" class="icon"></i><span>Klub</span></a>
+        <a class="m-tab" href="#"><i data-lucide="user" class="icon"></i><span>Profil</span></a>
+      </div>
+    </div>
+  </div>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>if (window.lucide) window.lucide.createIcons();</script>
+</body>
+</html>

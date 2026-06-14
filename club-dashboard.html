@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Klubmarked — Klub dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .p-dash .profile { display: flex; align-items: center; gap: 20px; background: var(--card); padding: 28px 40px; border-bottom: 1px solid var(--border); }
+    .p-dash .profile .crest { width: 72px; height: 72px; border-radius: var(--radius-pill); background: var(--yellow); display: grid; place-items: center; font-family: var(--font-primary); font-size: 24px; font-weight: 700; color: #1A1A1A; }
+    .p-dash .profile .name-row { display: flex; align-items: center; gap: 10px; }
+    .p-dash .profile h1 { font-family: var(--font-primary); font-size: 26px; font-weight: 700; margin: 0; }
+    .p-dash .verified { display: inline-flex; align-items: center; gap: 5px; background: var(--color-success); color: var(--color-success-foreground); border-radius: var(--radius-pill); padding: 4px 10px; font-family: var(--font-primary); font-size: 11px; font-weight: 600; letter-spacing: .5px; }
+    .p-dash .verified .icon { width: 14px; height: 14px; }
+    .p-dash .profile .member { color: var(--muted-foreground); font-size: 14px; margin-top: 5px; }
+
+    .p-dash .content { padding: 40px; display: flex; flex-direction: column; gap: 56px; }
+    .p-dash .listings-title { font-family: var(--font-primary); font-size: 35px; font-weight: 700; margin: 0; }
+    .p-dash .cat-label { font-family: var(--font-primary); font-size: 24px; font-weight: 700; margin: 18px 0 0; }
+
+    .p-dash .lcard { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden; transition: box-shadow .18s ease, transform .18s ease; }
+    .p-dash .lcard:hover { box-shadow: 0 10px 26px rgba(0,0,0,.07); transform: translateY(-2px); }
+    .p-dash .lcard .media { position: relative; height: 200px; background: var(--accent); }
+    .p-dash .lcard .media img { width: 100%; height: 100%; object-fit: cover; }
+    .p-dash .lcard .menu { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: var(--radius-pill); background: var(--card); display: grid; place-items: center; box-shadow: 0 2px 6px rgba(0,0,0,.12); }
+    .p-dash .lcard .menu .icon { width: 18px; height: 18px; color: var(--primary); }
+    .p-dash .lcard .body { display: flex; flex-direction: column; gap: 10px; padding: 18px; }
+    .p-dash .lcard .footer { display: flex; align-items: center; justify-content: space-between; }
+    .p-dash .lcard .price-label { font-size: 11px; color: var(--muted-foreground); }
+    .p-dash .lcard .price { font-family: var(--font-primary); font-size: 22px; font-weight: 700; }
+    .p-dash .lcard .edit { display: inline-flex; align-items: center; gap: 6px; background: var(--secondary); color: #fff; border-radius: var(--radius-pill); padding: 10px 18px; font-family: var(--font-primary); font-size: 14px; font-weight: 600; }
+    .p-dash .lcard .edit .icon { width: 16px; height: 16px; }
+
+    .p-dash .acard { display: flex; flex-direction: column; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); padding: 20px; }
+    .p-dash .acard .top { display: flex; justify-content: space-between; align-items: center; }
+    .p-dash .acard .ic { width: 40px; height: 40px; border-radius: var(--radius-m); background: var(--accent); display: grid; place-items: center; }
+    .p-dash .acard .ic .icon { width: 20px; height: 20px; color: var(--primary); }
+    .p-dash .acard .type { font-family: var(--font-primary); font-size: 12px; letter-spacing: 1px; color: var(--muted-foreground); font-weight: 600; }
+    .p-dash .acard .ttl { font-family: var(--font-primary); font-size: 17px; font-weight: 700; }
+    .p-dash .acard .partner { font-size: 13px; color: var(--muted-foreground); }
+    .p-dash .acard .terms { font-size: 14px; line-height: 1.5; }
+    .p-dash .acard .foot { display: flex; justify-content: space-between; align-items: center; }
+    .p-dash .acard .value { font-family: var(--font-primary); font-size: 15px; font-weight: 700; }
+    .p-dash .acard .see { color: var(--primary); font-family: var(--font-primary); font-size: 13px; font-weight: 600; }
+
+    .p-dash .ptable { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden; }
+    .p-dash .ptable .thead, .p-dash .ptable .trow { display: grid; grid-template-columns: 1fr 90px 140px 150px 130px 170px; gap: 16px; align-items: center; padding: 14px 20px; }
+    .p-dash .ptable .thead { background: var(--background); font-family: var(--font-primary); font-size: 12px; letter-spacing: .5px; color: var(--muted-foreground); font-weight: 600; }
+    .p-dash .ptable .trow { border-bottom: 1px solid var(--border); }
+    .p-dash .ptable .trow:last-child { border-bottom: none; }
+    .p-dash .ptable .prod { display: flex; align-items: center; gap: 12px; }
+    .p-dash .ptable .thumb { width: 44px; height: 44px; border-radius: var(--radius-s); background: var(--accent); display: grid; place-items: center; flex: 0 0 44px; }
+    .p-dash .ptable .thumb .icon { width: 22px; height: 22px; color: var(--primary); }
+    .p-dash .ptable .prod b { display: block; font-family: var(--font-primary); font-size: 15px; font-weight: 600; }
+    .p-dash .ptable .prod span { display: block; font-size: 13px; color: var(--muted-foreground); }
+    .p-dash .ptable .cell { font-size: 14px; }
+    .p-dash .ptable .amt { font-family: var(--font-primary); font-size: 15px; font-weight: 700; }
+    .p-dash .ptable .reorder { display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; border-radius: var(--radius-pill); padding: 9px 16px; font-family: var(--font-primary); font-size: 13px; font-weight: 600; }
+    .p-dash .ptable .reorder .icon { width: 15px; height: 15px; }
+  </style>
+</head>
+<body class="p-dash" data-acct="Penge Pia" data-abbr="PP" data-active="klub">
+  <div class="page">
+    <div data-include="header"></div>
+
+    <div class="strip">
+      <a href="#" class="">Kluboverblik</a>
+      <a href="#" class="is-active" style="color:var(--secondary);background:#fff;border-radius:var(--radius-pill);padding:5px 12px">Køb og aftaler</a>
+      <a href="admin.html">Afventer godkendelse</a>
+      <a href="#">…</a>
+    </div>
+
+    <div class="profile">
+      <span class="crest">FCD</span>
+      <div>
+        <div class="name-row">
+          <h1>FC Duckwise</h1>
+          <span class="verified"><i data-lucide="badge-check" class="icon"></i> VERIFICERET KLUB</span>
+        </div>
+        <div class="member">Medlem af Trifork United Clubs · Aarhus, Danmark</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- My listings -->
+      <section>
+        <h2 class="listings-title">Klubbens køb og aftaler</h2>
+        <p class="cat-label">Tøj</p>
+        <div class="grid grid--4" id="listings" style="margin-top:18px"></div>
+      </section>
+
+      <!-- Mine aftaler -->
+      <section>
+        <div class="section__head">
+          <div><h2 class="section__title">Mine aftaler</h2>
+            <p style="color:var(--muted-foreground);font-size:14px;margin:4px 0 0">Aftaler DBU har forhandlet til FC Duckwise</p></div>
+          <a class="section__link" href="#">Se alle <i data-lucide="arrow-right" class="icon" style="width:16px;height:16px"></i></a>
+        </div>
+        <div class="grid grid--4" id="agreements" style="margin-top:18px"></div>
+      </section>
+
+      <!-- Seneste køb -->
+      <section>
+        <div class="section__head">
+          <div><h2 class="section__title">Seneste køb</h2>
+            <p style="color:var(--muted-foreground);font-size:14px;margin:4px 0 0">Genbestil produkter klubben tidligere har købt</p></div>
+          <a class="section__link" href="#">Se alle <i data-lucide="arrow-right" class="icon" style="width:16px;height:16px"></i></a>
+        </div>
+        <div class="ptable" style="margin-top:18px">
+          <div class="thead"><span>PRODUKT</span><span>ANTAL</span><span>BESTILT</span><span>STATUS</span><span>BELØB</span><span></span></div>
+          <div id="purchases"></div>
+        </div>
+      </section>
+    </div>
+
+    <div data-include="footer"></div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/store.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tweaks.js"></script>
+  <script>
+    var U = function(id){ return "https://images.unsplash.com/photo-"+id+"?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"; };
+    var listings = [
+      ["1748111821894-462764bab8c8","HJEMMEBANE · FC DUCKWISE","Hjemmebanetrøje 24/25","399 kr","AKTIV","success"],
+      ["1658572708478-a7de215d89d0","UDEBANE · FC DUCKWISE","Udebanetrøje 24/25","399 kr","AKTIV","success"],
+      ["1772388196737-92097bf4b78c","STØVLER · FC DUCKWISE","Træningsstøvler str. 41","450 kr","RESERVERET","warning"],
+      ["1771884077841-9cbc59c7b094","FAN · FC DUCKWISE","Klub Halstørklæde","89 kr","AKTIV","success"],
+      ["1679767364686-28f38972d632","TRÆNING · FC DUCKWISE","Træningssæt komplet","325 kr","AKTIV","success"],
+      ["1514565131-fce0801e5785","MÅLMAND · FC DUCKWISE","Målmandstrøje 23/24","275 kr","8 VISNINGER","info"],
+      ["1587384474964-3a06ce1ce699","UDSTYR · FC DUCKWISE","Matchbold + pumpe","199 kr","AKTIV","success"],
+      ["1592367630397-65872fe016e9","FAN · FC DUCKWISE","Klub kasket","129 kr","AKTIV","success"]
+    ];
+    document.getElementById("listings").innerHTML = listings.map(function(l){
+      return '<article class="lcard"><div class="media"><img src="'+U(l[0])+'" alt="">'
+        + '<span class="badge badge--'+l[5]+'" style="position:absolute;top:14px;left:14px">'+l[4]+'</span>'
+        + '<button class="menu"><i data-lucide="ellipsis" class="icon"></i></button></div>'
+        + '<div class="body"><div class="card__cat"><i data-lucide="shield" class="icon"></i><span>'+l[1]+'</span></div>'
+        + '<h3 class="card__title">'+l[2]+'</h3>'
+        + '<div class="card__meta"><span class="chip">Str. M</span><span class="chip">Ny</span></div>'
+        + '<div class="card__divider"></div>'
+        + '<div class="footer"><div><div class="price-label">Din pris</div><div class="price">'+l[3]+'</div></div>'
+        + '<button class="edit"><i data-lucide="pencil" class="icon"></i> Rediger</button></div></div></article>';
+    }).join("");
+
+    var agreements = [
+      ["handshake","LEVERANDØRAFTALE","DBU × Hummel rammeaftale","Hummel","Alle klubbens medlemmer får 25% rabat på Hummel-sortimentet. Gratis klubtryk på trøjer og træningstøj indgår i aftalen.","−25% rabat"],
+      ["megaphone","SPONSORAFTALE","Hovedsponsor — Guldpakke","Nordjyske Bank","Sponsorlogo på alle kamptrøjer samt bandereklame ved hjemmebanen. Inkluderer eksponering på klubbens digitale platforme.","75.000 kr/sæson"],
+      ["video","SPORTSTECH-ABONNEMENT","Veo videoanalyse","Veo Technologies","Automatisk optagelse af alle hjemmekampe med 4K-kamera. Fuld taktisk analyse og klip deles direkte med trænerteamet.","499 kr/md"],
+      ["shield-check","FORSIKRING","Klub- & spillerforsikring","Tryg Forsikring","Dækker alle aktive spillere ved skader under kamp og træning. Omfatter desuden klubbens udstyr og materiel.","1.200 kr/md"]
+    ];
+    document.getElementById("agreements").innerHTML = agreements.map(function(a){
+      return '<article class="acard"><div class="top"><span class="ic"><i data-lucide="'+a[0]+'" class="icon"></i></span>'
+        + '<span class="badge badge--success">AKTIV</span></div>'
+        + '<span class="type">'+a[1]+'</span><div class="ttl">'+a[2]+'</div><div class="partner">'+a[3]+'</div>'
+        + '<p class="terms" style="margin:0">'+a[4]+'</p><div class="divider"></div>'
+        + '<div class="foot"><span class="value">'+a[5]+'</span><a class="see" href="#">Se aftale</a></div></article>';
+    }).join("");
+
+    var purchases = [
+      ["shirt","Hjemmebanetrøjer 24/25","Hummel · str. mix","18 stk","12. mar 2026","7.182 kr"],
+      ["shirt","Klub træningsbukser","Hummel · DBU Edition","22 stk","4. feb 2026","8.228 kr"],
+      ["volleyball","Matchbolde str. 5","Select · Pro","10 stk","20. jan 2026","2.290 kr"],
+      ["hand","Målmandshandsker","Hummel · str. 8-10","4 par","8. jan 2026","756 kr"],
+      ["briefcase-medical","Førstehjælpstasker","Cederroth","2 stk","15. dec 2025","1.180 kr"]
+    ];
+    document.getElementById("purchases").innerHTML = purchases.map(function(p){
+      return '<div class="trow"><div class="prod"><span class="thumb"><i data-lucide="'+p[0]+'" class="icon"></i></span>'
+        + '<div><b>'+p[1]+'</b><span>'+p[2]+'</span></div></div>'
+        + '<span class="cell">'+p[3]+'</span><span class="cell">'+p[4]+'</span>'
+        + '<span><span class="badge badge--success"><i data-lucide="circle-check" class="icon" style="width:13px;height:13px"></i> Leveret</span></span>'
+        + '<span class="amt">'+p[5]+'</span>'
+        + '<span><button class="reorder"><i data-lucide="rotate-cw" class="icon"></i> Genbestil</button></span></div>';
+    }).join("");
+
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

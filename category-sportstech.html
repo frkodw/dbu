@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Klubmarked — Sportstech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .p-cat .cat-body { display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start; }
+    .p-cat .cat-title { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+    .p-cat .cat-title h1 { font-family: var(--font-primary); font-size: 34px; font-weight: 700; margin: 0; }
+    .p-cat .cat-title span { font-size: 15px; color: var(--muted-foreground); }
+    .p-cat .sidebar { display: flex; flex-direction: column; gap: 8px; }
+    .p-cat .side-head { font-family: var(--font-primary); font-size: 13px; font-weight: 600; letter-spacing: 1px; color: var(--muted-foreground); }
+    .p-cat .side-menu { display: flex; flex-direction: column; }
+    .p-cat .side-menu a { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-radius: var(--radius-s); font-size: 14px; color: var(--foreground); }
+    .p-cat .side-menu a:hover { background: var(--background); }
+    .p-cat .side-menu a.is-active { background: var(--accent); color: var(--primary); font-family: var(--font-primary); font-weight: 600; }
+    .p-cat .side-menu a.is-active .icon { width: 16px; height: 16px; }
+    .p-cat .side-menu a .count { font-size: 12px; color: var(--muted-foreground); }
+    .p-cat .side-div { height: 1px; background: var(--border); margin: 8px 0; }
+    .p-cat .filter-bar { display: flex; flex-wrap: wrap; gap: 12px; }
+    .p-cat .filter-pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: var(--radius-pill); background: var(--card); border: 1px solid var(--border); font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--foreground); cursor: pointer; }
+    .p-cat .filter-pill .icon { width: 16px; height: 16px; color: var(--muted-foreground); }
+    .p-cat .filter-pill--dark { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+    .p-cat .filter-pill--dark .icon { color: #fff; }
+    .p-cat .results-count { font-size: 14px; color: var(--muted-foreground); margin: 16px 0; }
+    @media (max-width: 1100px) { .p-cat .cat-body { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body data-active="udforsk" class="p-cat">
+  <div class="page">
+    <div data-include="header"></div>
+
+    <!-- Group strip: category switch -->
+    <div class="strip">
+      <span class="strip__pill"><i data-lucide="layers" class="icon"></i> ALLE KATEGORIER</span>
+      <span class="strip__sep"></span>
+      <a href="category-shirts.html">Tøj</a>
+      <a href="#">Sko</a>
+      <a href="#">Udstyr</a>
+      <a href="category-sportstech.html" class="is-active">Tech</a>
+      <a href="#">Digitale værktøjer</a>
+      <a href="category-sponsor.html">Sponsor &amp; fundraising</a>
+      <a href="#">Faciliteter &amp; drift</a>
+      <a href="#">Events &amp; rejser</a>
+      <a href="#">Uddannelse</a>
+      <a href="#">Sundhed &amp; trivsel</a>
+    </div>
+
+    <section class="section" style="padding:28px 40px 40px">
+      <!-- Breadcrumb -->
+      <div class="crumb" style="margin-bottom:18px">
+        <a href="index.html">Alle</a>
+        <i data-lucide="chevron-right" class="icon"></i>
+        <span style="color:var(--primary);font-weight:600">Sportstech</span>
+      </div>
+
+      <div class="cat-body">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="side-head">SPORTSTECH</div>
+          <nav class="side-menu">
+            <a href="#" class="is-active" data-filter="">Alle <i data-lucide="chevron-right" class="icon"></i></a>
+            <a href="#" data-filter="videoanalyse">Videoanalyse</a>
+            <a href="#" data-filter="tracking">Tracking</a>
+            <a href="#" data-filter="wearable">Wearable tech</a>
+            <a href="#" data-filter="performance">Performance-data</a>
+            <a href="#" data-filter="skades">Skadesforebyggelse</a>
+            <a href="#" data-filter="træner">Trænerapps</a>
+            <a href="#" data-filter="ai">AI-assistenter</a>
+            <a href="#" data-filter="kampanalyse">Kampanalyse</a>
+            <a href="#" data-filter="talent">Talentudvikling</a>
+          </nav>
+          <div class="side-div"></div>
+          <div class="side-head">TYPE</div>
+          <nav class="side-menu">
+            <a href="#">Hardware <span class="count">86</span></a>
+            <a href="#">Software <span class="count">74</span></a>
+            <a href="#">Abonnement <span class="count">58</span></a>
+            <a href="#">Tjenester <span class="count">69</span></a>
+            <a href="#">Kurser &amp; workshops <span class="count">55</span></a>
+          </nav>
+        </aside>
+
+        <!-- Main -->
+        <div>
+          <div class="cat-title">
+            <h1>Sportstech</h1>
+            <span data-cat-count>342 varer &amp; tjenester</span>
+          </div>
+
+          <div class="filter-bar" style="margin-top:18px">
+            <button class="filter-pill" data-cat-sort><span data-lbl>Sortér efter</span> <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Type <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Underkategori <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill" data-cat-price><span data-lbl>Pris</span> <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Leverandør <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Platform <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Abonnement <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Niveau <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill filter-pill--dark"><i data-lucide="sliders-horizontal" class="icon"></i> Alle filtre</button>
+          </div>
+
+          <p class="results-count" data-cat-count>342 varer &amp; tjenester</p>
+
+          <div class="grid grid--3" id="tech-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <div data-include="footer"></div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/store.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tweaks.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/category.js"></script>
+  <script>
+    initCategory({ grid: "#tech-grid", countSuffix: " varer & tjenester", items: [
+      { img: "assests/tech1.png", cover: true, cat: "TRACKING", title: "GPS-trackingvest (sensor inkl.)", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. moms", price: "12.995 kr", status: "NY", statusKind: "info" },
+      { img: "assests/tech2.png", cover: true, cat: "VIDEOANALYSE", title: "360° Multikamera m. stativ", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. moms", price: "8.499 kr", status: "POPULÆR", statusKind: "warning" },
+      { img: "assests/tech3.png", cover: true, cat: "PERFORMANCE-DATA", title: "Performance-dashboard (skærm)", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. moms", price: "2.299 kr", status: "TILGÆNGELIG" },
+      { img: "assests/tech4.png", cover: true, cat: "WEARABLE TECH", title: "Pulsbælte med HR-sensor", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. moms", price: "899 kr", status: "ABONNEMENT", statusKind: "info" },
+      { img: "assests/tech6.png", cover: true, cat: "DATAANALYSE", title: "Kampanalyse-software", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. moms", price: "5.750 kr", status: "TILGÆNGELIG" },
+      { img: "assests/tech7.png", cover: true, cat: "WEARABLE TECH", title: "Træningssensor m. ladedock", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. moms", price: "1.499 kr", status: "TILGÆNGELIG" },
+      { img: "assests/tech8.png", cover: true, cat: "PERFORMANCE-DATA", title: "SenseFusion Data-hub", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. moms", price: "3.499 kr", status: "ABONNEMENT", statusKind: "info" },
+      { img: "assests/tech9.png", cover: true, cat: "WEARABLE TECH", title: "AURA Smart Kompressionsærme", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. moms", price: "1.295 kr", status: "POPULÆR", statusKind: "warning" },
+      { img: "assests/tech5.png", cover: true, cat: "PERFORMANCE-DATA", title: "MyoSense Muskelsensor (EMG)", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. moms", price: "1.899 kr", status: "NY", statusKind: "info" }
+    ]});
+  </script>
+</body>
+</html>

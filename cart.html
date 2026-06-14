@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Klubmarked — Indkøbsvogn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .p-cart .content { padding: 28px 40px 48px; display: flex; flex-direction: column; gap: 18px; }
+    .p-cart h1 { font-family: var(--font-primary); font-size: 34px; font-weight: 700; margin: 0; }
+    .p-cart .title-row { display: flex; align-items: baseline; gap: 12px; }
+    .p-cart .title-row .count { color: var(--muted-foreground); font-size: 15px; }
+    .p-cart .approval-banner { display: flex; gap: 14px; align-items: center; background: var(--color-info); color: var(--color-info-foreground); border-radius: var(--radius-m); padding: 16px; }
+    .p-cart .approval-banner .ic { flex: 0 0 36px; width: 36px; height: 36px; border-radius: var(--radius-pill); background: rgba(255,255,255,.5); display: grid; place-items: center; }
+    .p-cart .approval-banner .ic .icon { width: 20px; height: 20px; }
+    .p-cart .approval-banner b { font-family: var(--font-primary); font-size: 15px; }
+    .p-cart .approval-banner p { font-size: 14px; line-height: 1.4; margin: 2px 0 0; }
+    .p-cart .body { display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start; }
+    .p-cart .items { display: flex; flex-direction: column; gap: 16px; }
+
+    .p-cart .item-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden; }
+    .p-cart .product-head { display: flex; gap: 16px; padding: 20px; border-bottom: 1px solid var(--border); }
+    .p-cart .product-head .thumb { width: 88px; height: 110px; border-radius: var(--radius-m); object-fit: cover; flex: 0 0 88px; }
+    .p-cart .product-head .info { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .p-cart .product-head .sup { font-family: var(--font-primary); font-size: 14px; font-weight: 700; color: var(--muted-foreground); }
+    .p-cart .product-head .ttl { font-family: var(--font-primary); font-size: 20px; font-weight: 700; }
+    .p-cart .product-head .det { font-size: 13px; color: var(--muted-foreground); }
+    .p-cart .stock-pill { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; background: var(--color-success); color: var(--color-success-foreground); border-radius: var(--radius-pill); padding: 4px 10px; font-size: 12px; font-weight: 600; }
+    .p-cart .stock-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-success-foreground); }
+    .p-cart .product-head .right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .p-cart .product-head .unit { font-family: var(--font-primary); font-size: 16px; font-weight: 700; }
+    .p-cart .product-head .note { font-size: 12px; color: var(--muted-foreground); }
+    .p-cart .remove { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--muted-foreground); padding-top: 6px; cursor: pointer; }
+    .p-cart .remove .icon { width: 14px; height: 14px; }
+
+    .p-cart .dist { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+    .p-cart .dist-sub { display: flex; justify-content: space-between; align-items: center; }
+    .p-cart .dist-sub b { font-family: var(--font-primary); font-size: 15px; font-weight: 700; }
+    .p-cart .total-chip { background: var(--accent); color: var(--accent-foreground); border-radius: var(--radius-pill); padding: 4px 12px; font-family: var(--font-primary); font-size: 13px; font-weight: 700; }
+    .p-cart table { border-collapse: collapse; width: 100%; }
+    .p-cart thead th { background: var(--background); font-family: var(--font-primary); font-size: 12px; letter-spacing: .5px; color: var(--muted-foreground); font-weight: 600; text-align: left; padding: 10px 12px; }
+    .p-cart thead th:first-child { border-radius: var(--radius-s) 0 0 var(--radius-s); }
+    .p-cart thead th:last-child { border-radius: 0 var(--radius-s) var(--radius-s) 0; text-align: right; }
+    .p-cart tbody td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .p-cart tbody td.gender { width: 120px; font-weight: 600; }
+    .p-cart tbody td.qty { width: 140px; }
+    .p-cart tbody td.amount { width: 100px; text-align: right; font-family: var(--font-primary); font-weight: 600; }
+    .p-cart .stepper { display: inline-flex; align-items: center; border: 1px solid var(--input-border); border-radius: var(--radius-s); overflow: hidden; }
+    .p-cart .stepper button { width: 30px; height: 30px; display: grid; place-items: center; color: var(--foreground); }
+    .p-cart .stepper button:hover { background: var(--background); }
+    .p-cart .stepper .v { width: 36px; text-align: center; font-size: 14px; font-weight: 600; }
+    .p-cart .stepper .icon { width: 14px; height: 14px; }
+    .p-cart .subtotal-row td { text-align: right; font-family: var(--font-primary); font-weight: 700; font-size: 15px; border: none; padding-top: 14px; }
+    .p-cart .continue { display: inline-flex; align-items: center; gap: 6px; color: var(--primary); font-size: 14px; }
+    .p-cart .continue .icon { width: 16px; height: 16px; }
+
+    .p-cart .summary-col { display: flex; flex-direction: column; gap: 16px; }
+    .p-cart .summary, .p-cart .flow { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); padding: 24px; }
+    .p-cart .summary h2, .p-cart .flow h2 { font-family: var(--font-primary); font-size: 18px; font-weight: 700; margin: 0 0 14px; }
+    .p-cart .srow { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted-foreground); margin-bottom: 14px; }
+    .p-cart .srow .v { color: var(--foreground); }
+    .p-cart .srow .ok { color: var(--color-success-foreground); }
+    .p-cart .summary .divider { margin: 0 0 14px; }
+    .p-cart .grand { display: flex; justify-content: space-between; align-items: baseline; }
+    .p-cart .grand .l { font-family: var(--font-primary); font-size: 16px; font-weight: 700; }
+    .p-cart .grand .v { font-family: var(--font-primary); font-size: 24px; font-weight: 700; color: var(--primary); }
+    .p-cart .vat { font-size: 12px; color: var(--muted-foreground); margin-top: 6px; }
+    .p-cart .flow .lab { font-family: var(--font-primary); font-size: 11px; letter-spacing: 1px; color: var(--muted-foreground); font-weight: 600; }
+    .p-cart .person { display: flex; gap: 12px; align-items: center; margin-top: 6px; }
+    .p-cart .person .av { width: 40px; height: 40px; border-radius: var(--radius-pill); display: grid; place-items: center; color: #fff; font-family: var(--font-primary); font-weight: 700; font-size: 14px; }
+    .p-cart .person .av--dark { background: var(--secondary); }
+    .p-cart .person .av--red { background: var(--primary); }
+    .p-cart .person b { display: block; font-family: var(--font-primary); font-size: 15px; font-weight: 600; }
+    .p-cart .person span { font-size: 13px; color: var(--muted-foreground); }
+    .p-cart .conn { display: flex; align-items: center; gap: 8px; padding: 12px; color: var(--muted-foreground); font-size: 12px; }
+    .p-cart .conn .icon { width: 16px; height: 16px; }
+    .p-cart .send-cta { height: 60px; border-radius: var(--radius-pill); background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-primary); font-size: 17px; font-weight: 700; }
+    .p-cart .send-cta:hover { background: var(--primary-hover); }
+    .p-cart .send-cta .icon { width: 20px; height: 20px; }
+    .p-cart .send-note { display: flex; gap: 8px; padding: 4px; color: var(--muted-foreground); font-size: 12px; line-height: 1.4; }
+    .p-cart .send-note .icon { flex: 0 0 15px; width: 15px; height: 15px; }
+    .p-cart .empty-cart { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 64px 20px 80px; }
+    .p-cart .empty-cart .ec-ic { width: 88px; height: 88px; border-radius: var(--radius-pill); background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; }
+    .p-cart .empty-cart .ec-ic .icon { width: 40px; height: 40px; color: var(--muted-foreground); }
+    .p-cart .empty-cart h2 { font-family: var(--font-primary); font-size: 24px; font-weight: 700; margin: 6px 0 0; }
+    .p-cart .empty-cart p { color: var(--muted-foreground); font-size: 15px; margin: 0 0 8px; }
+  </style>
+</head>
+<body class="p-cart" data-active="udforsk">
+  <div class="page">
+    <div data-include="header"></div>
+    <div class="content">
+      <nav class="crumb">
+        <a href="index.html">Hjem</a><i data-lucide="chevron-right" class="icon"></i>
+        <span style="color:var(--primary);font-weight:600">Indkøbsvogn</span>
+      </nav>
+      <div class="title-row"><h1>Indkøbsvogn</h1><span class="count" id="cart-count">0 varer</span></div>
+
+      <div class="approval-banner" id="approval-banner">
+        <span class="ic"><i data-lucide="shield-check" class="icon"></i></span>
+        <div><b>Bestillingen skal godkendes før den afsendes</b>
+          <p>Du opretter denne bestilling som <span id="ab-role">træner</span>. En klubadministrator skal godkende kurven, før købet gennemføres.</p></div>
+      </div>
+
+      <div class="body" id="cart-body">
+        <div class="items" id="cart-items"></div>
+        <aside class="summary-col" id="cart-summary"></aside>
+      </div>
+
+      <div class="empty-cart" id="empty-cart" hidden>
+        <span class="ec-ic"><i data-lucide="shopping-cart" class="icon"></i></span>
+        <h2>Din kurv er tom</h2>
+        <p>Find klubtøj, udstyr og udvalgte aftaler i markedet.</p>
+        <a class="btn" href="index.html"><i data-lucide="arrow-left" class="icon"></i> Gå til markedet</a>
+      </div>
+    </div>
+    <div data-include="footer"></div>
+  </div>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/store.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tweaks.js"></script>
+  <script>
+  (function () {
+    var itemsEl = document.getElementById("cart-items");
+    var sumEl = document.getElementById("cart-summary");
+    var bodyEl = document.getElementById("cart-body");
+    var emptyEl = document.getElementById("empty-cart");
+    var countEl = document.getElementById("cart-count");
+    var banner = document.getElementById("approval-banner");
+
+    function genderAvatar(p) { return p.id === "torben" ? "av--dark" : (p.id === "pia" ? "av--red" : "av--dark"); }
+
+    function render() {
+      var cart = window.DBU.cart();
+      var p = window.DBU.persona();
+      var count = window.DBU.cartCount();
+      countEl.textContent = count + " varer" + (p.kind === "admin" ? "" : " · til godkendelse");
+      document.getElementById("ab-role").textContent = p.role.split(" ")[0].toLowerCase();
+
+      if (count === 0) {
+        bodyEl.hidden = true; banner.hidden = true; emptyEl.hidden = false; return;
+      }
+      bodyEl.hidden = false; emptyEl.hidden = true; banner.hidden = false;
+
+      /* ---- items ---- */
+      var html = cart.map(function (line) {
+        var lq = window.DBU.lineQty(line);
+        var rows = line.dist.map(function (d, idx) {
+          return '<tr data-line="' + line.id + '" data-idx="' + idx + '">' +
+            '<td class="gender">' + (d.gender === "—" ? "" : d.gender) + '</td>' +
+            '<td>' + d.size + '</td>' +
+            '<td class="qty"><span class="stepper">' +
+              '<button data-step="-1" aria-label="Færre"><i data-lucide="minus" class="icon"></i></button>' +
+              '<span class="v">' + d.qty + '</span>' +
+              '<button data-step="1" aria-label="Flere"><i data-lucide="plus" class="icon"></i></button>' +
+            '</span></td>' +
+            '<td class="amount">' + window.DBU.kr(d.qty * line.unit) + '</td></tr>';
+        }).join("");
+        return '<article class="item-card">' +
+          '<div class="product-head">' +
+            '<img class="thumb" src="' + line.img + '" alt=""' + (line.fit ? ' style="object-fit:contain;background:var(--background)"' : '') + ' />' +
+            '<div class="info">' +
+              '<span class="sup">' + line.sup + '</span>' +
+              '<span class="ttl">' + line.title + '</span>' +
+              '<span class="det">' + (line.det || "") + '</span>' +
+              '<span class="stock-pill"><span class="dot"></span> På lager</span>' +
+            '</div>' +
+            '<div class="right">' +
+              '<span class="unit">Stk. ' + window.DBU.kr(line.unit) + '</span>' +
+              '<span class="note">' + (line.unitNote || "Klubpris") + '</span>' +
+              '<span class="remove" data-remove="' + line.id + '"><i data-lucide="trash-2" class="icon"></i> Fjern</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="dist">' +
+            '<div class="dist-sub"><b>Fordeling</b><span class="total-chip">I alt ' + lq + ' stk</span></div>' +
+            '<table><thead><tr><th>KØN</th><th>STØRRELSE</th><th>ANTAL</th><th>BELØB</th></tr></thead>' +
+            '<tbody>' + rows + '</tbody>' +
+            '<tfoot><tr class="subtotal-row"><td colspan="4">Subtotal: ' + window.DBU.kr(window.DBU.lineTotal(line)) + '</td></tr></tfoot></table>' +
+          '</div></article>';
+      }).join("");
+      html += '<a class="continue" href="index.html"><i data-lucide="arrow-left" class="icon"></i> Fortsæt med at handle</a>';
+      itemsEl.innerHTML = html;
+
+      /* ---- summary ---- */
+      var sub = window.DBU.cartSubtotal();
+      var vat = sub * 0.25 / 1.25; // amount of VAT inside a VAT-inclusive total
+      sumEl.innerHTML =
+        '<section class="summary">' +
+          '<h2>Oversigt</h2>' +
+          '<div class="srow"><span>Varer (' + count + ' stk)</span><span class="v">' + window.DBU.kr(sub) + '</span></div>' +
+          '<div class="srow"><span>Klubrabat (DBU × Hummel)</span><span class="ok">inkluderet</span></div>' +
+          '<div class="srow"><span>Levering</span><span class="ok">Gratis</span></div>' +
+          '<div class="divider"></div>' +
+          '<div class="grand"><span class="l">Total inkl. moms</span><span class="v">' + window.DBU.kr(sub) + '</span></div>' +
+          '<div class="vat">Heraf moms (25%): ' + window.DBU.kr(vat) + '</div>' +
+        '</section>' +
+        '<section class="flow">' +
+          '<h2>Godkendelsesflow</h2>' +
+          '<span class="lab">BESTILT AF</span>' +
+          '<div class="person"><span class="av ' + genderAvatar(p) + '">' + p.abbr + '</span><div><b>' + p.acct + '</b><span>' + p.role + '</span></div></div>' +
+          '<div class="conn"><i data-lucide="arrow-down" class="icon"></i> sendes til godkendelse</div>' +
+          '<span class="lab">SKAL GODKENDES AF</span>' +
+          '<div class="person"><span class="av av--red">KA</span><div><b>Klubadministrator</b><span>' + p.group + ' · Indkøbsansvarlig</span></div></div>' +
+        '</section>' +
+        '<button class="send-cta" id="send-cta"><i data-lucide="send" class="icon"></i> Send til godkendelse</button>' +
+        '<div class="send-note"><i data-lucide="info" class="icon"></i> Købet gennemføres først, når en klubadministrator har godkendt bestillingen. Du får besked om svaret.</div>';
+
+      if (window.lucide) window.lucide.createIcons();
+      wire();
+    }
+
+    function wire() {
+      itemsEl.querySelectorAll(".stepper button").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var tr = b.closest("tr");
+          var line = tr.getAttribute("data-line");
+          var idx = parseInt(tr.getAttribute("data-idx"), 10);
+          var cur = window.DBU.cart().filter(function (l) { return l.id === line; })[0].dist[idx].qty;
+          window.DBU.setLineDistQty(line, idx, cur + parseInt(b.getAttribute("data-step"), 10));
+          // store fires dbu:change -> re-render
+        });
+      });
+      itemsEl.querySelectorAll("[data-remove]").forEach(function (r) {
+        r.addEventListener("click", function () {
+          window.DBU.removeLine(r.getAttribute("data-remove"));
+        });
+      });
+      var send = document.getElementById("send-cta");
+      if (send) send.addEventListener("click", function () {
+        if (window.DBU.cartCount() === 0) return;
+        window.DBU.submitCartForApproval();
+        location.href = "checkout.html";
+      });
+    }
+
+    render();
+    // Re-render on state change, but avoid the header's own re-renders looping:
+    var rendering = false;
+    window.DBU.on(function () {
+      if (rendering) return;
+      rendering = true;
+      render();
+      rendering = false;
+    });
+  })();
+  </script>
+</body>
+</html>

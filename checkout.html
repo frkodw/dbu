@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Klubmarked — Bekræftelse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .p-confirm .content { padding: 28px 40px 48px; display: flex; flex-direction: column; gap: 28px; }
+    .p-confirm .hero { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; padding: 20px 0 8px; }
+    .p-confirm .check-circle { width: 76px; height: 76px; border-radius: var(--radius-pill); background: var(--color-success); display: grid; place-items: center; }
+    .p-confirm .check-circle .icon { width: 40px; height: 40px; color: var(--color-success-foreground); }
+    .p-confirm .hero h1 { font-family: var(--font-primary); font-size: 34px; font-weight: 700; margin: 0; }
+    .p-confirm .hero p { color: var(--muted-foreground); font-size: 16px; margin: 0; }
+    .p-confirm .body { display: grid; grid-template-columns: 1fr 400px; gap: 28px; align-items: start; }
+    .p-confirm .steps h2 { font-family: var(--font-primary); font-size: 20px; font-weight: 700; margin: 0 0 20px; }
+    .p-confirm .step { display: flex; gap: 14px; margin-bottom: 18px; }
+    .p-confirm .step:last-child { margin-bottom: 0; }
+    .p-confirm .num { flex: 0 0 34px; width: 34px; height: 34px; border-radius: var(--radius-pill); display: grid; place-items: center; font-family: var(--font-primary); font-weight: 700; font-size: 15px; }
+    .p-confirm .num--active { background: var(--primary); color: #fff; }
+    .p-confirm .num--idle { background: var(--background); color: var(--muted-foreground); border: 1px solid var(--border); }
+    .p-confirm .step b { display: block; font-family: var(--font-primary); font-size: 15px; font-weight: 600; }
+    .p-confirm .step span { color: var(--muted-foreground); font-size: 13px; line-height: 1.4; }
+    .p-confirm .sum h2 { font-family: var(--font-primary); font-size: 18px; font-weight: 700; margin: 0 0 16px; }
+    .p-confirm .line { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 12px; }
+    .p-confirm .line b { font-weight: 600; }
+    .p-confirm .line .muted { color: var(--muted-foreground); }
+    .p-confirm .total { font-family: var(--font-primary); font-size: 17px; font-weight: 700; }
+    .p-confirm .note { display: flex; gap: 10px; background: var(--color-info); color: var(--color-info-foreground); border-radius: var(--radius-m); padding: 12px; font-size: 13px; line-height: 1.4; margin-top: 4px; }
+    .p-confirm .note .icon { flex: 0 0 18px; width: 18px; height: 18px; }
+    .p-confirm .cta-row { display: flex; justify-content: center; gap: 12px; padding-top: 8px; }
+  </style>
+</head>
+<body class="p-confirm" data-acct="Penge Pia" data-abbr="PP">
+  <div class="page">
+    <div data-include="header"></div>
+    <div class="content">
+      <nav class="crumb">
+        <a href="index.html">Hjem</a><i data-lucide="chevron-right" class="icon"></i>
+        <a href="cart.html">Indkøbsvogn</a><i data-lucide="chevron-right" class="icon"></i>
+        <span style="color:var(--primary);font-weight:600">Bekræftelse</span>
+      </nav>
+
+      <div class="hero">
+        <div class="check-circle"><i data-lucide="check" class="icon"></i></div>
+        <h1>Tak! Din bestilling er sendt til godkendelse</h1>
+        <p id="order-meta">Afventer godkendelse fra klubadmin</p>
+      </div>
+
+      <div class="body">
+        <section class="panel steps">
+          <h2>Hvad sker der nu?</h2>
+          <div class="step">
+            <span class="num num--active">1</span>
+            <div><b>Klubadmin gennemgår din anmodning</b><span>Din klubadministrator får besked og godkender eller afviser de valgte varer.</span></div>
+          </div>
+          <div class="step">
+            <span class="num num--idle">2</span>
+            <div><b>Sælger pakker og afsender</b><span>Når anmodningen er godkendt, klargør sælgeren varerne til levering.</span></div>
+          </div>
+          <div class="step">
+            <span class="num num--idle">3</span>
+            <div><b>Du får besked når ordren er klar</b><span>Du modtager en notifikation og kan følge status under «Min klub».</span></div>
+          </div>
+        </section>
+
+        <aside class="panel sum">
+          <h2>Ordreoversigt</h2>
+          <div id="order-lines"></div>
+          <div class="divider" style="margin:4px 0 12px"></div>
+          <div class="line"><span class="muted">Subtotal</span><b id="order-sub">0 kr</b></div>
+          <div class="line"><span class="muted">Levering</span><b>Gratis</b></div>
+          <div class="line total"><span>Total</span><span id="order-total">0 kr</span></div>
+          <div class="note"><i data-lucide="info" class="icon"></i>Beløbet reserveres først, når klubadmin har godkendt din anmodning.</div>
+        </aside>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn" id="goto-admin"><i data-lucide="shield-check" class="icon"></i> Skift til klubadmin & godkend</button>
+        <a class="btn btn--ghost" href="index.html">Tilbage til forsiden</a>
+      </div>
+    </div>
+    <div data-include="footer"></div>
+  </div>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/store.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tweaks.js"></script>
+  <script>
+  (function () {
+    var order = window.DBU.lastOrder();
+    var meta = document.getElementById("order-meta");
+    var linesEl = document.getElementById("order-lines");
+    if (!order) {
+      meta.textContent = "Ingen aktiv bestilling — gå til markedet for at handle.";
+      linesEl.innerHTML = '<div class="line"><span class="muted">Din kurv var tom.</span></div>';
+      document.getElementById("order-sub").textContent = "0 kr";
+      document.getElementById("order-total").textContent = "0 kr";
+      return;
+    }
+    var today = new Date().toLocaleDateString("da-DK", { day: "numeric", month: "long", year: "numeric" });
+    meta.textContent = "Ordre #" + order.ref + " · Sendt " + today + " · Afventer godkendelse fra klubadmin";
+    linesEl.innerHTML = order.items.map(function (it) {
+      var q = (it.dist || []).reduce(function (n, d) { return n + d.qty; }, 0);
+      return '<div class="line"><span class="muted">' + it.title + ' · ' + q + ' stk</span><b>' + window.DBU.kr(q * it.unit) + '</b></div>';
+    }).join("");
+    document.getElementById("order-sub").textContent = window.DBU.kr(order.total);
+    document.getElementById("order-total").textContent = window.DBU.kr(order.total);
+
+    var btn = document.getElementById("goto-admin");
+    if (btn) {
+      // Torben (træner) submits for approval — he shouldn't get the demo
+      // shortcut to switch into klubadmin and approve his own request.
+      if (window.DBU.personaId() === "torben") {
+        btn.remove();
+      } else {
+        btn.addEventListener("click", function () {
+          window.DBU.setPersona("pia");
+          location.href = "admin.html";
+        });
+      }
+    }
+  })();
+  </script>
+</body>
+</html>

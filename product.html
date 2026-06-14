@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Klubmarked — Danmark Hjemmebanetrøje 2026/27</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .p-product .pd-body { display: grid; grid-template-columns: 740px 1fr; gap: 48px; align-items: start; }
+    .p-product .gallery { display: grid; grid-template-columns: 84px 1fr; gap: 16px; }
+    .p-product .thumbs { display: flex; flex-direction: column; gap: 12px; }
+    .p-product .thumb { width: 84px; height: 84px; border-radius: var(--radius-s); object-fit: cover; border: 1px solid var(--border); cursor: pointer; }
+    .p-product .thumb.is-active { border: 2px solid var(--foreground); }
+    .p-product .main-image { width: 100%; height: 760px; border-radius: var(--radius-m); object-fit: cover; }
+
+    .p-product .info { display: flex; flex-direction: column; gap: 22px; }
+    .p-product .brand b { font-family: var(--font-primary); font-size: 18px; font-weight: 700; display: inline-block; border-bottom: 2px solid var(--foreground); padding-bottom: 4px; }
+    .p-product .pd-title { font-family: var(--font-primary); font-size: 30px; font-weight: 700; line-height: 1.15; margin: 0; }
+    .p-product .price-block { display: flex; flex-direction: column; gap: 4px; }
+    .p-product .price-row { display: flex; align-items: baseline; gap: 8px; }
+    .p-product .price-now { font-family: var(--font-primary); font-size: 26px; font-weight: 700; color: var(--primary); }
+    .p-product .price-vat { font-size: 14px; color: var(--muted-foreground); }
+    .p-product .norm-row { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted-foreground); }
+    .p-product .norm-row .save { font-family: var(--font-primary); font-weight: 600; color: var(--primary); }
+
+    .p-product .supplier label { font-family: var(--font-secondary); font-size: 15px; }
+    .p-product .supplier label b { font-family: var(--font-primary); font-weight: 700; }
+    .p-product .tiles { display: flex; gap: 10px; margin-top: 12px; }
+    .p-product .tile { width: 72px; height: 72px; display: grid; place-items: center; border-radius: var(--radius-m); background: var(--background); border: 1px solid var(--border); font-family: var(--font-primary); font-size: 14px; font-weight: 700; cursor: pointer; }
+    .p-product .tile.is-active { border: 2px solid var(--foreground); }
+
+    .p-product .deal { display: flex; flex-direction: column; gap: 14px; background: var(--accent); border: 1px solid var(--primary); border-radius: var(--radius-l); padding: 18px; }
+    .p-product .deal-head { display: flex; align-items: center; gap: 10px; }
+    .p-product .deal-crest { width: 34px; height: 34px; border-radius: var(--radius-pill); background: var(--primary); color: #fff; display: grid; place-items: center; font-family: var(--font-primary); font-size: 11px; font-weight: 700; flex-shrink: 0; }
+    .p-product .deal-head .ht { flex: 1; }
+    .p-product .deal-head .ht b { display: block; font-family: var(--font-primary); font-size: 16px; font-weight: 700; color: var(--accent-foreground); }
+    .p-product .deal-head .ht span { display: block; font-size: 12px; color: var(--accent-foreground); }
+    .p-product .deal-tag { background: var(--primary); color: #fff; font-family: var(--font-primary); font-size: 10px; font-weight: 600; letter-spacing: .5px; padding: 5px 10px; border-radius: var(--radius-pill); }
+    .p-product .deal-benefits { display: flex; flex-direction: column; gap: 9px; }
+    .p-product .deal-benefit { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: var(--accent-foreground); }
+    .p-product .deal-benefit .icon { width: 18px; height: 18px; color: var(--primary); flex-shrink: 0; }
+    .p-product .deal-foot { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--accent-foreground); }
+    .p-product .deal-foot .icon { width: 14px; height: 14px; }
+
+    .p-product .note-box { display: flex; align-items: center; gap: 12px; background: var(--background); border-radius: var(--radius-m); padding: 16px; font-size: 14px; line-height: 1.4; }
+    .p-product .note-box .icon { width: 22px; height: 22px; flex-shrink: 0; }
+    .p-product .note-box--pop .icon { color: var(--primary); }
+
+    .p-product .field-group { display: flex; flex-direction: column; gap: 8px; }
+    .p-product .field-group > label { font-family: var(--font-primary); font-size: 15px; font-weight: 600; }
+    .p-product .select { display: flex; align-items: center; justify-content: space-between; background: var(--card); border: 1px solid var(--input-border); border-radius: var(--radius-m); padding: 15px 18px; font-size: 15px; color: var(--muted-foreground); cursor: pointer; }
+    .p-product .select .icon { width: 22px; height: 22px; color: var(--foreground); }
+
+    .p-product .cart-row { display: flex; gap: 14px; }
+    .p-product .add-btn { flex: 1; height: 64px; display: grid; place-items: center; border-radius: var(--radius-pill); background: var(--secondary); color: #fff; font-family: var(--font-primary); font-size: 17px; font-weight: 700; cursor: pointer; }
+    .p-product .add-btn:hover { background: #000; }
+    .p-product .qty-stepper { display: inline-flex; align-items: center; gap: 4px; align-self: flex-start; border: 1px solid var(--input-border); border-radius: var(--radius-m); padding: 6px; }
+    .p-product .qty-stepper button { width: 44px; height: 44px; display: grid; place-items: center; border-radius: var(--radius-s); color: var(--foreground); }
+    .p-product .qty-stepper button:hover { background: var(--background); }
+    .p-product .qty-stepper .qv { min-width: 56px; text-align: center; font-family: var(--font-primary); font-size: 18px; font-weight: 700; }
+    .p-product .select span[data-dd-value].is-placeholder { color: var(--muted-foreground); }
+    .p-product .thumb, .p-product .tile { transition: border-color .15s ease; }
+    .p-product .fav-btn { width: 64px; height: 64px; display: grid; place-items: center; border-radius: var(--radius-pill); border: 1px solid var(--border); background: var(--card); cursor: pointer; }
+    .p-product .fav-btn .icon { width: 24px; height: 24px; color: var(--foreground); }
+
+    @media (max-width: 1100px) {
+      .p-product .pd-body { grid-template-columns: 1fr; }
+      .p-product .main-image { height: 480px; }
+    }
+  </style>
+</head>
+<body data-active="udforsk" class="p-product">
+  <div class="page">
+    <div data-include="header"></div>
+
+    <!-- Group strip: category switch -->
+    <div class="strip">
+      <span class="strip__pill"><i data-lucide="layers" class="icon"></i> ALLE KATEGORIER</span>
+      <span class="strip__sep"></span>
+      <a href="category-shirts.html" class="is-active">Tøj</a>
+      <a href="#">Sko</a>
+      <a href="category-sportstech.html">Udstyr</a>
+      <a href="category-sportstech.html">Tech</a>
+      <a href="#">Digitale værktøjer</a>
+      <a href="category-sponsor.html">Sponsor &amp; fundraising</a>
+      <a href="#">Faciliteter &amp; drift</a>
+      <a href="#">Events &amp; rejser</a>
+      <a href="#">Uddannelse</a>
+      <a href="#">Sundhed &amp; trivsel</a>
+    </div>
+
+    <section class="section" style="padding:24px 40px 48px">
+      <!-- Breadcrumb -->
+      <div class="crumb" style="margin-bottom:20px">
+        <a href="index.html">Hjem</a>
+        <i data-lucide="chevron-right" class="icon"></i>
+        <a href="category-shirts.html">Tøj</a>
+        <i data-lucide="chevron-right" class="icon"></i>
+        <a href="#">Træningstøj</a>
+        <i data-lucide="chevron-right" class="icon"></i>
+        <span style="color:var(--primary);font-weight:600">Træningsbukser</span>
+      </div>
+
+      <div class="pd-body">
+        <!-- Gallery -->
+        <div class="gallery">
+          <div class="thumbs">
+            <img class="thumb is-active" src="assests/shirt1.webp" alt="Visning 1" />
+            <img class="thumb" src="assests/shirt1c.webp" alt="Visning 2" />
+            <img class="thumb" src="assests/shirt1b.webp" alt="Visning 3" />
+          </div>
+          <img class="main-image" src="assests/shirt1.webp" alt="Danmark Hjemmebanetrøje 2026/27 Pro Player Edition" />
+        </div>
+
+        <!-- Info -->
+        <div class="info">
+          <div class="brand"><b>Hummel</b></div>
+          <h1 class="pd-title">Danmark Hjemmebanetrøje<br />2026/27 Pro Player Edition</h1>
+
+          <div class="price-block">
+            <div class="price-row">
+              <span class="price-now">fra 374,00 kr</span>
+              <span class="price-vat">inkl. moms</span>
+            </div>
+            <div class="norm-row">
+              <span>Normalpris:</span>
+              <span style="text-decoration:line-through">549,00 kr</span>
+              <span class="save">DBU-klubpris −25%</span>
+            </div>
+          </div>
+
+          <!-- Supplier select -->
+          <div class="supplier">
+            <label>Leverandør: <b>Hummel</b></label>
+            <div class="tiles">
+              <div class="tile is-active">Hummel</div>
+              <div class="tile">Sport24</div>
+              <div class="tile">Unisport</div>
+              <div class="tile">Interspor</div>
+            </div>
+          </div>
+
+          <!-- DBU Club Deal -->
+          <div class="deal">
+            <div class="deal-head">
+              <span class="deal-crest">DBU</span>
+              <div class="ht">
+                <b>DBU-aftale for FC Duckwise</b>
+                <span>Forhandlet af Dansk Boldspil-Union til din klub</span>
+              </div>
+              <span class="deal-tag">AKTIV</span>
+            </div>
+            <div class="deal-benefits">
+              <div class="deal-benefit"><i data-lucide="circle-check" class="icon"></i> −25% klubrabat på alle Hummel-varer</div>
+              <div class="deal-benefit"><i data-lucide="circle-check" class="icon"></i> Gratis klubtryk, logo &amp; spillernavn</div>
+              <div class="deal-benefit"><i data-lucide="circle-check" class="icon"></i> Fri fragt på ordrer over 1.000 kr</div>
+              <div class="deal-benefit"><i data-lucide="circle-check" class="icon"></i> Faktura til klubben — saml medlemmernes ordrer</div>
+            </div>
+            <div class="deal-foot"><i data-lucide="calendar" class="icon"></i> Gælder til 30. juni 2026 · DBU × Hummel rammeaftale</div>
+          </div>
+
+          <!-- Fit tip -->
+          <div class="note-box">
+            <i data-lucide="ruler" class="icon"></i>
+            Produktet er stor i størrelsen, og vi anbefaler derfor at gå en størrelse ned
+          </div>
+
+          <!-- Køn -->
+          <div class="field-group">
+            <label>Køn</label>
+            <div class="dd" id="dd-gender">
+              <div class="select" data-dd-toggle><span data-dd-value>Herre</span> <i data-lucide="chevron-down" class="icon"></i></div>
+            </div>
+          </div>
+
+          <!-- Size -->
+          <div class="field-group">
+            <label>Størrelse</label>
+            <div class="dd" id="dd-size">
+              <div class="select" data-dd-toggle><span data-dd-value data-placeholder="1">Vælg størrelse</span> <i data-lucide="chevron-down" class="icon"></i></div>
+            </div>
+          </div>
+
+          <!-- Antal -->
+          <div class="field-group">
+            <label>Antal</label>
+            <div class="qty-stepper" id="qty">
+              <button type="button" data-qty="-1" aria-label="Færre"><i data-lucide="minus" class="icon"></i></button>
+              <span class="qv">1</span>
+              <button type="button" data-qty="1" aria-label="Flere"><i data-lucide="plus" class="icon"></i></button>
+            </div>
+          </div>
+
+          <!-- Cart row -->
+          <div class="cart-row">
+            <button class="add-btn" id="add-btn">Læg i indkøbskurv</button>
+            <button class="fav-btn" id="fav-btn" aria-label="Tilføj til favoritter"><i data-lucide="heart" class="icon"></i></button>
+          </div>
+
+          <!-- Popular tip -->
+          <div class="note-box note-box--pop">
+            <i data-lucide="flame" class="icon"></i>
+            Det her er en af vores mest populære varer denne måned
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related products -->
+    <section class="section" style="padding:8px 40px 48px">
+      <div class="section__head">
+        <h2 class="section__title">Relaterede varer</h2>
+        <a class="section__link" href="category-shirts.html">Se alle <i data-lucide="arrow-right" class="icon" style="width:16px;height:16px"></i></a>
+      </div>
+      <div class="grid grid--4" id="related-grid"></div>
+    </section>
+
+    <div data-include="footer"></div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/store.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tweaks.js"></script>
+  <script src="js/cards.js"></script>
+  <script>
+    renderCards("#related-grid", [
+      { img: "assests/shirt1.webp", cat: "HJEMMEBANE · FC KØBENHAVN", title: "Officiel Hjemmebanetrøje 24/25", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "399 kr", status: "TILGÆNGELIG", href: "product.html" },
+      { img: "assests/shirt2.webp", cat: "UDEBANE · BRØNDBY IF", title: "Udebanetrøje 23/24 Spillerversion", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "349 kr", status: "RESERVERET", statusKind: "warning" },
+      { img: "assests/shirt3.webp", cat: "HJEMMEBANE · AGF", title: "Retro Hjemmebanetrøje 1996", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "549 kr", status: "FREMHÆVET", statusKind: "info" },
+      { img: "assests/shirt4.webp", cat: "UDEBANE · SILKEBORG IF", title: "Udebanetrøje 24/25", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "299 kr", status: "TILGÆNGELIG" }
+    ]);
+  </script>
+
+  <script>
+  (function () {
+    var PRODUCT = { title: "Danmark Hjemmebanetrøje 2026/27", sup: "Hummel", img: "assests/shirt1.webp", unit: 374, unitNote: "DBU-klubpris (−25%)", det: "Pro Player Edition · DBU × Hummel aftale" };
+    var SIZES = { Herre: ["S","M","L","XL","XXL"], Dame: ["XS","S","M","L","XL"], Ungdom: ["128","140","152","164"] };
+    var gender = "Herre", size = null, qty = 1;
+
+    /* ---- generic dropdown ---- */
+    function buildDD(rootId, options, current, onPick) {
+      var root = document.getElementById(rootId);
+      var toggle = root.querySelector("[data-dd-toggle]");
+      var valEl = root.querySelector("[data-dd-value]");
+      function render() {
+        valEl.textContent = current || valEl.getAttribute("data-ph") || "Vælg";
+        valEl.classList.toggle("is-placeholder", !current);
+      }
+      function close() { var m = root.querySelector(".dd__menu"); if (m) m.remove(); toggle.classList.remove("is-open"); }
+      function open() {
+        close();
+        var menu = document.createElement("div");
+        menu.className = "dd__menu";
+        menu.innerHTML = options.map(function (o) {
+          return '<button class="dd__opt' + (o === current ? " is-on" : "") + '" data-v="' + o + '">' + o +
+            (o === current ? ' <i data-lucide="check" class="icon"></i>' : "") + "</button>";
+        }).join("");
+        root.appendChild(menu);
+        if (window.lucide) window.lucide.createIcons();
+        menu.querySelectorAll(".dd__opt").forEach(function (b) {
+          b.addEventListener("click", function (e) {
+            e.stopPropagation(); current = b.getAttribute("data-v"); render(); close(); onPick(current);
+          });
+        });
+        toggle.classList.add("is-open");
+      }
+      toggle.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (root.querySelector(".dd__menu")) close(); else open();
+      });
+      document.addEventListener("click", close);
+      root.setData = function (opts, cur) { options = opts; current = cur; render(); };
+      render();
+      return root;
+    }
+
+    var sizeDD;
+    var genderDD = buildDD("dd-gender", ["Herre","Dame","Ungdom"], "Herre", function (g) {
+      gender = g; size = null;
+      sizeDD.setData(SIZES[g], null);
+    });
+    document.querySelector("#dd-size [data-dd-value]").setAttribute("data-ph", "Vælg størrelse");
+    sizeDD = buildDD("dd-size", SIZES.Herre, null, function (s) { size = s; });
+
+    /* ---- qty stepper ---- */
+    var qv = document.querySelector("#qty .qv");
+    document.querySelectorAll("#qty [data-qty]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        qty = Math.max(1, qty + parseInt(b.getAttribute("data-qty"), 10));
+        qv.textContent = qty;
+      });
+    });
+
+    /* ---- supplier tiles ---- */
+    document.querySelectorAll(".tiles .tile").forEach(function (t) {
+      t.addEventListener("click", function () {
+        document.querySelectorAll(".tiles .tile").forEach(function (x) { x.classList.remove("is-active"); });
+        t.classList.add("is-active");
+        PRODUCT.sup = t.textContent.trim();
+        document.querySelector(".brand b").textContent = PRODUCT.sup;
+        document.querySelector(".supplier label b").textContent = PRODUCT.sup;
+      });
+    });
+
+    /* ---- gallery thumbs ---- */
+    var main = document.querySelector(".main-image");
+    document.querySelectorAll(".thumbs .thumb").forEach(function (th) {
+      th.addEventListener("click", function () {
+        document.querySelectorAll(".thumbs .thumb").forEach(function (x) { x.classList.remove("is-active"); });
+        th.classList.add("is-active");
+        if (main) { main.src = th.src; PRODUCT.img = th.getAttribute("src"); }
+      });
+    });
+
+    /* ---- favorite ---- */
+    var favBtn = document.getElementById("fav-btn");
+    var favKey = "product:" + PRODUCT.title;
+    function paintFav() { favBtn.classList.toggle("is-faved", window.DBU && window.DBU.isFav(favKey)); }
+    favBtn.addEventListener("click", function () { if (window.DBU) { window.DBU.toggleFav(favKey); paintFav(); } });
+    paintFav();
+
+    /* ---- add to cart ---- */
+    var addBtn = document.getElementById("add-btn");
+    addBtn.addEventListener("click", function () {
+      if (!size) {
+        var ddToggle = document.querySelector("#dd-size [data-dd-toggle]");
+        ddToggle.style.borderColor = "var(--primary)";
+        ddToggle.scrollIntoView({ block: "center" });
+        window.dbuToast && window.dbuToast("Vælg en størrelse først", "alert");
+        setTimeout(function () { ddToggle.style.borderColor = ""; }, 1600);
+        return;
+      }
+      window.DBU.addToCart({
+        sup: PRODUCT.sup, title: PRODUCT.title, det: PRODUCT.det, img: PRODUCT.img,
+        unit: PRODUCT.unit, unitNote: PRODUCT.unitNote,
+        dist: [{ gender: gender, size: size, qty: qty }]
+      });
+      window.dbuToast && window.dbuToast(qty + " × " + gender + " " + size + " lagt i kurven", "ok", "cart.html");
+    });
+  })();
+  </script>
+</body>
+</html>

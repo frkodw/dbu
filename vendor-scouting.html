@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Leverandør — Find klubber at sponsorere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .p-scout .scout-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin: 18px 0; }
+    .p-scout .scout-head h1 { font-family: var(--font-primary); font-size: 34px; font-weight: 700; margin: 0; }
+    .p-scout .scout-head p { font-size: 15px; color: var(--muted-foreground); margin: 8px 0 0; max-width: 680px; }
+    .p-scout .sort-pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: var(--radius-pill); background: var(--card); border: 1px solid var(--border); font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+    .p-scout .sort-pill .icon { width: 16px; height: 16px; color: var(--muted-foreground); }
+
+    .p-scout .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+    .p-scout .fchip { padding: 8px 14px; border-radius: var(--radius-pill); background: var(--card); border: 1px solid var(--border); font-size: 13px; cursor: pointer; }
+    .p-scout .fchip.is-active { background: var(--secondary); border-color: var(--secondary); color: #fff; font-weight: 600; }
+
+    .p-scout .table { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden; }
+    .p-scout .row { display: grid; grid-template-columns: 20px 1fr 150px 140px 160px 110px 120px; gap: 16px; align-items: center; padding: 18px 20px; }
+    .p-scout .row.head { background: var(--background); padding: 14px 20px; }
+    .p-scout .row.head .col { font-family: var(--font-primary); font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--muted-foreground); }
+    .p-scout .row.head .col.fra { text-align: right; }
+    .p-scout .row.featured { background: var(--accent); border-left: 3px solid var(--primary); }
+    .p-scout .rdiv { height: 1px; background: var(--border); }
+    .p-scout .star { width: 20px; height: 20px; }
+    .p-scout .star.on { color: var(--primary); }
+    .p-scout .star.off { color: var(--input-border); }
+
+    .p-scout .identity { display: flex; align-items: center; gap: 12px; }
+    .p-scout .crest { width: 40px; height: 40px; border-radius: var(--radius-m); display: grid; place-items: center; color: #fff; font-family: var(--font-primary); font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-scout .idc b { display: block; font-family: var(--font-primary); font-size: 16px; font-weight: 700; }
+    .p-scout .idc span { display: block; font-size: 12px; color: var(--muted-foreground); }
+
+    .p-scout .match { display: flex; flex-direction: column; gap: 7px; }
+    .p-scout .dots { display: flex; gap: 5px; }
+    .p-scout .dot { width: 9px; height: 9px; border-radius: var(--radius-pill); }
+    .p-scout .dot.on { background: var(--primary); }
+    .p-scout .dot.off { background: var(--border); }
+    .p-scout .mlabel { font-size: 12px; font-weight: 600; }
+    .p-scout .mlabel.good { color: var(--color-success-foreground); }
+    .p-scout .mlabel.maybe { color: var(--color-warning-foreground); }
+
+    .p-scout .reach { display: flex; flex-direction: column; gap: 4px; }
+    .p-scout .rv { display: flex; align-items: center; gap: 7px; }
+    .p-scout .rv .n { font-family: var(--font-primary); font-size: 16px; font-weight: 700; }
+    .p-scout .trend { display: inline-flex; align-items: center; gap: 2px; padding: 2px 6px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 600; }
+    .p-scout .trend .icon { width: 11px; height: 11px; }
+    .p-scout .trend.up { background: var(--color-success); color: var(--color-success-foreground); }
+    .p-scout .trend.flat { background: var(--background); color: var(--muted-foreground); }
+    .p-scout .rlabel { font-size: 12px; color: var(--muted-foreground); }
+
+    .p-scout .spons { display: flex; flex-direction: column; gap: 6px; }
+    .p-scout .bar { display: flex; gap: 3px; }
+    .p-scout .seg { width: 14px; height: 6px; border-radius: var(--radius-s); }
+    .p-scout .seg.on { background: var(--pitch-green); }
+    .p-scout .seg.off { background: var(--border); }
+    .p-scout .slabel { font-size: 12px; color: var(--muted-foreground); }
+
+    .p-scout .fra { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .p-scout .fra .fl { font-family: var(--font-primary); font-size: 10px; font-weight: 600; letter-spacing: 1px; color: var(--muted-foreground); }
+    .p-scout .fra .fp { font-family: var(--font-primary); font-size: 18px; font-weight: 700; color: var(--primary); }
+
+    .p-scout .scout-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 22px; }
+    .p-scout .scout-footer .shown { font-size: 13px; color: var(--muted-foreground); }
+  </style>
+</head>
+<body data-active="udforsk" class="p-scout" data-acct="Simon Sponsor" data-group="Salling Group" data-abbr="SS" data-nav-label="Min side">
+  <div class="page">
+    <div data-include="header"></div>
+
+    <section class="section" style="padding:28px 40px 40px">
+      <!-- Breadcrumb -->
+      <div class="crumb">
+        <a href="index.html">Markedsplads</a>
+        <i data-lucide="chevron-right" class="icon"></i>
+        <span style="color:var(--primary);font-weight:600">Find klubber</span>
+      </div>
+
+      <!-- Title row -->
+      <div class="scout-head">
+        <div>
+          <h1>Find klubber at sponsorere</h1>
+          <p>Scout blandt 24 klubber der søger sponsorer — sammenlign rækkevidde, ledige sponsorater og pris.</p>
+        </div>
+        <button class="sort-pill">Sortér: Bedst match <i data-lucide="chevron-down" class="icon"></i></button>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="chips">
+        <span class="fchip is-active">Alle klubber · 24</span>
+        <span class="fchip">Tech-match · 7</span>
+        <span class="fchip">Hovedstaden · 9</span>
+        <span class="fchip">Ledige hovedsponsorater · 18</span>
+        <span class="fchip">Under 25.000 kr · 11</span>
+      </div>
+
+      <!-- Scouting table -->
+      <div class="table" id="scout-table"></div>
+
+      <!-- Footer -->
+      <div class="scout-footer">
+        <span class="shown">Viser 6 af 24 klubber</span>
+        <button class="sort-pill">Indlæs flere klubber <i data-lucide="chevron-down" class="icon"></i></button>
+      </div>
+    </section>
+
+    <div data-include="footer"></div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/store.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tweaks.js"></script>
+  <script>
+    (function () {
+      var clubs = [
+        { star: false, featured: false, abbr: "FCD", crest: "#D60A2E", name: "FC Duckwise", meta: "Andeby · Sjælland · Serie 2",
+          dots: 5, match: "Stærkt match", matchClass: "good", reach: "1.248", trend: "+8%", trendDir: "up",
+          segOn: 4, segTotal: 6, spons: "4 af 6 ledige", fra: "12.000 kr" },
+        { star: false, featured: false, abbr: "TT", crest: "#1A1A1A", name: "Trifork Tigers", meta: "Aarhus · Midtjylland · Serie 1",
+          dots: 5, match: "Stærkt match", matchClass: "good", reach: "2.106", trend: "+12%", trendDir: "up",
+          segOn: 5, segTotal: 7, spons: "5 af 7 ledige", fra: "18.000 kr" },
+        { star: false, featured: false, abbr: "CM", crest: "#1A56DB", name: "CPH Mallards", meta: "København · Hovedstaden · Danmarksserien",
+          dots: 4, match: "Godt match", matchClass: "good", reach: "3.420", trend: "+5%", trendDir: "up",
+          segOn: 3, segTotal: 8, spons: "3 af 8 ledige", fra: "24.000 kr" },
+        { star: false, featured: false, abbr: "AD", crest: "#3F8F3F", name: "Aarhus Ducks", meta: "Aarhus · Midtjylland · Serie 3",
+          dots: 4, match: "Godt match", matchClass: "good", reach: "842", trend: "+3%", trendDir: "up",
+          segOn: 6, segTotal: 6, spons: "6 af 6 ledige", fra: "8.000 kr" },
+        { star: false, featured: false, abbr: "NN", crest: "#8E0014", name: "Nørrebro Nightingales", meta: "København · Hovedstaden · Serie 2",
+          dots: 3, match: "Muligt match", matchClass: "maybe", reach: "1.560", trend: "−2%", trendDir: "flat",
+          segOn: 2, segTotal: 5, spons: "2 af 5 ledige", fra: "15.000 kr" },
+        { star: false, featured: false, abbr: "OO", crest: "#9A6700", name: "Odense Otters", meta: "Odense · Syddanmark · Kvindeligaen",
+          dots: 3, match: "Muligt match", matchClass: "maybe", reach: "1.090", trend: "+1%", trendDir: "up",
+          segOn: 4, segTotal: 6, spons: "4 af 6 ledige", fra: "10.000 kr" }
+      ];
+
+      function dots(n) {
+        var s = "";
+        for (var i = 0; i < 5; i++) s += '<span class="dot ' + (i < n ? "on" : "off") + '"></span>';
+        return s;
+      }
+      function segs(on, total) {
+        var s = "";
+        for (var i = 0; i < total; i++) s += '<span class="seg ' + (i < on ? "on" : "off") + '"></span>';
+        return s;
+      }
+
+      var html = '<div class="row head">' +
+        '<div class="col"></div>' +
+        '<div class="col">KLUB</div>' +
+        '<div class="col">MATCH</div>' +
+        '<div class="col">RÆKKEVIDDE</div>' +
+        '<div class="col">SPONSORATER</div>' +
+        '<div class="col fra">FRA</div>' +
+        '<div class="col"></div>' +
+        '</div>';
+
+      clubs.forEach(function (c, idx) {
+        html += '<div class="rdiv"></div>';
+        var trendIcon = c.trendDir === "up" ? "trending-up" : "trending-down";
+        html += '<div class="row' + (c.featured ? " featured" : "") + '">' +
+          '<i data-lucide="star" class="star ' + (c.star ? "on" : "off") + '"></i>' +
+          '<div class="identity">' +
+            '<div class="crest" style="background:' + c.crest + '">' + c.abbr + '</div>' +
+            '<div class="idc"><b>' + c.name + '</b><span>' + c.meta + '</span></div>' +
+          '</div>' +
+          '<div class="match"><div class="dots">' + dots(c.dots) + '</div>' +
+            '<span class="mlabel ' + c.matchClass + '">' + c.match + '</span></div>' +
+          '<div class="reach"><div class="rv"><span class="n">' + c.reach + '</span>' +
+            '<span class="trend ' + c.trendDir + '"><i data-lucide="' + trendIcon + '" class="icon"></i>' + c.trend + '</span></div>' +
+            '<span class="rlabel">medlemmer</span></div>' +
+          '<div class="spons"><div class="bar">' + segs(c.segOn, c.segTotal) + '</div>' +
+            '<span class="slabel">' + c.spons + '</span></div>' +
+          '<div class="fra"><span class="fl">FRA</span><span class="fp">' + c.fra + '</span></div>' +
+          '<div class="action"><a class="btn btn--sm btn--block" href="#">Se klub</a></div>' +
+          '</div>';
+      });
+
+      document.getElementById("scout-table").innerHTML = html;
+      if (window.lucide) lucide.createIcons();
+    })();
+  </script>
+</body>
+</html>

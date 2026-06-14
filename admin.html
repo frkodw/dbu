@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Klubmarked — Godkendelser</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .p-admin .content { padding: 28px 40px 48px; display: flex; flex-direction: column; gap: 18px; }
+    .p-admin h1 { font-family: var(--font-primary); font-size: 34px; font-weight: 700; margin: 0; }
+    .p-admin .sub { color: var(--muted-foreground); font-size: 15px; margin: 4px 0 0; }
+    .p-admin .tabs { display: flex; gap: 8px; margin-top: 14px; }
+    .p-admin .tab { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: var(--radius-pill); font-family: var(--font-primary); font-size: 14px; font-weight: 600; border: 1px solid var(--border); background: var(--card); cursor: pointer; }
+    .p-admin .tab.is-active { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+    .p-admin .tab .cnt { padding: 2px 8px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; background: var(--background); color: var(--muted-foreground); }
+    .p-admin .tab.is-active .cnt { background: rgba(255,255,255,.2); color: #fff; }
+    .p-admin .body { display: grid; grid-template-columns: 440px 1fr; gap: 28px; align-items: start; }
+    .p-admin .list-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .p-admin .list-head b { font-family: var(--font-primary); font-size: 12px; letter-spacing: 1px; color: var(--muted-foreground); }
+    .p-admin .list-head .icon { width: 16px; height: 16px; color: var(--muted-foreground); }
+    .p-admin .reqs { display: flex; flex-direction: column; gap: 12px; }
+    .p-admin .req { display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: var(--radius-l); background: var(--card); border: 1px solid var(--border); cursor: pointer; }
+    .p-admin .req.is-active { background: var(--accent); border: 2px solid var(--primary); }
+    .p-admin .req-top { display: flex; justify-content: space-between; align-items: center; }
+    .p-admin .requester { display: flex; align-items: center; gap: 10px; }
+    .p-admin .requester .av { width: 36px; height: 36px; border-radius: var(--radius-pill); background: var(--primary); color: #fff; display: grid; place-items: center; font-family: var(--font-primary); font-weight: 700; font-size: 13px; }
+    .p-admin .requester .av--dark { background: var(--secondary); }
+    .p-admin .requester b { display: block; font-family: var(--font-primary); font-size: 14px; font-weight: 700; }
+    .p-admin .requester > div span { display: block; font-size: 12px; color: var(--muted-foreground); }
+    .p-admin .req-title { font-family: var(--font-primary); font-size: 15px; font-weight: 600; }
+    .p-admin .req-bottom { display: flex; justify-content: space-between; align-items: center; }
+    .p-admin .req-bottom .meta { font-size: 12px; color: var(--muted-foreground); }
+    .p-admin .req-bottom .amt { font-family: var(--font-primary); font-size: 15px; font-weight: 700; }
+
+    .p-admin .detail { display: flex; flex-direction: column; gap: 18px; }
+    .p-admin .dcard { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden; }
+    .p-admin .dhead { display: flex; justify-content: space-between; align-items: flex-start; padding: 24px; border-bottom: 1px solid var(--border); }
+    .p-admin .dhead .av { width: 46px; height: 46px; font-size: 16px; }
+    .p-admin .dhead b { font-family: var(--font-primary); font-size: 18px; font-weight: 700; }
+    .p-admin .dhead .role { font-size: 14px; color: var(--muted-foreground); }
+    .p-admin .dhead-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+    .p-admin .dhead-right .meta { font-size: 12px; color: var(--muted-foreground); }
+    .p-admin .order { display: flex; flex-direction: column; gap: 16px; padding: 24px; }
+    .p-admin .order .lab { font-family: var(--font-primary); font-size: 13px; letter-spacing: 1px; color: var(--muted-foreground); font-weight: 600; }
+    .p-admin .line { display: flex; gap: 14px; align-items: center; }
+    .p-admin .line .thumb { width: 64px; height: 80px; border-radius: var(--radius-m); object-fit: cover; }
+    .p-admin .line .li { flex: 1; }
+    .p-admin .line .li .sup { font-family: var(--font-primary); font-size: 13px; font-weight: 700; }
+    .p-admin .line .li .tt { font-family: var(--font-primary); font-size: 17px; font-weight: 600; }
+    .p-admin .line .li .q { font-size: 13px; color: var(--muted-foreground); }
+    .p-admin .line .amt { font-family: var(--font-primary); font-size: 17px; font-weight: 700; }
+    .p-admin .dist { background: var(--background); border-radius: var(--radius-s); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .p-admin .dist .h { font-family: var(--font-primary); font-size: 13px; font-weight: 700; }
+    .p-admin .dist .row { display: flex; gap: 10px; font-size: 13px; }
+    .p-admin .dist .row .g { font-family: var(--font-primary); font-weight: 600; flex: 0 0 64px; }
+    .p-admin .dist .row .s { color: var(--muted-foreground); }
+    .p-admin .qnote { background: var(--accent); color: var(--accent-foreground); border-radius: var(--radius-s); padding: 14px; }
+    .p-admin .qnote .q { font-size: 14px; line-height: 1.5; }
+    .p-admin .qnote .by { font-family: var(--font-primary); font-size: 12px; font-weight: 600; margin-top: 6px; }
+
+    .p-admin .decision { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+    .p-admin .decision .dh { display: flex; justify-content: space-between; align-items: center; }
+    .p-admin .decision .dh b { font-family: var(--font-primary); font-size: 17px; font-weight: 700; }
+    .p-admin .decision .dh span { font-size: 13px; color: var(--muted-foreground); }
+    .p-admin .comment { border: 1px solid var(--input-border); border-radius: var(--radius-m); padding: 14px; min-height: 74px; font-family: var(--font-secondary); font-size: 14px; color: var(--foreground); resize: vertical; width: 100%; box-sizing: border-box; }
+    .p-admin .decision .buttons { display: flex; gap: 12px; }
+    .p-admin .approve { flex: 1; height: 56px; border-radius: var(--radius-pill); background: var(--color-success); color: var(--color-success-foreground); display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-primary); font-size: 16px; font-weight: 700; }
+    .p-admin .reject { width: 180px; height: 56px; border-radius: var(--radius-pill); border: 1px solid var(--destructive); color: var(--destructive); display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-primary); font-size: 15px; font-weight: 600; background: var(--card); }
+    .p-admin .alt { font-size: 13px; color: var(--muted-foreground); }
+
+    .p-admin .timeline { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+    .p-admin .timeline > b { font-family: var(--font-primary); font-size: 17px; font-weight: 700; }
+    .p-admin .tl { display: flex; gap: 12px; align-items: flex-start; }
+    .p-admin .tl .dot { flex: 0 0 32px; width: 32px; height: 32px; border-radius: var(--radius-pill); display: grid; place-items: center; }
+    .p-admin .tl .dot .icon { width: 16px; height: 16px; color: #fff; }
+    .p-admin .tl .dot--done { background: var(--color-success); }
+    .p-admin .tl .dot--active { background: var(--primary); }
+    .p-admin .tl .dot--idle { background: var(--background); border: 1px solid var(--border); }
+    .p-admin .tl .dot--idle .icon { color: var(--muted-foreground); }
+    .p-admin .tl b { display: block; font-family: var(--font-primary); font-size: 15px; font-weight: 600; }
+    .p-admin .tl.is-idle b { color: var(--muted-foreground); }
+    .p-admin .tl span { font-size: 13px; color: var(--muted-foreground); }
+    .p-admin .tl .dot--reject { background: var(--destructive); }
+    .p-admin .result { display: flex; flex-direction: column; gap: 10px; border-radius: var(--radius-m); padding: 18px; }
+    .p-admin .result--approved { background: var(--color-success); }
+    .p-admin .result--rejected { background: var(--color-error); }
+    .p-admin .result__top { display: flex; align-items: center; gap: 10px; }
+    .p-admin .result__top .icon { width: 22px; height: 22px; }
+    .p-admin .result--approved .result__top { color: var(--color-success-foreground); }
+    .p-admin .result--rejected .result__top { color: var(--color-error-foreground); }
+    .p-admin .result__top b { font-family: var(--font-primary); font-size: 17px; font-weight: 700; flex: 1; }
+    .p-admin .result__top span { font-size: 13px; font-weight: 500; opacity: .8; }
+    .p-admin .result__cmt { margin: 0; font-size: 14px; line-height: 1.5; color: var(--foreground); }
+    .p-admin .no-sel { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 80px 20px; color: var(--muted-foreground); background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); }
+    .p-admin .no-sel .icon { width: 40px; height: 40px; }
+    .p-admin .no-sel p { margin: 0; font-size: 15px; }
+  </style>
+</head>
+<body class="p-admin" data-acct="Penge Pia" data-abbr="PP" data-active="klub">
+  <div class="page">
+    <div data-include="header"></div>
+    <div class="content">
+      <div>
+        <h1>Godkendelser</h1>
+        <p class="sub">Anmodninger der afventer din godkendelse som klubadministrator</p>
+        <div class="tabs">
+          <button class="tab is-active" data-tab="pending">Afventer <span class="cnt" data-cnt="pending">0</span></button>
+          <button class="tab" data-tab="approved">Godkendt <span class="cnt" data-cnt="approved">0</span></button>
+          <button class="tab" data-tab="rejected">Afvist <span class="cnt" data-cnt="rejected">0</span></button>
+        </div>
+      </div>
+
+      <div class="body">
+        <section>
+          <div class="list-head"><b>ANMODNINGER</b><i data-lucide="search" class="icon"></i></div>
+          <div class="reqs" id="reqs"></div>
+        </section>
+
+        <div class="detail" id="detail"></div>
+      </div>
+    </div>
+    <div data-include="footer"></div>
+  </div>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/store.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tweaks.js"></script>
+  <script>
+  (function () {
+    var STATUS = {
+      pending:  { label: "AFVENTER GODKENDELSE", badge: "warning", icon: "hourglass" },
+      approved: { label: "GODKENDT", badge: "success", icon: "circle-check" },
+      rejected: { label: "AFVIST", badge: "error", icon: "x" }
+    };
+    var listEl = document.getElementById("reqs");
+    var detailEl = document.getElementById("detail");
+    var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+    var activeTab = "pending";
+    var selectedId = null;
+
+    function abbrAv(r) { return r.requester.dark ? " av--dark" : ""; }
+
+    /* group an item's distribution by gender -> "S×2 · M×3  (5)" */
+    function distRows(item) {
+      var byG = {};
+      var order = [];
+      (item.dist || []).forEach(function (d) {
+        if (!byG[d.gender]) { byG[d.gender] = []; order.push(d.gender); }
+        byG[d.gender].push(d);
+      });
+      return order.map(function (g) {
+        var sum = byG[g].reduce(function (n, d) { return n + d.qty; }, 0);
+        var parts = byG[g].map(function (d) { return d.size + "×" + d.qty; }).join(" · ");
+        var label = g === "—" ? "" : g;
+        return '<div class="row"><span class="g">' + label + '</span><span class="s">' + parts + '&nbsp;&nbsp;(' + sum + ')</span></div>';
+      }).join("");
+    }
+
+    function itemQty(item) { return (item.dist || []).reduce(function (n, d) { return n + d.qty; }, 0); }
+
+    function timeline(status, r) {
+      function tl(cls, dot, icon, title, sub) {
+        return '<div class="tl ' + cls + '"><span class="dot ' + dot + '"><i data-lucide="' + icon + '" class="icon"></i></span>' +
+          '<div><b>' + title + '</b><span>' + sub + '</span></div></div>';
+      }
+      var rows = tl("", "dot--done", "circle-check", "Oprettet af " + r.requester.role.split(" ")[0].toLowerCase(), r.requester.name + " · " + r.createdAt);
+      if (status === "pending") {
+        rows += tl("", "dot--active", "hourglass", "Afventer din godkendelse", "Klubadministrator · nu");
+        rows += tl("is-idle", "dot--idle", "truck", "Sendes til leverandør", "Efter godkendelse");
+        rows += tl("is-idle", "dot--idle", "package-check", "Leveret til klubben", "Forventet 5–7 hverdage");
+      } else if (status === "approved") {
+        rows += tl("", "dot--done", "circle-check", "Godkendt af klubadmin", "Penge Pia · " + (r.decidedAt || "i dag"));
+        rows += tl("", "dot--active", "truck", "Sendt til leverandør", r.items[0].sup + " — klargøres");
+        rows += tl("is-idle", "dot--idle", "package-check", "Leveret til klubben", "Forventet 5–7 hverdage");
+      } else {
+        rows += tl("", "dot--reject", "x", "Afvist af klubadmin", "Penge Pia · " + (r.decidedAt || "i dag"));
+        rows += tl("is-idle", "dot--idle", "circle-slash", "Anmodning afsluttet", "Ingen bestilling oprettet");
+      }
+      return '<section class="timeline"><b>Forløb</b>' + rows + '</section>';
+    }
+
+    function decisionBlock(r) {
+      if (r.status === "pending") {
+        return '<section class="decision">' +
+          '<div class="dh"><b>Din beslutning</b><span>Indkøberen får besked med det samme</span></div>' +
+          '<textarea class="comment" id="comment" placeholder="Tilføj en kommentar (valgfri) …"></textarea>' +
+          '<div class="buttons">' +
+            '<button class="approve" id="btn-approve"><i data-lucide="circle-check" class="icon" style="width:20px;height:20px"></i> Godkend bestilling</button>' +
+            '<button class="reject" id="btn-reject"><i data-lucide="x" class="icon" style="width:18px;height:18px"></i> Afvis</button>' +
+          '</div>' +
+          '<p class="alt">Du kan også anmode om ændringer, før du godkender.</p>' +
+        '</section>';
+      }
+      var kind = r.status;
+      var head = kind === "approved" ? "Bestilling godkendt" : "Bestilling afvist";
+      return '<section class="decision"><div class="result result--' + kind + '">' +
+        '<div class="result__top"><i data-lucide="' + (kind === "approved" ? "circle-check" : "x-circle") + '" class="icon"></i>' +
+        '<b>' + head + '</b><span>' + (r.decidedAt || "") + '</span></div>' +
+        (r.decision ? '<p class="result__cmt">“' + r.decision + '”</p>' : "") +
+        '</div></section>';
+    }
+
+    function renderDetail(r) {
+      if (!r) { detailEl.innerHTML = '<div class="no-sel"><i data-lucide="inbox" class="icon"></i><p>Ingen anmodninger i denne kategori.</p></div>'; if (window.lucide) window.lucide.createIcons(); return; }
+      var st = STATUS[r.status];
+      var total = window.DBU.reqTotal(r);
+      var lines = r.items.map(function (it) {
+        var q = itemQty(it);
+        return '<div class="line">' +
+            '<img class="thumb" src="' + it.img + '" alt=""' + (it.fit ? ' style="object-fit:contain;background:var(--background)"' : '') + ' />' +
+            '<div class="li"><div class="sup">' + it.sup + '</div><div class="tt">' + it.title + '</div>' +
+            '<div class="q">' + q + ' stk · ' + window.DBU.kr(it.unit) + '/stk · inkl. DBU klubrabat</div></div>' +
+            '<div class="amt">' + window.DBU.kr(q * it.unit) + '</div>' +
+          '</div>' +
+          '<div class="dist"><span class="h">Fordeling · ' + q + ' stk</span>' + distRows(it) + '</div>';
+      }).join("");
+
+      detailEl.innerHTML =
+        '<article class="dcard">' +
+          '<div class="dhead">' +
+            '<div class="requester"><span class="av' + abbrAv(r) + '">' + r.requester.abbr + '</span>' +
+            '<div><b>' + r.requester.name + '</b><div class="role">' + r.requester.role + '</div></div></div>' +
+            '<div class="dhead-right"><span class="badge badge--' + st.badge + '"><i data-lucide="' + st.icon + '" class="icon" style="width:13px;height:13px"></i> ' + st.label + '</span>' +
+            '<span class="meta">Anmodning #' + r.id.replace("req-", "") + ' · ' + r.createdAt + '</span>' +
+            '<span class="meta">I alt ' + window.DBU.reqQty(r) + ' stk · ' + window.DBU.kr(total) + '</span></div>' +
+          '</div>' +
+          '<div class="order"><span class="lab">BESTILLING</span>' + lines +
+            '<div class="qnote"><div class="q">“' + r.note + '”</div><div class="by">— ' + r.by + '</div></div>' +
+          '</div>' +
+        '</article>' +
+        decisionBlock(r) +
+        timeline(r.status, r);
+
+      if (window.lucide) window.lucide.createIcons();
+
+      var ap = document.getElementById("btn-approve");
+      var rj = document.getElementById("btn-reject");
+      if (ap) ap.addEventListener("click", function () { decide(r.id, "approved"); });
+      if (rj) rj.addEventListener("click", function () { decide(r.id, "rejected"); });
+    }
+
+    function decide(id, status) {
+      var c = document.getElementById("comment");
+      window.DBU.decideRequest(id, status, c ? c.value.trim() : "");
+      activeTab = status;
+      selectedId = id;
+      window.dbuToast && window.dbuToast(status === "approved" ? "Bestilling godkendt — indkøberen får besked" : "Bestilling afvist", status === "approved" ? "ok" : "alert");
+      renderAll();
+    }
+
+    function renderList() {
+      var items = window.DBU.requestsByStatus(activeTab);
+      if (!items.some(function (r) { return r.id === selectedId; })) {
+        selectedId = items[0] ? items[0].id : null;
+      }
+      listEl.innerHTML = items.map(function (r) {
+        var st = STATUS[r.status];
+        return '<article class="req' + (r.id === selectedId ? " is-active" : "") + '" data-id="' + r.id + '">' +
+          '<div class="req-top"><div class="requester"><span class="av' + abbrAv(r) + '">' + r.requester.abbr + '</span>' +
+          '<div><b>' + r.requester.name + '</b><span>' + r.requester.role + '</span></div></div>' +
+          '<span class="badge badge--' + st.badge + '">' + st.label.split(" ")[0] + '</span></div>' +
+          '<div class="req-title">' + r.title + '</div>' +
+          '<div class="req-bottom"><span class="meta">' + r.createdAt + ' · ' + window.DBU.reqQty(r) + ' varer</span>' +
+          '<span class="amt">' + window.DBU.kr(window.DBU.reqTotal(r)) + '</span></div></article>';
+      }).join("") || '<div class="no-sel" style="padding:40px 16px"><i data-lucide="inbox" class="icon"></i><p>Ingen anmodninger her.</p></div>';
+      listEl.querySelectorAll("[data-id]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          selectedId = el.getAttribute("data-id");
+          renderList();
+          renderDetail(window.DBU.requests().filter(function (r) { return r.id === selectedId; })[0]);
+        });
+      });
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function renderTabs() {
+      ["pending", "approved", "rejected"].forEach(function (s) {
+        var el = document.querySelector('[data-cnt="' + s + '"]');
+        if (el) el.textContent = window.DBU.requestsByStatus(s).length;
+      });
+      tabs.forEach(function (t) { t.classList.toggle("is-active", t.getAttribute("data-tab") === activeTab); });
+    }
+
+    function renderAll() {
+      renderTabs();
+      renderList();
+      renderDetail(window.DBU.requests().filter(function (r) { return r.id === selectedId; })[0]);
+    }
+
+    tabs.forEach(function (t) {
+      t.addEventListener("click", function () {
+        activeTab = t.getAttribute("data-tab");
+        selectedId = null;
+        renderAll();
+      });
+    });
+
+    // Auto-focus the freshly-submitted order if it's pending
+    var last = window.DBU.lastOrder();
+    if (last) {
+      var lr = window.DBU.requests().filter(function (r) { return r.id === last.id; })[0];
+      if (lr && lr.status === "pending") { activeTab = "pending"; selectedId = lr.id; }
+    }
+    renderAll();
+  })();
+  </script>
+</body>
+</html>
