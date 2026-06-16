@@ -34,7 +34,8 @@
       sup: "Hummel",
       title: "Klub Hjemmebanetrøje 24/25",
       det: "Officiel klubtrøje · DBU × Hummel aftale",
-      img: "assests/shirt1.webp",
+      img: "assests/klubshirt1.png",
+      fit: true,
       unit: 399,
       unitNote: "Klubpris (−25%)",
       dist: [
@@ -123,8 +124,22 @@
       cart: seedCart(),
       requests: seedRequests(),
       favorites: {},
-      lastOrder: null
+      lastOrder: null,
+      // Monotonic request counter. Persisted in state (NOT a module-level
+      // var) so it survives reloads — otherwise every page load reset it and
+      // submitted orders collided on the same id (req-1043, req-1043, …),
+      // which made the admin approve/select the wrong batch.
+      seq: 1042
     };
+  }
+
+  // Highest req-NNNN number already present, so an upgraded state (saved
+  // before `seq` existed) continues without ever re-minting an existing id.
+  function maxReqSeq(requests) {
+    return (requests || []).reduce(function (mx, r) {
+      var m = /req-(\d+)/.exec(r && r.id || "");
+      return m ? Math.max(mx, parseInt(m[1], 10)) : mx;
+    }, 1042);
   }
 
   function load() {
@@ -137,6 +152,15 @@
       if (!Array.isArray(s.cart)) s.cart = seedCart();
       if (!Array.isArray(s.requests)) s.requests = seedRequests();
       if (!s.favorites || typeof s.favorites !== "object") s.favorites = {};
+      if (typeof s.seq !== "number") s.seq = maxReqSeq(s.requests);
+      // Heal any duplicate ids left by the old reset-on-reload counter, so
+      // the admin can target each batch unambiguously.
+      var seen = {};
+      s.requests.forEach(function (r) {
+        if (!r || !r.id) return;
+        if (seen[r.id]) { s.seq = maxReqSeq(s.requests) + 1; r.id = "req-" + s.seq; }
+        seen[r.id] = true;
+      });
       return s;
     } catch (e) {
       return fresh();
@@ -183,7 +207,6 @@
   function kr(n) { return fmt(n) + " kr"; }
 
   /* ---- Public API --------------------------------------------- */
-  var seq = 1043;
   window.DBU = {
     PERSONAS: PERSONAS,
     PERSONA_ORDER: PERSONA_ORDER,
@@ -243,8 +266,9 @@
     reqQty: reqQty,
     submitCartForApproval: function (note) {
       var p = PERSONAS[state.persona];
-      var id = "req-" + (seq++);
-      var ref = "DBU-2026-0" + (613 + state.requests.length);
+      var n = (state.seq = maxReqSeq(state.requests) + 1);
+      var id = "req-" + n;
+      var ref = "DBU-2026-0" + (613 + (n - 1042));
       var req = {
         id: id, ref: ref,
         requester: { name: p.acct, role: p.role, abbr: p.abbr, dark: p.id === "torben" },

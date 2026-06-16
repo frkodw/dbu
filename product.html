@@ -12,9 +12,9 @@
     .p-product .pd-body { display: grid; grid-template-columns: 740px 1fr; gap: 48px; align-items: start; }
     .p-product .gallery { display: grid; grid-template-columns: 84px 1fr; gap: 16px; }
     .p-product .thumbs { display: flex; flex-direction: column; gap: 12px; }
-    .p-product .thumb { width: 84px; height: 84px; border-radius: var(--radius-s); object-fit: cover; border: 1px solid var(--border); cursor: pointer; }
+    .p-product .thumb { width: 84px; height: 84px; border-radius: var(--radius-s); object-fit: contain; background: var(--background); border: 1px solid var(--border); cursor: pointer; }
     .p-product .thumb.is-active { border: 2px solid var(--foreground); }
-    .p-product .main-image { width: 100%; height: 760px; border-radius: var(--radius-m); object-fit: cover; }
+    .p-product .main-image { width: 100%; height: 760px; border-radius: var(--radius-m); object-fit: contain; background: var(--background); }
 
     .p-product .info { display: flex; flex-direction: column; gap: 22px; }
     .p-product .brand b { font-family: var(--font-primary); font-size: 18px; font-weight: 700; display: inline-block; border-bottom: 2px solid var(--foreground); padding-bottom: 4px; }
@@ -99,26 +99,25 @@
         <i data-lucide="chevron-right" class="icon"></i>
         <a href="category-shirts.html">Tøj</a>
         <i data-lucide="chevron-right" class="icon"></i>
-        <a href="#">Træningstøj</a>
+        <a href="category-shirts.html">Trøjer</a>
         <i data-lucide="chevron-right" class="icon"></i>
-        <span style="color:var(--primary);font-weight:600">Træningsbukser</span>
+        <span style="color:var(--primary);font-weight:600">Klub Hjemmebanetrøje 24/25</span>
       </div>
 
       <div class="pd-body">
         <!-- Gallery -->
         <div class="gallery">
           <div class="thumbs">
-            <img class="thumb is-active" src="assests/shirt1.webp" alt="Visning 1" />
-            <img class="thumb" src="assests/shirt1c.webp" alt="Visning 2" />
-            <img class="thumb" src="assests/shirt1b.webp" alt="Visning 3" />
+            <img class="thumb is-active" src="assests/klubshirt1.png" alt="Visning 1" />
+            <img class="thumb" src="assests/klubshirt2.png" alt="Visning 2" />
           </div>
-          <img class="main-image" src="assests/shirt1.webp" alt="Danmark Hjemmebanetrøje 2026/27 Pro Player Edition" />
+          <img class="main-image" src="assests/klubshirt1.png" alt="Klub Hjemmebanetrøje 24/25 Spillerversion" />
         </div>
 
         <!-- Info -->
         <div class="info">
           <div class="brand"><b>Hummel</b></div>
-          <h1 class="pd-title">Danmark Hjemmebanetrøje<br />2026/27 Pro Player Edition</h1>
+          <h1 class="pd-title">Klub Hjemmebanetrøje<br />24/25 Spillerversion</h1>
 
           <div class="price-block">
             <div class="price-row">
@@ -153,13 +152,13 @@
               </div>
               <span class="deal-tag">AKTIV</span>
             </div>
-            <div class="deal-benefits">
+            <div class="deal-benefits" id="deal-benefits">
               <div class="deal-benefit"><i data-lucide="circle-check" class="icon"></i> −25% klubrabat på alle Hummel-varer</div>
               <div class="deal-benefit"><i data-lucide="circle-check" class="icon"></i> Gratis klubtryk, logo &amp; spillernavn</div>
               <div class="deal-benefit"><i data-lucide="circle-check" class="icon"></i> Fri fragt på ordrer over 1.000 kr</div>
               <div class="deal-benefit"><i data-lucide="circle-check" class="icon"></i> Faktura til klubben — saml medlemmernes ordrer</div>
             </div>
-            <div class="deal-foot"><i data-lucide="calendar" class="icon"></i> Gælder til 30. juni 2026 · DBU × Hummel rammeaftale</div>
+            <div class="deal-foot" id="deal-foot"><i data-lucide="calendar" class="icon"></i> Gælder til 30. juni 2026 · DBU × Hummel rammeaftale</div>
           </div>
 
           <!-- Fit tip -->
@@ -228,17 +227,63 @@
   <script src="js/cards.js"></script>
   <script>
     renderCards("#related-grid", [
-      { img: "assests/shirt1.webp", cat: "HJEMMEBANE · FC KØBENHAVN", title: "Officiel Hjemmebanetrøje 24/25", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "399 kr", status: "TILGÆNGELIG", href: "product.html" },
-      { img: "assests/shirt2.webp", cat: "UDEBANE · BRØNDBY IF", title: "Udebanetrøje 23/24 Spillerversion", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "349 kr", status: "RESERVERET", statusKind: "warning" },
-      { img: "assests/shirt3.webp", cat: "HJEMMEBANE · AGF", title: "Retro Hjemmebanetrøje 1996", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "549 kr", status: "FREMHÆVET", statusKind: "info" },
-      { img: "assests/shirt4.webp", cat: "UDEBANE · SILKEBORG IF", title: "Udebanetrøje 24/25", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "299 kr", status: "TILGÆNGELIG" }
+      { img: "assests/klubshirt2.png", fit: true, cat: "KLUBTRØJE · FC KØBENHAVN", title: "Officiel Klubtrøje 24/25", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "399 kr", status: "TILGÆNGELIG", href: "product.html" },
+      { img: "assests/klubshirt3.png", fit: true, cat: "KLUBTRØJE · BRØNDBY IF", title: "Klubtrøje Udebane 23/24 Spillerversion", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "349 kr", status: "RESERVERET", statusKind: "warning" },
+      { img: "assests/klubshirt4.png", fit: true, cat: "KLUBTRØJE · AGF", title: "Retro Klubtrøje 1996", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "549 kr", status: "FREMHÆVET", statusKind: "info" },
+      { img: "assests/klubshirt5.png", fit: true, cat: "KLUBTRØJE · SILKEBORG IF", title: "Klubtrøje Udebane 24/25", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "299 kr", status: "TILGÆNGELIG" }
     ]);
   </script>
 
   <script>
   (function () {
-    var PRODUCT = { title: "Danmark Hjemmebanetrøje 2026/27", sup: "Hummel", img: "assests/shirt1.webp", unit: 374, unitNote: "DBU-klubpris (−25%)", det: "Pro Player Edition · DBU × Hummel aftale" };
+    var PRODUCT = { title: "Klub Hjemmebanetrøje 24/25", sup: "Hummel", img: "assests/klubshirt1.png", fit: true, unit: 374, unitNote: "DBU-klubpris (−25%)", det: "Spillerversion · DBU × Hummel aftale" };
     var SIZES = { Herre: ["S","M","L","XL","XXL"], Dame: ["XS","S","M","L","XL"], Ungdom: ["128","140","152","164"] };
+
+    // Normalpris (før klubrabat) — DBU forhandler en rabat hos hver leverandør.
+    var NORMAL_PRICE = 549;
+    // DBU-aftaler pr. leverandør: hver leverandør har sin egen forhandlede pakke.
+    var SUPPLIERS = {
+      "Hummel": {
+        discount: 25,
+        benefits: [
+          "−25% klubrabat på alle Hummel-varer",
+          "Gratis klubtryk, logo & spillernavn",
+          "Fri fragt på ordrer over 1.000 kr",
+          "Faktura til klubben — saml medlemmernes ordrer"
+        ],
+        foot: "Gælder til 30. juni 2026 · DBU × Hummel rammeaftale"
+      },
+      "Sport24": {
+        discount: 20,
+        benefits: [
+          "−20% klubrabat på hele sortimentet",
+          "Gratis navn & nummer på spillertrøjer",
+          "Klik & hent samme dag i alle Sport24-butikker",
+          "Klubfaktura med 30 dages betaling"
+        ],
+        foot: "Gælder til 31. december 2026 · DBU × Sport24 rammeaftale"
+      },
+      "Unisport": {
+        discount: 22,
+        benefits: [
+          "−22% klubrabat på Unisport-priser",
+          "Gratis trykpakke ved holdordrer (min. 10 stk)",
+          "Fri fragt & gratis retur på alle klubordrer",
+          "Fast klubkonsulent til holdtøj"
+        ],
+        foot: "Gælder til 30. september 2026 · DBU × Unisport rammeaftale"
+      },
+      "Interspor": {
+        discount: 18,
+        benefits: [
+          "−18% klubrabat + medlemsbonus",
+          "Gratis logotryk på første holdordre",
+          "Fri fragt på ordrer over 750 kr",
+          "Saml medlemmernes køb på én klubfaktura"
+        ],
+        foot: "Gælder til 31. december 2026 · DBU × Interspor rammeaftale"
+      }
+    };
     var gender = "Herre", size = null, qty = 1;
 
     /* ---- generic dropdown ---- */
@@ -295,16 +340,39 @@
       });
     });
 
-    /* ---- supplier tiles ---- */
+    /* ---- supplier tiles → DBU-aftale skifter pr. leverandør ---- */
+    var brandEls = [document.querySelector(".brand b"), document.querySelector(".supplier label b")];
+    var benefitsEl = document.getElementById("deal-benefits");
+    var footEl = document.getElementById("deal-foot");
+    var priceNowEl = document.querySelector(".price-now");
+    var saveEl = document.querySelector(".norm-row .save");
+    function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+    function formatKr(n) { return n.toFixed(2).replace(".", ","); }
+    function applySupplier(name) {
+      var d = SUPPLIERS[name];
+      if (!d) return;
+      var net = NORMAL_PRICE * (1 - d.discount / 100);
+      PRODUCT.sup = name;
+      PRODUCT.unit = Math.round(net);
+      PRODUCT.unitNote = "DBU-klubpris (−" + d.discount + "%)";
+      PRODUCT.det = "Spillerversion · DBU × " + name + " aftale";
+      brandEls.forEach(function (el) { if (el) el.textContent = name; });
+      if (priceNowEl) priceNowEl.textContent = "fra " + formatKr(net) + " kr";
+      if (saveEl) saveEl.textContent = "DBU-klubpris −" + d.discount + "%";
+      benefitsEl.innerHTML = d.benefits.map(function (b) {
+        return '<div class="deal-benefit"><i data-lucide="circle-check" class="icon"></i> ' + esc(b) + '</div>';
+      }).join("");
+      footEl.innerHTML = '<i data-lucide="calendar" class="icon"></i> ' + esc(d.foot);
+      if (window.lucide) window.lucide.createIcons();
+    }
     document.querySelectorAll(".tiles .tile").forEach(function (t) {
       t.addEventListener("click", function () {
         document.querySelectorAll(".tiles .tile").forEach(function (x) { x.classList.remove("is-active"); });
         t.classList.add("is-active");
-        PRODUCT.sup = t.textContent.trim();
-        document.querySelector(".brand b").textContent = PRODUCT.sup;
-        document.querySelector(".supplier label b").textContent = PRODUCT.sup;
+        applySupplier(t.textContent.trim());
       });
     });
+    applySupplier("Hummel"); // initial state, så pris og fordele matcher den aktive leverandør
 
     /* ---- gallery thumbs ---- */
     var main = document.querySelector(".main-image");

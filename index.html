@@ -8,6 +8,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* Officiel sponsor cards (v2) */
+    .sponsor {
+      display: flex; flex-direction: column; background: var(--card);
+      border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden;
+      transition: box-shadow .18s ease, transform .18s ease;
+    }
+    .sponsor:hover { box-shadow: 0 10px 26px rgba(0,0,0,.07); transform: translateY(-2px); }
+    .sponsor__logo {
+      display: flex; align-items: center; justify-content: center;
+      height: 120px; padding: 24px; background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+    .sponsor__logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .sponsor__body { padding: 14px; display: flex; flex-direction: column; gap: 5px; }
+    .sponsor__body h3 { font-family: var(--font-primary); font-size: 19px; font-weight: 700; margin: 0; }
+    .sponsor__body p { font-size: 14px; color: var(--muted-foreground); margin: 0; }
+  </style>
 </head>
 <body data-active="udforsk">
   <div class="page">
@@ -69,29 +87,35 @@
       </div>
     </section>
 
-    <!-- Kollektioner -->
+    <!-- Officiel sponsor -->
     <section class="section" style="padding:12px 40px">
       <div class="section__head">
-        <h2 class="section__title">Kollektioner</h2>
-        <a class="section__link" href="#">Se alle →</a>
+        <h2 class="section__title">Officiel sponsor</h2>
+        <a class="section__link" href="category-sponsor.html">Se alle →</a>
       </div>
-      <div class="grid grid--3">
-        <a class="collection" href="category-shirts.html">
-          <img src="https://images.unsplash.com/photo-1627834248925-d668a9dc1497?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900" alt="" />
-          <div class="collection__body">
-            <h3>Nye sæsontrøjer</h3><p>Lige landet: 24/25 hjemme &amp; ude</p>
+      <div class="grid grid--4">
+        <a class="sponsor" href="category-sponsor.html">
+          <div class="sponsor__logo"><img src="assests/salling.png" alt="Salling" /></div>
+          <div class="sponsor__body">
+            <h3>Salling</h3><p>Officiel sponsor · varehus &amp; klubtilbud</p>
           </div>
         </a>
-        <a class="collection" href="#">
-          <img src="https://images.unsplash.com/photo-1648642928890-dc0c286a6eea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900" alt="" />
-          <div class="collection__body">
-            <h3>Støvleudsalg</h3><p>Pro fodtøj op til 50% rabat</p>
+        <a class="sponsor" href="category-sponsor.html">
+          <div class="sponsor__logo"><img src="assests/hummel.png" alt="Hummel" /></div>
+          <div class="sponsor__body">
+            <h3>Hummel</h3><p>Officiel sponsor · spilletøj &amp; udstyr</p>
           </div>
         </a>
-        <a class="collection" href="#">
-          <img src="https://images.unsplash.com/photo-1553475261-5934e9eb634d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900" alt="" />
-          <div class="collection__body">
-            <h3>Målmandsshop</h3><p>Handsker, benskinner &amp; målmandsudstyr</p>
+        <a class="sponsor" href="category-sponsor.html">
+          <div class="sponsor__logo"><img src="assests/stark-logo.jpg" alt="STARK" /></div>
+          <div class="sponsor__body">
+            <h3>STARK</h3><p>Officiel sponsor · byg &amp; materiel</p>
+          </div>
+        </a>
+        <a class="sponsor" href="category-sponsor.html">
+          <div class="sponsor__logo"><img src="assests/unisport-black.svg" alt="Unisport" /></div>
+          <div class="sponsor__body">
+            <h3>Unisport</h3><p>Officiel sponsor · fodboldudstyr</p>
           </div>
         </a>
       </div>
@@ -126,8 +150,8 @@
   <script src="js/carousel.js"></script>
   <script>
     renderCards("#rec-grid", [
-      { img: "assests/shirt1.webp", cat: "TRØJE · FC DUCKWISE", title: "Officiel Hjemmebanetrøje 25/26", meta: ["Str. L", "Ny"], priceLabel: "Pris inkl. gebyr", price: "499 kr", status: "TILGÆNGELIG", href: "product.html" },
-      { img: "assests/shirt3.webp", cat: "TRØJE · AARHUS DUCKS", title: "Udebanetrøje 25/26", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "389 kr", status: "TILGÆNGELIG" },
+      { img: "assests/klubshirt1.png", fit: true, cat: "KLUBTRØJE · FC DUCKWISE", title: "Officiel Klubtrøje 25/26", meta: ["Str. L", "Ny"], priceLabel: "Pris inkl. gebyr", price: "499 kr", status: "TILGÆNGELIG", href: "product.html" },
+      { img: "assests/klubshirt5.png", fit: true, cat: "KLUBTRØJE · AARHUS DUCKS", title: "Klubtrøje Udebane 25/26", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "389 kr", status: "TILGÆNGELIG" },
       { img: "assests/fodbold2.webp", fit: true, cat: "UDSTYR · CPH MALLARDS", title: "Matchbold Pro Edition", meta: ["Str. 5", "Ny"], priceLabel: "Pris inkl. gebyr", price: "229 kr", status: "TILGÆNGELIG" },
       { img: "assests/fodbold3.png", fit: true, cat: "UDSTYR · CPH MALLARDS", title: "Træningsbold (3-pak)", meta: ["Str. 5", "Ny"], priceLabel: "Pris inkl. gebyr", price: "399 kr", status: "TILGÆNGELIG" }
     ]);
