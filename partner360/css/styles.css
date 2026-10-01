@@ -114,12 +114,22 @@ input, textarea, select { font-family: inherit; }
 
 .topbar__brand {
   font-family: var(--font-primary); font-weight: 700; font-size: 18px; white-space: nowrap;
+  color: #fff; padding: 4px 8px; margin: 0 -8px; border-radius: var(--radius-s); cursor: text;
 }
+.topbar__brand:hover { background: rgba(255,255,255,.12); }
+.topbar__brand-input {
+  font-family: var(--font-primary); font-weight: 700; font-size: 18px; color: #fff;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.6); border-radius: var(--radius-s);
+  padding: 3px 7px; margin: 0 -8px; width: 320px; max-width: 40vw; outline: 0;
+}
+.topbar__brand-input:focus { border-color: #fff; background: rgba(255,255,255,.2); }
+.topbar__brand-count { font-size: 11px; color: rgba(255,255,255,.75); margin-left: 16px; white-space: nowrap; }
 .topbar__nav { display: flex; align-items: center; gap: 40px; }
-.topbar__nav a {
+.topbar__nav a, .topbar__nav-static {
   position: relative; display: block; padding: 8px 0;
   font-family: var(--font-primary); font-weight: 600; font-size: 16px; white-space: nowrap;
 }
+.topbar__nav-static { cursor: default; pointer-events: none; }
 .topbar__nav a.is-active { font-weight: 700; }
 .topbar__nav a.is-active::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--yellow);

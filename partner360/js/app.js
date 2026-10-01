@@ -48,6 +48,7 @@
   function renderTopbar(opts) {
     const host = $('#topbar'); if (!host) return;
     opts = opts || {};
+    document.title = document.title.replace(/^DBU Partner360/, appName());
     if (opts.variant === 'partner') {
       const p = opts.partner || partner();
       const logoStyle = p.logoBg ? ` style="background:${p.logoBg}"` : '';
@@ -64,14 +65,54 @@
         </div>${userHtml()}`;
     } else {
       const active = opts.active || 'Partnere';
-      const nav = [['Partnere', 'index.html'], ['Aktiveringer', '#'], ['Kanaler', '#'], ['Rapporter', 'performance.html?p=salling']];
+      /* Kun "Partnere" er klikbar; de øvrige punkter er visuelle (ingen sider i prototypen) */
+      const nav = [['Partnere', 'index.html'], ['Aktiveringer', null], ['Kanaler', null], ['Rapporter', null]];
       host.className = 'topbar';
       host.innerHTML = `
         <div class="topbar__left">
-          <a class="topbar__brand" href="index.html">DBU Partner360</a>
-          <nav class="topbar__nav">${nav.map(([l, h]) => `<a href="${h}" class="${l === active ? 'is-active' : ''}">${l}</a>`).join('')}</nav>
+          <button type="button" class="topbar__brand" title="Klik for at omdøbe løsningen">${esc(appName())}</button>
+          <nav class="topbar__nav">${nav.map(([l, h]) => h
+            ? `<a href="${h}" class="${l === active ? 'is-active' : ''}">${l}</a>`
+            : `<span class="topbar__nav-static" aria-disabled="true">${l}</span>`).join('')}</nav>
         </div>${userHtml()}`;
+      host.querySelector('.topbar__brand').addEventListener('click', editAppName);
     }
+  }
+
+  /* ---------- navn på løsningen (kan omdøbes, maks 50 tegn, gemmes i localStorage) ---------- */
+  const APP_NAME_DEFAULT = 'DBU Partner360', APP_NAME_MAX = 50, KEY_APP_NAME = 'p360.appName';
+  function appName() {
+    try { return (localStorage.getItem(KEY_APP_NAME) || '').trim() || APP_NAME_DEFAULT; } catch (e) { return APP_NAME_DEFAULT; }
+  }
+  function setAppName(name) {
+    name = String(name || '').trim().slice(0, APP_NAME_MAX);
+    try { if (name && name !== APP_NAME_DEFAULT) localStorage.setItem(KEY_APP_NAME, name); else localStorage.removeItem(KEY_APP_NAME); } catch (e) {}
+    return appName();
+  }
+  function editAppName(e) {
+    const btn = e.currentTarget;
+    if (btn.classList.contains('is-editing')) return;
+    btn.classList.add('is-editing');
+    const input = document.createElement('input');
+    input.type = 'text'; input.maxLength = APP_NAME_MAX; input.value = appName();
+    input.className = 'topbar__brand-input'; input.setAttribute('aria-label', 'Navn på løsningen');
+    const counter = document.createElement('span');
+    counter.className = 'topbar__brand-count';
+    const updateCount = () => { counter.textContent = `${input.value.length}/${APP_NAME_MAX}`; };
+    updateCount();
+    btn.replaceWith(input); input.after(counter);
+    input.focus(); input.select();
+    let done = false;
+    const finish = (save) => {
+      if (done) return; done = true;
+      const name = save ? setAppName(input.value) : appName();
+      btn.textContent = name; btn.classList.remove('is-editing');
+      input.replaceWith(btn); counter.remove();
+      document.title = document.title.replace(/^.*? — /, `${name} — `);
+    };
+    input.addEventListener('input', updateCount);
+    input.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') finish(true); if (ev.key === 'Escape') finish(false); });
+    input.addEventListener('blur', () => finish(true));
   }
 
   /* ---------- sidebar ---------- */
@@ -140,5 +181,5 @@
   }
   bindDropdowns();
 
-  Object.assign(D, { $, $$, esc, icon, partnerId, partner, href, renderTopbar, renderSidebar, decorateLinks, icons, setDropdownText });
+  Object.assign(D, { $, $$, esc, icon, partnerId, partner, href, renderTopbar, renderSidebar, decorateLinks, icons, setDropdownText, appName, setAppName });
 })();
