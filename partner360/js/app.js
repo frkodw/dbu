@@ -70,7 +70,10 @@
       host.className = 'topbar';
       host.innerHTML = `
         <div class="topbar__left">
-          <button type="button" class="topbar__brand" title="Klik for at omdøbe løsningen">${esc(appName())}</button>
+          <div class="topbar__home">
+            <a class="topbar__mark" href="index.html" aria-label="DBU"><img src="assets/Dansk_boldspil_union_logo.png" alt="DBU" /></a>
+            <button type="button" class="topbar__brand" title="Klik for at omdøbe løsningen">${esc(appName())}</button>
+          </div>
           <nav class="topbar__nav">${nav.map(([l, h]) => h
             ? `<a href="${h}" class="${l === active ? 'is-active' : ''}">${l}</a>`
             : `<span class="topbar__nav-static" aria-disabled="true">${l}</span>`).join('')}</nav>
