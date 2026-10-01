@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Partner360 — Opret ny aktivering · Trin 3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .chan-meta { font-size: 12px; color: var(--muted-foreground); white-space: pre; }
+    .chans { display: flex; flex-wrap: wrap; gap: 12px; width: 100%; }
+    .selected-note { font-size: 12px; color: var(--muted-foreground); white-space: pre; }
+    .chip--remove .icon { width: 14px; height: 14px; margin-left: 2px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header id="topbar" class="topbar"></header>
+    <div class="shell">
+      <aside id="sidebar" class="sidebar"></aside>
+      <div class="main">
+      <main class="content">
+        <div class="page-head">
+          <div class="page-head__title">
+            <h1>Opret ny aktivering</h1>
+            <p class="page-head__sub" id="step-subtitle"></p>
+          </div>
+        </div>
+        <div id="stepper" class="stepper"></div>
+
+        <div class="wizard">
+          <div class="wizard__form">
+            <div class="chips" id="categories"></div>
+            <p class="chan-meta" id="chan-meta"></p>
+            <div class="chans" id="chans"></div>
+            <div class="card card--p20" style="gap:10px">
+              <div class="card__title card__title--s" id="sel-title">Valgte kanaler (3)</div>
+              <div class="chips" id="sel-chips"></div>
+              <p class="selected-note" id="sel-note"></p>
+            </div>
+          </div>
+          <aside id="summary" class="summary"></aside>
+        </div>
+
+      </main>
+      <div id="wizard-footer" class="wizard__footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/wizard.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const D = window.P360, W = D.wizard.init(3);
+      const cfg = D.channels[W.flow];
+      const list = cfg.list;
+
+      document.getElementById('categories').innerHTML = D.channelCategories.map((c) =>
+        `<button type="button" class="chip" data-single="channelCategory" data-value="${D.esc(c)}">${D.esc(c)}</button>`).join('');
+
+      document.getElementById('chans').innerHTML = list.map((c) =>
+        `<button type="button" class="chan" data-multi="channels" data-value="${c.id}">
+          <span class="chan__head"><span class="checkbox"><i data-lucide="check" class="icon"></i></span><span class="chan__title">${D.esc(c.title)}</span><span class="chan__icon"><i data-lucide="${c.icon}" class="icon"></i></span></span>
+          <span class="chan__desc">${D.esc(c.desc)}</span>
+          <span class="chan__foot"><span>${D.esc(c.reach)}</span><span class="chan__price">${D.esc(c.price)}</span></span>
+        </button>`).join('');
+
+      function renderSelected() {
+        const sel = list.filter((c) => (W.state.channels || []).includes(c.id));
+        document.getElementById('chan-meta').textContent = `${W.state.channelCategory}  ·  ${list.length} kanaler  ·  ${sel.length} valgt`;
+        document.getElementById('sel-title').textContent = `Valgte kanaler (${sel.length})`;
+        document.getElementById('sel-chips').innerHTML = sel.map((c) =>
+          `<button type="button" class="chip chip--remove" data-multi="channels" data-value="${c.id}">${D.esc(c.chip)} <i data-lucide="x" class="icon"></i></button>`).join('')
+          || '<span class="muted" style="font-size:13px">Ingen kanaler valgt endnu</span>';
+        const isDefault = sel.length === 3 && sel.every((c) => (W.defaults.channels || []).includes(c.id));
+        if (isDefault) document.getElementById('sel-note').textContent = cfg.selectedNote;
+        else {
+          const reach = sel.reduce((a, c) => a + c.reachNum, 0), price = sel.reduce((a, c) => a + c.priceNum, 0);
+          document.getElementById('sel-note').textContent = `Samlet estimeret rækkevidde: ≈ ${reach.toLocaleString('da-DK')} personer  ·  Vejledende pris fra ${price.toLocaleString('da-DK')} kr.`;
+        }
+        D.icons();
+      }
+      W.onChange((k) => { if (k === 'channels' || k === 'channelCategory') renderSelected(); });
+      W.sync();
+      renderSelected();
+    })();
+  </script>
+</body>
+</html>

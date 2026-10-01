@@ -1,0 +1,51 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="352" height="270" viewBox="0 0 352 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Heat">
+<g id="Hovedstaden glow" filter="url(#filter0_f_0_113)">
+<circle cx="256.132" cy="152.907" r="44.6" fill="#D60A2E" fill-opacity="0.408"/>
+</g>
+<circle id="Hovedstaden" cx="256.132" cy="152.907" r="3.25" fill="#D60A2E" stroke="white" stroke-width="1.5"/>
+<g id="Midtjylland glow" filter="url(#filter1_f_0_113)">
+<circle cx="163.508" cy="124.091" r="32" fill="#D60A2E" fill-opacity="0.3"/>
+</g>
+<circle id="Midtjylland" cx="163.508" cy="124.091" r="3.25" fill="#D60A2E" stroke="white" stroke-width="1.5"/>
+<g id="Syddanmark glow" filter="url(#filter2_f_0_113)">
+<circle cx="194.383" cy="173.491" r="30.6" fill="#D60A2E" fill-opacity="0.288"/>
+</g>
+<circle id="Syddanmark" cx="194.383" cy="173.491" r="3.25" fill="#D60A2E" stroke="white" stroke-width="1.5"/>
+<g id="Sj&#195;&#166;lland glow" filter="url(#filter3_f_0_113)">
+<circle cx="233.491" cy="161.141" r="28.5" fill="#D60A2E" fill-opacity="0.27"/>
+</g>
+<circle id="Sj&#195;&#166;lland" cx="233.491" cy="161.141" r="3.25" fill="#D60A2E" stroke="white" stroke-width="1.5"/>
+<g id="Nordjylland glow" filter="url(#filter4_f_0_113)">
+<circle cx="140.866" cy="62.3413" r="24.3" fill="#D60A2E" fill-opacity="0.234"/>
+</g>
+<circle id="Nordjylland" cx="140.866" cy="62.3413" r="3.25" fill="#D60A2E" stroke="white" stroke-width="1.5"/>
+</g>
+<defs>
+<filter id="filter0_f_0_113" x="193.932" y="90.7074" width="124.4" height="124.4" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="8.8" result="effect1_foregroundBlur_0_113"/>
+</filter>
+<filter id="filter1_f_0_113" x="117.108" y="77.6909" width="92.8" height="92.8" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="7.2" result="effect1_foregroundBlur_0_113"/>
+</filter>
+<filter id="filter2_f_0_113" x="150.183" y="129.291" width="88.4" height="88.4" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="6.8" result="effect1_foregroundBlur_0_113"/>
+</filter>
+<filter id="filter3_f_0_113" x="192.391" y="120.041" width="82.2" height="82.2" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="6.3" result="effect1_foregroundBlur_0_113"/>
+</filter>
+<filter id="filter4_f_0_113" x="104.766" y="26.2413" width="72.2" height="72.2" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="5.9" result="effect1_foregroundBlur_0_113"/>
+</filter>
+</defs>
+</svg>

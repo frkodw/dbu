@@ -3,164 +3,184 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DBU Klubmarked — Udforsk</title>
+  <title>DBU Prototyper</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
   <style>
-    /* Officiel sponsor cards (v2) */
-    .sponsor {
-      display: flex; flex-direction: column; background: var(--card);
-      border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden;
+    :root {
+      --background: #F6F5F4;
+      --border: #E4E1DE;
+      --card: #FFFFFF;
+      --foreground: #1A1A1A;
+      --muted-foreground: #6B6B6B;
+      --primary: #D60A2E;
+      --primary-hover: #B4071F;
+      --primary-foreground: #FFFFFF;
+      --yellow: #FFC20E;
+      --font-primary: "Barlow", system-ui, sans-serif;
+      --font-secondary: "Inter", system-ui, sans-serif;
+      --radius-l: 16px;
+      --radius-pill: 999px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      font-family: var(--font-secondary); color: var(--foreground);
+      background: var(--background);
+      -webkit-font-smoothing: antialiased;
+      display: flex; flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .hdr {
+      display: flex; align-items: center; gap: 12px;
+      height: 72px; padding: 0 40px;
+      background: var(--primary); color: var(--primary-foreground);
+    }
+    .hdr__mark {
+      width: 40px; height: 40px; border-radius: var(--radius-pill);
+      background: #fff; display: grid; place-items: center; overflow: hidden;
+    }
+    .hdr__mark img { width: 30px; height: 30px; object-fit: contain; }
+    .hdr__wordmark b {
+      display: block; font-family: var(--font-primary);
+      font-size: 19px; font-weight: 700; letter-spacing: .5px; line-height: 1.15;
+    }
+    .hdr__wordmark span {
+      display: block; font-size: 10px; font-weight: 600;
+      letter-spacing: .5px; color: rgba(255,255,255,.7);
+    }
+
+    main { flex: 1; width: 100%; max-width: 1040px; margin: 0 auto; padding: 56px 24px 72px; }
+    .intro { max-width: 620px; margin-bottom: 40px; }
+    .intro h1 {
+      font-family: var(--font-primary); font-size: 40px; font-weight: 800;
+      letter-spacing: -.5px; margin: 0 0 10px; line-height: 1.1;
+    }
+    .intro p { margin: 0; font-size: 16px; color: var(--muted-foreground); line-height: 1.5; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+    .proto {
+      display: flex; flex-direction: column;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-l); overflow: hidden;
       transition: box-shadow .18s ease, transform .18s ease;
     }
-    .sponsor:hover { box-shadow: 0 10px 26px rgba(0,0,0,.07); transform: translateY(-2px); }
-    .sponsor__logo {
-      display: flex; align-items: center; justify-content: center;
-      height: 120px; padding: 24px; background: #fff;
-      border-bottom: 1px solid var(--border);
+    .proto:hover { box-shadow: 0 10px 26px rgba(0,0,0,.07); transform: translateY(-2px); }
+    .proto__cover {
+      height: 160px; display: flex; align-items: flex-end; padding: 20px;
+      color: #fff; position: relative;
     }
-    .sponsor__logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
-    .sponsor__body { padding: 14px; display: flex; flex-direction: column; gap: 5px; }
-    .sponsor__body h3 { font-family: var(--font-primary); font-size: 19px; font-weight: 700; margin: 0; }
-    .sponsor__body p { font-size: 14px; color: var(--muted-foreground); margin: 0; }
+    .proto__cover--market { background: linear-gradient(135deg, #D60A2E 0%, #8E0014 100%); }
+    .proto__cover--partner { background: linear-gradient(135deg, #1A1A1A 0%, #3A3A3A 100%); }
+    .proto__cover b {
+      font-family: var(--font-primary); font-size: 28px; font-weight: 800;
+      letter-spacing: .3px; line-height: 1.05;
+    }
+    .proto__tag {
+      position: absolute; top: 16px; left: 20px;
+      font-family: var(--font-primary); font-size: 11px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: var(--radius-pill);
+      background: rgba(255,255,255,.18);
+    }
+    .proto__tag--new { background: var(--yellow); color: #1A1A1A; }
+    .proto__body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .proto__body p { margin: 0; font-size: 14px; color: var(--muted-foreground); line-height: 1.5; flex: 1; }
+    .proto__meta { font-size: 12px; color: var(--muted-foreground); }
+    .proto__foot {
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+      margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--border);
+    }
+    .proto__links { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; min-width: 0; }
+    .chip {
+      display: inline-flex; align-items: center;
+      padding: 4px 10px; border-radius: var(--radius-pill);
+      background: var(--background); border: 1px solid var(--border);
+      color: var(--muted-foreground);
+      font-size: 12px; font-weight: 500; line-height: 1.3; white-space: nowrap;
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+    .chip:hover { background: #fff; color: var(--foreground); border-color: #CFCBC7; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      flex-shrink: 0;
+      padding: 12px 22px; border-radius: var(--radius-pill);
+      background: var(--primary); color: var(--primary-foreground);
+      font-family: var(--font-primary); font-size: 14px; font-weight: 700;
+      letter-spacing: .6px; text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(214,10,46,.25);
+      transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+    .btn:hover { background: var(--primary-hover); box-shadow: 0 6px 16px rgba(214,10,46,.32); transform: translateY(-1px); }
+    .btn svg { width: 14px; height: 14px; }
+
+    footer {
+      padding: 20px 40px; border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--muted-foreground);
+    }
+
+    @media (max-width: 640px) {
+      .hdr, footer { padding-left: 16px; padding-right: 16px; }
+      main { padding: 36px 16px 56px; }
+      .intro h1 { font-size: 32px; }
+    }
   </style>
 </head>
-<body data-active="udforsk">
-  <div class="page">
-    <div data-include="header"></div>
+<body>
+  <header class="hdr">
+    <div class="hdr__mark"><img src="marketplace/assests/Dansk_boldspil_union_logo.png" alt="DBU" /></div>
+    <div class="hdr__wordmark"><b>DBU</b><span>PROTOTYPER</span></div>
+  </header>
 
-    <!-- Group strip: category switch -->
-    <div class="strip" style="height: 57px">
-      <span class="strip__pill"><i data-lucide="layers" class="icon"></i> Alle kategorier</span>
-      <span class="strip__sep"></span>
-      <a href="category-shirts.html">Tøj</a>
-      <a href="#">Sko</a>
-      <a href="category-sportstech.html">Udstyr</a>
-      <a href="category-sportstech.html">Tech</a>
-      <a href="#">Digitale værktøjer</a>
-      <a href="category-sponsor.html">Sponsor &amp; fundraising</a>
-      <a href="#">Faciliteter &amp; drift</a>
-      <a href="#">Events &amp; rejser</a>
-      <a href="#">Uddannelse</a>
-      <a href="#">Sundhed &amp; trivsel</a>
+  <main>
+    <div class="intro">
+      <h1>Vælg en prototype</h1>
+      <p>Klik-prototyper udviklet for DBU. Hver prototype er en selvstændig site i sin egen mappe.</p>
     </div>
 
-    <!-- Promo hero — dynamic carousel -->
-    <section class="home-promo" style="height: 323px">
-      <div class="carousel" data-carousel data-interval="6000" aria-label="Kampagner" aria-roledescription="karrusel">
-        <div class="promo carousel__slide is-active">
-          <img class="promo__img" src="assests/generated-1781248661023.png" alt="Stadion" />
-          <div class="promo__scrim" style="height: 288px"></div>
-          <div class="promo__content">
-            <h1 class="promo__headline">Op til 40% på officielle klubtrøjer 24/25</h1>
-            <p class="promo__sub">Verificerede annoncer fra klubber i hele forbundet. Nye varer tilføjes dagligt.</p>
-            <a class="btn" href="category-shirts.html"><i data-lucide="arrow-right" class="icon"></i> SE UDSALGET</a>
+    <div class="grid">
+      <article class="proto">
+        <div class="proto__cover proto__cover--market">
+          <span class="proto__tag">Marketplace</span>
+          <b>DBU Klubmarked</b>
+        </div>
+        <div class="proto__body">
+          <p>DBU-kurateret markedsplads for dansk fodbold. Klubber køber, private støtter deres klub, og leverandører og sponsorer finder klubber.</p>
+          <span class="proto__meta">Mappe: <code>marketplace/</code></span>
+          <div class="proto__foot">
+            <div class="proto__links">
+              <a class="chip" target="_blank" rel="noopener" href="marketplace/vendor-scouting.html">Leverandør</a>
+              <a class="chip" target="_blank" rel="noopener" href="marketplace/admin.html">Admin</a>
+            </div>
+            <a class="btn" target="_blank" rel="noopener" href="marketplace/index.html">Åbn <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
           </div>
         </div>
-        <div class="promo carousel__slide">
-          <img class="promo__img" src="https://images.unsplash.com/photo-1764116679127-dc9d2c1138a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600" alt="Træningstøj" />
-          <div class="promo__scrim"></div>
-          <div class="promo__content">
-            <h1 class="promo__headline">Nyt træningstøj til hele holdet</h1>
-            <p class="promo__sub">Udstyr klubben til den nye sæson — klubpriser på alle sæt.</p>
-            <a class="btn" href="category-shirts.html"><i data-lucide="arrow-right" class="icon"></i> SHOP NYHEDER</a>
+      </article>
+
+      <article class="proto">
+        <div class="proto__cover proto__cover--partner">
+          <span class="proto__tag proto__tag--new">Ny</span>
+          <b>DBU Partner360</b>
+        </div>
+        <div class="proto__body">
+          <p>Partnerplatform for DBU's sponsoransvarlige: partneroverblik, oprettelse af aktiveringer i 7 trin og performance-rapport. To flows: Salling Group (kupon) og Skoda (event).</p>
+          <span class="proto__meta">Mappe: <code>partner360/</code></span>
+          <div class="proto__foot">
+            <div class="proto__links">
+              <a class="chip" target="_blank" rel="noopener" href="partner360/partner.html?p=salling">Salling Group</a>
+              <a class="chip" target="_blank" rel="noopener" href="partner360/partner.html?p=skoda">Skoda</a>
+              <a class="chip" target="_blank" rel="noopener" href="partner360/performance.html?p=salling">Performance</a>
+            </div>
+            <a class="btn" target="_blank" rel="noopener" href="partner360/index.html">Åbn <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
           </div>
         </div>
-        <div class="promo carousel__slide">
-          <img class="promo__img" src="https://images.unsplash.com/photo-1643116712744-6ee1ee41b740?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600" alt="Pakkelevering" />
-          <div class="promo__scrim"></div>
-          <div class="promo__content">
-            <h1 class="promo__headline">Fri fragt på klubordrer over 1.000 kr</h1>
-            <p class="promo__sub">Saml holdets bestillinger og spar på leveringen — hele juni.</p>
-            <a class="btn" href="cart.html"><i data-lucide="arrow-right" class="icon"></i> BESTIL NU</a>
-          </div>
-        </div>
-        <button class="carousel__arrow carousel__arrow--prev" aria-label="Forrige"><i data-lucide="chevron-left" class="icon"></i></button>
-        <button class="carousel__arrow carousel__arrow--next" aria-label="Næste"><i data-lucide="chevron-right" class="icon"></i></button>
-        <div class="carousel__dots" role="tablist" aria-label="Vælg kampagne">
-          <button class="carousel__dot is-active" aria-label="Kampagne 1"></button>
-          <button class="carousel__dot" aria-label="Kampagne 2"></button>
-          <button class="carousel__dot" aria-label="Kampagne 3"></button>
-        </div>
-      </div>
-    </section>
+      </article>
+    </div>
+  </main>
 
-    <!-- Officiel sponsor -->
-    <section class="section" style="padding:12px 40px">
-      <div class="section__head">
-        <h2 class="section__title">Officiel sponsor</h2>
-        <a class="section__link" href="category-sponsor.html">Se alle →</a>
-      </div>
-      <div class="grid grid--4">
-        <a class="sponsor" href="category-sponsor.html">
-          <div class="sponsor__logo"><img src="assests/salling.png" alt="Salling" /></div>
-          <div class="sponsor__body">
-            <h3>Salling</h3><p>Officiel sponsor · varehus &amp; klubtilbud</p>
-          </div>
-        </a>
-        <a class="sponsor" href="category-sponsor.html">
-          <div class="sponsor__logo"><img src="assests/hummel.png" alt="Hummel" /></div>
-          <div class="sponsor__body">
-            <h3>Hummel</h3><p>Officiel sponsor · spilletøj &amp; udstyr</p>
-          </div>
-        </a>
-        <a class="sponsor" href="category-sponsor.html">
-          <div class="sponsor__logo"><img src="assests/stark-logo.jpg" alt="STARK" /></div>
-          <div class="sponsor__body">
-            <h3>STARK</h3><p>Officiel sponsor · byg &amp; materiel</p>
-          </div>
-        </a>
-        <a class="sponsor" href="category-sponsor.html">
-          <div class="sponsor__logo"><img src="assests/unisport-black.svg" alt="Unisport" /></div>
-          <div class="sponsor__body">
-            <h3>Unisport</h3><p>Officiel sponsor · fodboldudstyr</p>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- Anbefalet til din klub -->
-    <section class="section" style="padding:24px 40px">
-      <div class="section__head">
-        <h2 class="section__title">Anbefalet til din klub</h2>
-        <a class="section__link" href="#">Se alle <i data-lucide="arrow-right" class="icon" style="width:16px;height:16px"></i></a>
-      </div>
-      <div class="grid grid--4" id="rec-grid"></div>
-    </section>
-
-    <!-- Nye aftaler -->
-    <section class="section" style="padding:24px 40px 40px">
-      <div class="section__head">
-        <h2 class="section__title">Nye aftaler</h2>
-        <a class="section__link" href="#">Se alle <i data-lucide="arrow-right" class="icon" style="width:16px;height:16px"></i></a>
-      </div>
-      <div class="grid grid--4" id="deal-grid"></div>
-    </section>
-
-    <div data-include="footer"></div>
-  </div>
-
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="js/store.js"></script>
-  <script src="js/site.js"></script>
-  <script src="js/tweaks.js"></script>
-  <script src="js/cards.js"></script>
-  <script src="js/carousel.js"></script>
-  <script>
-    renderCards("#rec-grid", [
-      { img: "assests/klubshirt1.png", fit: true, cat: "KLUBTRØJE · FC DUCKWISE", title: "Officiel Klubtrøje 25/26", meta: ["Str. L", "Ny"], priceLabel: "Pris inkl. gebyr", price: "499 kr", status: "TILGÆNGELIG", href: "product.html" },
-      { img: "assests/klubshirt5.png", fit: true, cat: "KLUBTRØJE · AARHUS DUCKS", title: "Klubtrøje Udebane 25/26", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "389 kr", status: "TILGÆNGELIG" },
-      { img: "assests/fodbold2.webp", fit: true, cat: "UDSTYR · CPH MALLARDS", title: "Matchbold Pro Edition", meta: ["Str. 5", "Ny"], priceLabel: "Pris inkl. gebyr", price: "229 kr", status: "TILGÆNGELIG" },
-      { img: "assests/fodbold3.png", fit: true, cat: "UDSTYR · CPH MALLARDS", title: "Træningsbold (3-pak)", meta: ["Str. 5", "Ny"], priceLabel: "Pris inkl. gebyr", price: "399 kr", status: "TILGÆNGELIG" }
-    ]);
-    renderCards("#deal-grid", [
-      { img: "assests/vikingbus2.webp", cat: "TRANSPORT · PARTNERAFTALE", title: "Vikingbus · Klubrejser", meta: ["Hele landet", "Aftale"], priceLabel: "Medlemsrabat", price: "−20%", status: "PARTNER", statusKind: "info", deal: true },
-      { img: "assests/stark1.webp", cat: "BYG & MATERIEL · PARTNER", title: "STARK · Erhvervsaftale", meta: ["Klubkonto", "Aftale"], priceLabel: "Klubrabat", price: "−15%", status: "PARTNER", statusKind: "info", deal: true },
-      { img: "assests/unisport.webp", fit: true, cat: "UDSTYR · PARTNER", title: "Unisport · Klubrabat", meta: ["Online & butik", "Aftale"], priceLabel: "Klubpris", price: "−25%", status: "PARTNER", statusKind: "info", deal: true },
-      { img: "assests/sko.webp", fit: true, cat: "STØVLER · CPH MALLARDS", title: "Nike Phantom Fodboldstøvler", meta: ["Str. 42", "Ny"], priceLabel: "Pris inkl. gebyr", price: "899 kr", status: "TILGÆNGELIG", deal: true }
-    ]);
-  </script>
+  <footer>Duckwise for DBU · Prototyper, ikke produktion.</footer>
 </body>
 </html>

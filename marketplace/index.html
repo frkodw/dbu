@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Klubmarked — Udforsk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* Officiel sponsor cards (v2) */
+    .sponsor {
+      display: flex; flex-direction: column; background: var(--card);
+      border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden;
+      transition: box-shadow .18s ease, transform .18s ease;
+    }
+    .sponsor:hover { box-shadow: 0 10px 26px rgba(0,0,0,.07); transform: translateY(-2px); }
+    .sponsor__logo {
+      display: flex; align-items: center; justify-content: center;
+      height: 120px; padding: 24px; background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+    .sponsor__logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .sponsor__body { padding: 14px; display: flex; flex-direction: column; gap: 5px; }
+    .sponsor__body h3 { font-family: var(--font-primary); font-size: 19px; font-weight: 700; margin: 0; }
+    .sponsor__body p { font-size: 14px; color: var(--muted-foreground); margin: 0; }
+  </style>
+</head>
+<body data-active="udforsk">
+  <div class="page">
+    <div data-include="header"></div>
+
+    <!-- Group strip: category switch -->
+    <div class="strip" style="height: 57px">
+      <span class="strip__pill"><i data-lucide="layers" class="icon"></i> Alle kategorier</span>
+      <span class="strip__sep"></span>
+      <a href="category-shirts.html">Tøj</a>
+      <a href="#">Sko</a>
+      <a href="category-sportstech.html">Udstyr</a>
+      <a href="category-sportstech.html">Tech</a>
+      <a href="category-sponsor.html">Sponsor &amp; fundraising</a>
+      <a href="#">Faciliteter &amp; drift</a>
+      <a href="#">Events &amp; rejser</a>
+      <a href="#">Uddannelse</a>
+      <a href="#">Sundhed &amp; trivsel</a>
+    </div>
+
+    <!-- Promo hero — dynamic carousel -->
+    <section class="home-promo" style="height: 323px">
+      <div class="carousel" data-carousel data-interval="6000" aria-label="Kampagner" aria-roledescription="karrusel">
+        <div class="promo carousel__slide is-active">
+          <img class="promo__img" src="assests/generated-1781248661023.png" alt="Stadion" />
+          <div class="promo__scrim" style="height: 288px"></div>
+          <div class="promo__content">
+            <h1 class="promo__headline">Op til 40% på officielle klubtrøjer 24/25</h1>
+            <p class="promo__sub">Verificerede annoncer fra klubber i hele forbundet. Nye varer tilføjes dagligt.</p>
+            <a class="btn" href="category-shirts.html"><i data-lucide="arrow-right" class="icon"></i> SE UDSALGET</a>
+          </div>
+        </div>
+        <div class="promo carousel__slide">
+          <img class="promo__img" src="https://images.unsplash.com/photo-1764116679127-dc9d2c1138a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600" alt="Træningstøj" />
+          <div class="promo__scrim"></div>
+          <div class="promo__content">
+            <h1 class="promo__headline">Nyt træningstøj til hele holdet</h1>
+            <p class="promo__sub">Udstyr klubben til den nye sæson — klubpriser på alle sæt.</p>
+            <a class="btn" href="category-shirts.html"><i data-lucide="arrow-right" class="icon"></i> SHOP NYHEDER</a>
+          </div>
+        </div>
+        <div class="promo carousel__slide">
+          <img class="promo__img" src="https://images.unsplash.com/photo-1643116712744-6ee1ee41b740?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600" alt="Pakkelevering" />
+          <div class="promo__scrim"></div>
+          <div class="promo__content">
+            <h1 class="promo__headline">Fri fragt på klubordrer over 1.000 kr</h1>
+            <p class="promo__sub">Saml holdets bestillinger og spar på leveringen — hele juni.</p>
+            <a class="btn" href="cart.html"><i data-lucide="arrow-right" class="icon"></i> BESTIL NU</a>
+          </div>
+        </div>
+        <button class="carousel__arrow carousel__arrow--prev" aria-label="Forrige"><i data-lucide="chevron-left" class="icon"></i></button>
+        <button class="carousel__arrow carousel__arrow--next" aria-label="Næste"><i data-lucide="chevron-right" class="icon"></i></button>
+        <div class="carousel__dots" role="tablist" aria-label="Vælg kampagne">
+          <button class="carousel__dot is-active" aria-label="Kampagne 1"></button>
+          <button class="carousel__dot" aria-label="Kampagne 2"></button>
+          <button class="carousel__dot" aria-label="Kampagne 3"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Officiel sponsor -->
+    <section class="section" style="padding:12px 40px">
+      <div class="section__head">
+        <h2 class="section__title">Officiel sponsor</h2>
+        <a class="section__link" href="category-sponsor.html">Se alle →</a>
+      </div>
+      <div class="grid grid--4">
+        <a class="sponsor" href="category-sponsor.html">
+          <div class="sponsor__logo"><img src="assests/salling.png" alt="Salling" /></div>
+          <div class="sponsor__body">
+            <h3>Salling</h3><p>Officiel sponsor · varehus &amp; klubtilbud</p>
+          </div>
+        </a>
+        <a class="sponsor" href="category-sponsor.html">
+          <div class="sponsor__logo"><img src="assests/hummel.png" alt="Hummel" /></div>
+          <div class="sponsor__body">
+            <h3>Hummel</h3><p>Officiel sponsor · spilletøj &amp; udstyr</p>
+          </div>
+        </a>
+        <a class="sponsor" href="category-sponsor.html">
+          <div class="sponsor__logo"><img src="assests/stark-logo.jpg" alt="STARK" /></div>
+          <div class="sponsor__body">
+            <h3>STARK</h3><p>Officiel sponsor · byg &amp; materiel</p>
+          </div>
+        </a>
+        <a class="sponsor" href="category-sponsor.html">
+          <div class="sponsor__logo"><img src="assests/unisport-black.svg" alt="Unisport" /></div>
+          <div class="sponsor__body">
+            <h3>Unisport</h3><p>Officiel sponsor · fodboldudstyr</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Anbefalet til din klub -->
+    <section class="section" style="padding:24px 40px">
+      <div class="section__head">
+        <h2 class="section__title">Anbefalet til din klub</h2>
+        <a class="section__link" href="#">Se alle <i data-lucide="arrow-right" class="icon" style="width:16px;height:16px"></i></a>
+      </div>
+      <div class="grid grid--4" id="rec-grid"></div>
+    </section>
+
+    <!-- Nye aftaler -->
+    <section class="section" style="padding:24px 40px 40px">
+      <div class="section__head">
+        <h2 class="section__title">Nye aftaler</h2>
+        <a class="section__link" href="#">Se alle <i data-lucide="arrow-right" class="icon" style="width:16px;height:16px"></i></a>
+      </div>
+      <div class="grid grid--4" id="deal-grid"></div>
+    </section>
+
+    <div data-include="footer"></div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/store.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tweaks.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/carousel.js"></script>
+  <script>
+    renderCards("#rec-grid", [
+      { img: "assests/klubshirt1.png", fit: true, cat: "KLUBTRØJE · FC DUCKWISE", title: "Officiel Klubtrøje 25/26", meta: ["Str. L", "Ny"], priceLabel: "Pris inkl. gebyr", price: "499 kr", status: "TILGÆNGELIG", href: "product.html" },
+      { img: "assests/klubshirt5.png", fit: true, cat: "KLUBTRØJE · AARHUS DUCKS", title: "Klubtrøje Udebane 25/26", meta: ["Str. M", "Ny"], priceLabel: "Pris inkl. gebyr", price: "389 kr", status: "TILGÆNGELIG" },
+      { img: "assests/fodbold2.webp", fit: true, cat: "UDSTYR · CPH MALLARDS", title: "Matchbold Pro Edition", meta: ["Str. 5", "Ny"], priceLabel: "Pris inkl. gebyr", price: "229 kr", status: "TILGÆNGELIG" },
+      { img: "assests/fodbold3.png", fit: true, cat: "UDSTYR · CPH MALLARDS", title: "Træningsbold (3-pak)", meta: ["Str. 5", "Ny"], priceLabel: "Pris inkl. gebyr", price: "399 kr", status: "TILGÆNGELIG" }
+    ]);
+    renderCards("#deal-grid", [
+      { img: "assests/vikingbus2.webp", cat: "TRANSPORT · PARTNERAFTALE", title: "Vikingbus · Klubrejser", meta: ["Hele landet", "Aftale"], priceLabel: "Medlemsrabat", price: "−20%", status: "PARTNER", statusKind: "info", deal: true },
+      { img: "assests/stark1.webp", cat: "BYG & MATERIEL · PARTNER", title: "STARK · Erhvervsaftale", meta: ["Klubkonto", "Aftale"], priceLabel: "Klubrabat", price: "−15%", status: "PARTNER", statusKind: "info", deal: true },
+      { img: "assests/unisport.webp", fit: true, cat: "UDSTYR · PARTNER", title: "Unisport · Klubrabat", meta: ["Online & butik", "Aftale"], priceLabel: "Klubpris", price: "−25%", status: "PARTNER", statusKind: "info", deal: true },
+      { img: "assests/sko.webp", fit: true, cat: "STØVLER · CPH MALLARDS", title: "Nike Phantom Fodboldstøvler", meta: ["Str. 42", "Ny"], priceLabel: "Pris inkl. gebyr", price: "899 kr", status: "TILGÆNGELIG", deal: true }
+    ]);
+  </script>
+</body>
+</html>

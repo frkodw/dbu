@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Partner360 — Aktivering performance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* ---------- KPI row ---------- */
+    .perf-kpis { display: flex; gap: 16px; align-items: stretch; width: 100%; }
+    .perf-kpi {
+      flex: 1 0 0; min-width: 0; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l);
+      padding: 20px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .perf-kpi__label { font-size: 12px; color: var(--muted-foreground); white-space: nowrap; }
+    .perf-kpi__value { font-family: var(--font-primary); font-weight: 700; font-size: 28px; line-height: normal; white-space: nowrap; }
+    .perf-kpi__value--red { color: var(--primary); }
+    .perf-kpi__value--blue { color: var(--chart-blue); }
+    .perf-kpi__value--green { color: var(--pitch-green); }
+    .perf-kpi__value--yellow { color: var(--yellow); }
+    .perf-kpi__sub { font-size: 12px; color: var(--muted-foreground); white-space: pre; }
+    .progress { width: 100%; height: 8px; border-radius: var(--radius-pill); background: var(--background); overflow: hidden; }
+    .progress__bar { height: 100%; border-radius: var(--radius-pill); background: var(--primary); }
+
+    /* ---------- Charts row ---------- */
+    .perf-charts { display: flex; gap: 24px; align-items: stretch; width: 100%; }
+    .perf-chart { flex: 1 0 0; min-width: 0; gap: 16px; }
+    .perf-chart__head { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+
+    .seg { display: flex; gap: 2px; padding: 2px; border-radius: var(--radius-pill); background: var(--background); }
+    .seg__item { padding: 6px 12px; border-radius: var(--radius-pill); font-size: 12px; color: var(--foreground); white-space: nowrap; }
+    .seg__item.is-active { background: var(--primary); color: #fff; font-family: var(--font-primary); font-weight: 600; }
+
+    .bars { flex: 1 0 0; min-height: 343px; display: flex; align-items: flex-end; gap: 6px; width: 100%; }
+    .bars__bar { flex: 1 0 0; min-width: 1px; border-radius: 3px; background: var(--chart-blue); }
+    .bars__bar--hot { background: var(--primary); }
+    .bars__labels { display: flex; justify-content: space-between; width: 100%; font-size: 11px; color: var(--muted-foreground); white-space: nowrap; }
+    .legend { display: flex; align-items: center; gap: 16px; }
+    .legend__item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted-foreground); white-space: nowrap; }
+    .legend__swatch { width: 10px; height: 10px; border-radius: 2px; background: var(--chart-blue); }
+    .legend__swatch--hot { background: var(--primary); }
+    .note { font-size: 12px; color: var(--muted-foreground); line-height: normal; }
+
+    /* ---------- Geografi ---------- */
+    .perf-geo { width: 400px; flex-shrink: 0; gap: 12px; }
+    .dkmap { position: relative; width: 352px; height: 270px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); overflow: hidden; }
+    .dkmap__map { position: absolute; left: 74px; top: 14px; width: 201.407px; height: 240.163px; }
+    .dkmap__heat { position: absolute; left: -1px; top: -1px; width: 352px; height: 270px; }
+    .dkmap__legend { position: absolute; left: 11px; top: 247px; display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--muted-foreground); white-space: nowrap; }
+    .dkmap__grad { width: 60px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, #FBE7EB 0%, var(--primary) 100%); }
+
+    /* Horizontal mini bars (regioner + profil) */
+    .hbar { display: flex; align-items: center; gap: 12px; width: 100%; }
+    .hbar__label { flex: 1 0 0; min-width: 0; font-size: 13px; color: var(--foreground); line-height: normal; }
+    .hbar__track { width: 110px; height: 10px; border-radius: var(--radius-pill); background: var(--background); overflow: hidden; flex-shrink: 0; }
+    .hbar__fill { height: 100%; border-radius: var(--radius-pill); background: var(--primary); }
+    .hbar__fill--yellow { background: var(--yellow); }
+    .hbar__fill--blue { background: var(--chart-blue); }
+    .hbar__fill--green { background: var(--pitch-green); }
+    .hbar__value { width: 90px; flex-shrink: 0; text-align: right; font-size: 12px; color: var(--muted-foreground); white-space: pre; }
+
+    /* ---------- Hvem ---------- */
+    .perf-who { gap: 20px; width: 100%; }
+    .perf-who__head { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .perf-who__meta { font-size: 12px; color: var(--muted-foreground); white-space: pre; }
+    .perf-cols { display: flex; gap: 32px; align-items: flex-start; width: 100%; }
+    .perf-col { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .perf-col__title { font-size: 12px; color: var(--muted-foreground); white-space: nowrap; }
+
+    .top5 { display: flex; flex-direction: column; width: 100%; }
+    .top5__title { font-size: 12px; color: var(--muted-foreground); }
+    .top5__list { display: flex; flex-direction: column; padding-top: 8px; width: 100%; }
+    .top5__row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 14px; white-space: nowrap; }
+    .top5__row:last-child { border-bottom: 0; }
+    .top5__num { font-family: var(--font-primary); font-weight: 700; font-size: 14px; }
+
+    .insights { display: flex; flex-direction: column; gap: 8px; }
+    .insights__title { font-family: var(--font-primary); font-weight: 700; font-size: 14px; }
+    .insights__item { font-size: 13px; line-height: normal; white-space: pre-wrap; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1200px) {
+      .perf-kpis { flex-wrap: wrap; }
+      .perf-kpi { flex: 1 0 calc(50% - 8px); }
+      .perf-charts { flex-direction: column; }
+      .perf-geo { width: 100%; }
+    }
+    @media (max-width: 1024px) {
+      .perf-cols { flex-direction: column; gap: 20px; }
+    }
+    @media (max-width: 720px) {
+      .perf-kpi { flex-basis: 100%; }
+      .dkmap { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header id="topbar" class="topbar"></header>
+    <div class="shell">
+      <aside id="sidebar" class="sidebar"></aside>
+      <main class="content">
+
+        <!-- Page head -->
+        <div class="page-head">
+          <div class="page-head__title">
+            <div class="page-head__row"><h1>Bilka kupon: 10% på alle indkøb</h1><span class="badge">Live</span></div>
+            <p class="page-head__sub">Salling Group  ·  Kupon i DBU wallet (DBU appen)  ·  1. okt - 30. nov 2026  ·  Dag 24 af 61</p>
+          </div>
+          <div class="page-head__actions">
+            <a class="btn btn--ghost" href="#">Pause</a>
+            <a class="btn btn--ghost" href="#">Rediger</a>
+            <a class="btn" href="#">Del rapport</a>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="perf-kpis">
+          <div class="perf-kpi">
+            <span class="perf-kpi__label">Indløste kuponer</span>
+            <span class="perf-kpi__value perf-kpi__value--red">3.412</span>
+            <span class="perf-kpi__sub">Mål: 10.000  ·  34%</span>
+            <div class="progress"><div class="progress__bar" style="width:34%"></div></div>
+          </div>
+          <div class="perf-kpi">
+            <span class="perf-kpi__label">Gemt i wallet</span>
+            <span class="perf-kpi__value perf-kpi__value--blue">12.870</span>
+            <span class="perf-kpi__sub">af 380.000 der har set kuponen</span>
+          </div>
+          <div class="perf-kpi">
+            <span class="perf-kpi__label">Indløsningsrate</span>
+            <span class="perf-kpi__value perf-kpi__value--green">26,5%</span>
+            <span class="perf-kpi__sub">af gemte kuponer er indløst</span>
+          </div>
+          <div class="perf-kpi">
+            <span class="perf-kpi__label">Push åbnet</span>
+            <span class="perf-kpi__value perf-kpi__value--yellow">38%</span>
+            <span class="perf-kpi__sub">Udsendt 12. okt til 380.000  ·  2.930 gemte kuponen</span>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="perf-charts">
+          <div class="card perf-chart">
+            <div class="perf-chart__head">
+              <h2 class="card__title">Indløsninger pr. dag</h2>
+              <div class="seg" id="seg">
+                <button type="button" class="seg__item is-active">Dag</button>
+                <button type="button" class="seg__item">Uge</button>
+                <button type="button" class="seg__item">Kanal</button>
+              </div>
+            </div>
+            <div class="bars" id="bars"></div>
+            <div class="bars__labels">
+              <span>1. okt</span><span>8. okt</span><span>12. okt (landskamp)</span><span>15. okt</span><span>20. okt</span><span>24. okt</span>
+            </div>
+            <div class="legend">
+              <div class="legend__item"><span class="legend__swatch"></span>Almindelig dag</div>
+              <div class="legend__item"><span class="legend__swatch legend__swatch--hot"></span>Landskampsdag (push sendt)</div>
+            </div>
+            <p class="note">■ Landskampsdage: 12. okt (410 indløsninger) og 15. okt (330). Push-notifikationen 12. okt gav 5x flere indløsninger end en gennemsnitsdag.</p>
+          </div>
+
+          <div class="card perf-geo">
+            <h2 class="card__title">Hvor i landet indløses kuponen</h2>
+            <div class="dkmap">
+              <img class="dkmap__map" src="assets/dk-map.svg" alt="Danmarkskort" />
+              <img class="dkmap__heat" src="assets/dk-heat.svg" alt="" />
+              <div class="dkmap__legend"><span>Få</span><span class="dkmap__grad"></span><span>Mange indløsninger</span></div>
+            </div>
+            <div id="regions"></div>
+            <p class="note">Top varehuse: Bilka Hundige (412), Bilka Tilst (388), Bilka Odense (301), Bilka Fields (287), Bilka Vejle (198). Online (bilka.dk): 22%.</p>
+          </div>
+        </div>
+
+        <!-- Hvem -->
+        <div class="card perf-who">
+          <div class="perf-who__head">
+            <h2 class="card__title">Hvem indløser kuponen</h2>
+            <span class="perf-who__meta">Baseret på 3.412 indløsninger  ·  anonymiseret profildata fra DBU appen</span>
+          </div>
+          <div class="perf-cols" id="profile"></div>
+          <div class="perf-cols">
+            <div class="perf-col top5">
+              <span class="top5__title">Top 5 klubber (indløsninger)</span>
+              <div class="top5__list" id="top5"></div>
+            </div>
+            <div class="perf-col insights">
+              <span class="insights__title">Indsigter</span>
+              <p class="insights__item">•  Forældre i alderen 35-49 står for 44% af alle indløsninger, og forældre-rollen for over halvdelen.</p>
+              <p class="insights__item">•  Hovedstaden indløser mest (38%), men Midtjylland har højest indløsningsrate (31%).</p>
+              <p class="insights__item">•  Landskampsdage giver 3-5x flere indløsninger. Anbefaling: send push igen 14. nov.</p>
+              <p class="insights__item">•  Prognose ved uændret tempo: ≈ 8.700 indløsninger ved periodens udløb (87% af mål).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance pr. kanal -->
+        <section class="section">
+          <h2 class="card__title">Performance pr. kanal</h2>
+          <div class="table" id="tbl-channels"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const D = window.P360;
+      const p = D.partner('salling');
+      D.renderTopbar({ variant: 'partner', crumb: 'Aktivering', partner: p });
+      D.renderSidebar('Aktiveringer', p);
+
+      /* Søjler: 1.-24. okt (px-højder fra Figma, 12. og 15. okt = landskampsdage) */
+      const bars = [46, 67, 109, 96, 75, 71, 74, 88, 105, 100, 121, 343, 167, 125, 276, 138, 109, 96, 107, 125, 151, 88, 92, 84];
+      const hot = new Set([11, 14]);
+      document.getElementById('bars').innerHTML = bars.map((h, i) =>
+        `<div class="bars__bar${hot.has(i) ? ' bars__bar--hot' : ''}" style="height:${h}px" title="${i + 1}. okt"></div>`).join('');
+
+      /* Segment-toggle (kun visuel) */
+      const seg = document.getElementById('seg');
+      seg.addEventListener('click', (e) => {
+        const b = e.target.closest('.seg__item'); if (!b) return;
+        D.$$('.seg__item', seg).forEach((x) => x.classList.toggle('is-active', x === b));
+      });
+
+      /* Regioner */
+      const hbar = (label, w, value, cls) =>
+        `<div class="hbar"><span class="hbar__label">${D.esc(label)}</span><div class="hbar__track"><div class="hbar__fill${cls ? ' ' + cls : ''}" style="width:${w}px"></div></div><span class="hbar__value">${D.esc(value)}</span></div>`;
+      const regions = [['Hovedstaden', 42, '1.312  (38%)'], ['Midtjylland', 22, '689  (20%)'], ['Syddanmark', 20, '597  (18%)'], ['Sjælland', 17, '512  (15%)'], ['Nordjylland', 10, '302  (9%)']];
+      const reg = document.getElementById('regions');
+      reg.style.cssText = 'display:flex;flex-direction:column;gap:12px;width:100%';
+      reg.innerHTML = regions.map(([l, w, v]) => hbar(l, w, v)).join('');
+
+      /* Profil-kolonner */
+      const cols = [
+        ['Rolle', 'hbar__fill--yellow', [['Forælder til ungdomsspiller', 59, '54%'], ['Spiller', 32, '29%'], ['Træner / frivillig', 13, '12%'], ['Andet', 6, '5%']]],
+        ['Alder', 'hbar__fill--blue', [['Under 18', 19, '17%'], ['18-34', 25, '23%'], ['35-49', 48, '44%'], ['50+', 18, '16%']]],
+        ['Segment', 'hbar__fill--green', [['Ungdomsklubber (U6-U15)', 69, '63%'], ['Landsholdsfans', 31, '28%'], ['Seniorklubber', 8, '7%'], ['Andet', 3, '2%']]],
+      ];
+      document.getElementById('profile').innerHTML = cols.map(([t, cls, rows]) =>
+        `<div class="perf-col"><span class="perf-col__title">${t}</span>${rows.map(([l, w, v]) => hbar(l, w, v, cls)).join('')}</div>`).join('');
+
+      /* Top 5 klubber */
+      const top5 = [['B.93 Ungdom', 146], ['Lyngby BK Ungdom', 121], ['AGF Talentfodbold', 104], ['Odense KFUM', 97], ['Vejle BK Ungdom', 83]];
+      document.getElementById('top5').innerHTML = top5.map(([n, v]) =>
+        `<div class="top5__row"><span>${D.esc(n)}</span><span class="top5__num">${v}</span></div>`).join('');
+
+      /* Performance pr. kanal */
+      const W = [320, 150, 160, 130, 130, 192];
+      const head = ['Kanal', 'Visninger', 'Gemt i wallet', 'Indløst', 'Rate', 'Pris pr. indløsning'];
+      const rows = [
+        ['DBU appen: Wallet-kupon', '296.000', '9.120', '2.588', '28,4%', '9,7 kr.'],
+        ['DBU appen: Push (12. okt)', '380.000', '2.930', '641', '21,9%', '15,6 kr.'],
+        ['DBU Marketplace', '38.500', '820', '183', '22,3%', '82,0 kr.'],
+      ];
+      const total = ['I alt', '714.500', '12.870', '3.412', '26,5%', '14,7 kr.'];
+      const cell = (v, i, strong) => `<div class="table__cell${strong ? ' table__cell--strong' : ''}" style="width:${W[i]}px">${D.esc(v)}</div>`;
+      document.getElementById('tbl-channels').innerHTML =
+        `<div class="table__row table__row--head">${head.map((c, i) => `<div class="table__cell" style="width:${W[i]}px">${c}</div>`).join('')}</div>` +
+        rows.map((r) => `<div class="table__row">${r.map((v, i) => cell(v, i, i === 0)).join('')}</div>`).join('') +
+        `<div class="table__row">${total.map((v, i) => cell(v, i, true)).join('')}</div>`;
+
+      D.icons();
+    })();
+  </script>
+</body>
+</html>

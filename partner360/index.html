@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Partner360 — Partnere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header id="topbar" class="topbar"></header>
+
+    <main class="content content--global">
+      <div class="page-head">
+        <div class="page-head__title">
+          <h1>Partnere</h1>
+          <p class="page-head__sub">Overblik over alle DBU's partnere og hvem der er primær ansvarlig</p>
+        </div>
+        <a class="btn" href="#">Opret ny partner</a>
+      </div>
+
+      <div class="chips chips--filters">
+        <form class="search" onsubmit="return false">
+          <button type="button" class="search__scope" data-dropdown="scope" data-options="Alle|Partner|Ansvarlig"><span>Alle</span> <i data-lucide="chevron-down" class="icon"></i></button>
+          <span class="search__divider"></span>
+          <input id="partner-search" class="search__input" type="text" placeholder="Søg partner..." />
+          <button type="button" class="search__btn" aria-label="Søg"><i data-lucide="search" class="icon"></i></button>
+        </form>
+        <button class="chip is-selected" data-filter="alle">Alle</button>
+        <button class="chip" data-filter="aktiv">Aktive</button>
+        <button class="chip" data-filter="inaktiv">Inaktive</button>
+        <button class="chip" data-filter="udloebet">Udløbet</button>
+      </div>
+
+      <div class="table" id="partner-table">
+        <div class="table__row table__row--head">
+          <div class="table__cell" style="width:270px">Partner</div>
+          <div class="table__cell" style="width:140px">Aktive aktiveringer</div>
+          <div class="table__cell" style="width:140px">Rækkevidde</div>
+          <div class="table__cell" style="width:160px">Seneste aktivitet</div>
+          <div class="table__cell" style="width:200px">Ansvarlig</div>
+          <div class="table__cell" style="width:142px">Status</div>
+        </div>
+        <div id="partner-rows"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const D = window.P360;
+      D.renderTopbar({ variant: 'global', active: 'Partnere' });
+      const badge = { aktiv: ['', 'Aktiv'], inaktiv: ['badge--warning', 'Inaktiv'], udloebet: ['badge--error', 'Udløbet'] };
+      let filter = 'alle', query = '', scope = 'Alle';
+      const linked = ['salling', 'skoda'];
+
+      function matches(p) {
+        if (!query) return true;
+        const o = D.owners[p.owner];
+        const inName = p.name.toLowerCase().includes(query), inOwner = o.name.toLowerCase().includes(query);
+        return scope === 'Partner' ? inName : scope === 'Ansvarlig' ? inOwner : (inName || inOwner);
+      }
+      function render() {
+        const rows = D.partnerList.filter((p) => (filter === 'alle' || p.status === filter) && matches(p));
+        document.getElementById('partner-rows').innerHTML = rows.map((p) => {
+          const o = D.owners[p.owner];
+          const owner = o.external
+            ? `<div class="owner"><span class="avatar avatar--ext">${o.initials}</span><div class="owner__text"><span>${o.name}</span><span class="owner__sub">${o.external}</span></div></div>`
+            : `<div class="owner"><span class="avatar">${o.initials}</span><span>${o.name}</span></div>`;
+          const b = badge[p.status];
+          const isLink = linked.includes(p.id);
+          const tag = isLink ? 'a' : 'div';
+          return `<${tag} class="table__row${isLink ? ' table__row--link' : ''}"${isLink ? ` href="partner.html?p=${p.id}"` : ''}>
+            <div class="table__cell" style="width:270px"><div class="pcell"><span class="pcell__logo${p.fit === 'cover' ? ' pcell__logo--cover' : ''}"><img src="${p.logo}" alt=""></span><span class="pcell__name">${D.esc(p.name)}</span></div></div>
+            <div class="table__cell" style="width:140px">${p.active}</div>
+            <div class="table__cell" style="width:140px">${p.reach}</div>
+            <div class="table__cell" style="width:160px">${p.last}</div>
+            <div class="table__cell" style="width:200px">${owner}</div>
+            <div class="table__cell" style="width:142px"><span class="badge ${b[0]}">${b[1]}</span></div>
+          </${tag}>`;
+        }).join('') || `<div class="table__row"><div class="table__cell muted">Ingen partnere matcher.</div></div>`;
+      }
+      document.querySelectorAll('[data-filter]').forEach((c) => c.addEventListener('click', () => {
+        document.querySelectorAll('[data-filter]').forEach((x) => x.classList.remove('is-selected'));
+        c.classList.add('is-selected'); filter = c.dataset.filter; render();
+      }));
+      document.getElementById('partner-search').addEventListener('input', (e) => { query = e.target.value.trim().toLowerCase(); render(); });
+      document.addEventListener('dropdown', (e) => { if (e.detail.key === 'scope') { scope = e.detail.value; render(); } });
+      render();
+      D.icons();
+    })();
+  </script>
+</body>
+</html>

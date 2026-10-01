@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Partner360 — Opret ny aktivering · Trin 5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* ---------- Branding og visuel identitet ---------- */
+    .brand__head { display: flex; flex-direction: column; gap: 4px; }
+    .kits { display: flex; gap: 12px; width: 100%; }
+    .kit {
+      flex: 1; min-width: 0; padding: 16px; border-radius: var(--radius-l);
+      background: var(--card); border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 10px; cursor: pointer; text-align: left;
+    }
+    .kit:hover { border-color: var(--input-border); }
+    .kit.is-selected { background: var(--primary-subtle); border-color: var(--primary); }
+    .kit--fixed { flex: 0 0 160px; width: 160px; }
+    .kit__logo { width: 48px; height: 48px; border-radius: 8px; background: #fff; overflow: hidden; display: grid; place-items: center; }
+    .kit__logo img { width: 100%; height: 100%; object-fit: contain; }
+    .kit__row { display: flex; align-items: center; gap: 12px; }
+    .kit__text { display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }
+    .kit__name { font-weight: 500; font-size: 14px; }
+    .kit__assets { font-size: 12px; color: var(--muted-foreground); }
+
+    .kitsel { display: flex; flex-direction: column; gap: 12px; padding-top: 4px; width: 100%; }
+    .kitsel__title { font-family: var(--font-primary); font-weight: 700; font-size: 14px; }
+    .kitsel__cols { display: flex; gap: 24px; width: 100%; }
+    .kitsel__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+    .kitsel__label { font-size: 12px; color: var(--muted-foreground); white-space: nowrap; }
+    .kitsel__value { display: flex; align-items: center; gap: 8px; font-size: 13px; white-space: nowrap; }
+    .swatch { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; }
+    .kitsel__checks { display: flex; flex-wrap: wrap; gap: 24px; width: 100%; }
+    .kitsel__checks--col { flex-direction: column; gap: 10px; }
+    .choice { white-space: nowrap; }
+    .choice.choice--wrap { white-space: normal; text-align: left; }
+
+    /* Skoda-variant: ét kit + detaljer til højre */
+    .brand__single { display: flex; gap: 24px; align-items: flex-start; width: 100%; }
+    .brand__single .kitsel { flex: 1; min-width: 0; padding-top: 0; }
+    .brand__single .kitsel__cols { gap: 24px; }
+
+    /* ---------- Materiale header ---------- */
+    .mat-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; }
+    .mat-head__title { font-family: var(--font-primary); font-weight: 700; font-size: 18px; white-space: pre; }
+    .mat-head__hint { font-size: 12px; color: var(--muted-foreground); white-space: nowrap; }
+
+    /* ---------- Preview-kort ---------- */
+    .prev { min-height: var(--prev-h, 0); background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden; display: flex; flex-direction: column; width: 100%; }
+    .prev__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 24px; border-bottom: 1px solid var(--border); }
+    .prev__id { display: flex; align-items: center; gap: 10px; }
+    .prev__text { display: flex; flex-direction: column; gap: 2px; }
+    .prev__title { font-family: var(--font-primary); font-weight: 700; font-size: 15px; white-space: nowrap; }
+    .prev__meta { font-size: 11px; color: var(--muted-foreground); white-space: pre; }
+    .prev__actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .prev__body { display: flex; align-items: flex-start; gap: 24px; padding: 24px; width: 100%; }
+    .prev__body--col { flex-direction: column; gap: 16px; }
+    .prev__fields { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+    .prev__fields-title { font-family: var(--font-primary); font-weight: 700; font-size: 13px; }
+    .frow { display: flex; gap: 24px; width: 100%; }
+    .frow > .srow { flex: 1; min-width: 0; }
+
+    /* ---------- iPhone mockup (wallet) ---------- */
+    .phone {
+      position: relative; flex-shrink: 0; padding: 10px; border-radius: 44px;
+      background: #1a1a1a; border: 2px solid #595959;
+      filter: drop-shadow(0 12px 12px rgba(0, 0, 0, .25));
+    }
+    .phone__btn { position: absolute; width: 3px; border-radius: 2px; background: #404040; }
+    .phone__screen { width: 240px; border-radius: 34px; background: #fff; overflow: hidden; display: flex; flex-direction: column; }
+    .phone__hdr { background: var(--primary); color: #fff; padding: 8px 0 12px; display: flex; flex-direction: column; }
+    .phone__status { display: flex; align-items: center; justify-content: space-between; padding: 0 16px 0 18px; }
+    .phone__time { font-weight: 600; font-size: 10px; }
+    .phone__island { width: 56px; height: 14px; border-radius: 999px; background: #1a1a1a; }
+    .phone__icons { display: flex; align-items: center; gap: 4px; }
+    .phone__signal { display: flex; align-items: flex-end; gap: 1px; }
+    .phone__signal i { display: block; width: 2px; background: #fff; border-radius: .5px; }
+    .phone__wifi { width: 12px; height: 12px; stroke-width: 2.5; }
+    .phone__battery { display: flex; align-items: center; }
+    .phone__battery i { display: block; width: 18px; height: 9px; border: 1px solid rgba(255, 255, 255, .5); border-radius: 2.5px; padding: 1px; }
+    .phone__battery i::after { content: ""; display: block; width: 12px; height: 5px; border-radius: 1px; background: #fff; }
+    .phone__battery b { display: block; width: 1.5px; height: 3px; background: rgba(255, 255, 255, .5); }
+    .phone__nav { display: flex; align-items: center; gap: 6px; padding: 12px 12px 0; }
+    .phone__nav .icon { width: 14px; height: 14px; stroke-width: 3; }
+    .phone__nav-title { font-family: var(--font-primary); font-weight: 700; font-size: 13px; flex: 1; }
+    .phone__more { font-weight: 600; font-size: 12px; }
+    .phone__body { background: #f6f5f4; padding: 12px; }
+
+    .coupon { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .coupon__top { display: flex; align-items: center; justify-content: space-between; }
+    .coupon__logo { position: relative; width: 50px; height: 20px; overflow: hidden; }
+    .coupon__logo img { position: absolute; width: 30px; height: 30px; left: 9.75px; top: -5px; max-width: none; }
+    .coupon__app { font-size: 8px; color: var(--muted-foreground); }
+    .coupon__img { width: 100%; height: 110px; border-radius: 8px; object-fit: cover; }
+    .coupon__title { font-family: var(--font-primary); font-weight: 700; font-size: 13px; }
+    .coupon__desc { font-size: 8px; color: var(--muted-foreground); }
+    .coupon__code { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 4px; }
+    .barcode { display: flex; align-items: flex-start; gap: 1px; }
+    .barcode i { display: block; height: 24px; background: #000; border-radius: 1px; }
+    .coupon__codetxt { font-family: var(--font-primary); font-weight: 700; font-size: 10px; }
+    .coupon__valid { font-size: 7px; color: var(--muted-foreground); }
+    .coupon__btn { background: #0090d0; color: #fff; border-radius: 6px; padding: 8px 0; text-align: center; font-family: var(--font-primary); font-weight: 600; font-size: 10px; }
+    .coupon__terms { font-size: 7px; color: var(--muted-foreground); }
+
+    /* ---------- Låseskærm (push) ---------- */
+    .lock { width: 240px; height: 277px; flex-shrink: 0; background: #4a4a4a; border-radius: 20px; padding: 12px; overflow: hidden; display: flex; flex-direction: column; gap: 39px; color: #fff; }
+    .lock__time { display: flex; flex-direction: column; align-items: center; gap: 2px; padding-top: 12px; white-space: nowrap; }
+    .lock__time b { font-family: var(--font-primary); font-weight: 700; font-size: 28px; }
+    .lock__time span { font-size: 10px; }
+    .notif { background: #fff; color: var(--foreground); border-radius: 12px; padding: 10px; display: flex; align-items: flex-start; gap: 8px; }
+    .notif__icon { width: 32px; height: 32px; border-radius: 9.143px; background: var(--primary); display: grid; place-items: center; flex-shrink: 0; }
+    .notif__icon img { width: 25.142px; height: 25.142px; object-fit: cover; }
+    .notif__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .notif__row { display: flex; align-items: flex-start; gap: 2px; }
+    .notif__title { font-family: var(--font-primary); font-weight: 700; font-size: 10px; white-space: nowrap; }
+    .notif__when { flex: 1; height: 12px; display: flex; align-items: center; justify-content: flex-end; font-size: 7px; color: var(--muted-foreground); }
+    .notif__msg { font-size: 8px; line-height: normal; }
+
+    /* ---------- Browser mockup (marketplace) ---------- */
+    .browser { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+    .browser__bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--background); }
+    .browser__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+    .browser__url { flex: 1; min-width: 0; background: #fff; border-radius: 999px; padding: 4px 10px; font-size: 10px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; }
+    .mp__hdr { display: flex; align-items: center; gap: 24px; height: 42px; padding: 12px 24px; background: var(--primary); color: #fff; white-space: nowrap; }
+    .mp__brand { font-family: var(--font-primary); font-weight: 700; font-size: 11px; }
+    .mp__nav { font-size: 10px; }
+    .mp__nav--active { font-family: var(--font-primary); font-weight: 700; }
+    .mp__spacer { flex: 1; }
+    .mp__search { width: 85px; display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: #fff; color: var(--muted-foreground); font-size: 9px; }
+    .mp__search .icon { width: 10px; height: 10px; }
+    .mp__avatar { width: 20px; height: 20px; border-radius: 50%; background: var(--yellow); color: var(--foreground); display: grid; place-items: center; font-family: var(--font-primary); font-weight: 700; font-size: 8px; }
+    .mp__sub { display: flex; gap: 18px; padding: 8px 24px; background: var(--primary-deep); color: #fff; font-size: 9px; white-space: nowrap; }
+    .mp__sub b { font-family: var(--font-primary); font-weight: 700; }
+    .mp__content { display: flex; flex-direction: column; gap: 16px; padding: 24px; }
+    .mp__crumb { font-size: 9px; color: var(--muted-foreground); white-space: pre; }
+    .mp__row { display: flex; align-items: flex-start; gap: 24px; width: 100%; }
+    .mp__hero { position: relative; width: 320px; height: 200px; flex-shrink: 0; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+    .mp__hero img { width: 100%; height: 100%; object-fit: cover; }
+    .mp__tag { position: absolute; left: 12px; top: 12px; background: #0090d0; color: #fff; padding: 4px 8px; border-radius: 4px; font-family: var(--font-primary); font-weight: 700; font-size: 11px; }
+    .mp__badge { position: absolute; right: 12px; top: 12px; background: var(--primary-subtle); color: var(--primary-dark); padding: 5px 12px; border-radius: 999px; font-family: var(--font-primary); font-weight: 600; font-size: 11px; letter-spacing: .8px; text-transform: uppercase; }
+    .mp__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .mp__meta { font-size: 9px; color: var(--muted-foreground); white-space: pre; }
+    .mp__title { font-family: var(--font-primary); font-weight: 700; font-size: 20px; white-space: nowrap; }
+    .mp__desc { font-size: 10px; color: var(--muted-foreground); }
+    .mp__btns { display: flex; align-items: center; gap: 10px; }
+    .mp__btn { padding: 6px 12px; border-radius: 999px; font-family: var(--font-primary); font-weight: 600; font-size: 10px; white-space: nowrap; }
+    .mp__btn--blue { background: #0090d0; color: #fff; }
+    .mp__btn--ghost { border: 1px solid var(--border); }
+    .mp__link { font-size: 9px; color: var(--muted-foreground); }
+    .mp__steps { display: flex; flex-direction: column; gap: 12px; }
+    .mp__step { display: flex; align-items: center; gap: 6px; font-size: 8px; color: var(--muted-foreground); white-space: nowrap; }
+    .mp__step i { width: 16px; height: 16px; border-radius: 50%; background: var(--background); color: var(--foreground); display: grid; place-items: center; font-style: normal; font-family: var(--font-primary); font-weight: 700; font-size: 8px; }
+    .mp__other { font-family: var(--font-primary); font-weight: 700; font-size: 11px; }
+    .mp__logos { display: flex; gap: 12px; width: 100%; }
+    .mp__logo { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+    .mp__logo-box { height: 60px; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .mp__logo-box--fotex { background: #131e37; }
+    .mp__logo-box--fotex img { width: 98px; height: auto; flex-shrink: 0; }
+    .mp__logo-box--netto img { width: 168px; height: auto; flex-shrink: 0; }
+    .mp__logo-box--salling img { width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
+    .mp__logo-cap { font-size: 8px; color: var(--muted-foreground); white-space: nowrap; }
+
+    /* ---------- Skoda-billede ---------- */
+    .campaign-img { width: 240px; height: 320px; flex-shrink: 0; border-radius: 12px; object-fit: cover; }
+
+    /* ---------- Responsiv ---------- */
+    @media (max-width: 1200px) {
+      .mat-head { flex-wrap: wrap; }
+      .mp__title { white-space: normal; }
+    }
+    @media (max-width: 1024px) {
+      .kits { flex-wrap: wrap; }
+      .kit { flex: 1 1 calc(50% - 6px); }
+      .kitsel__cols { flex-wrap: wrap; }
+      .kitsel__col { flex: 1 1 calc(50% - 12px); }
+      .brand__single { flex-direction: column; }
+      .prev__body { flex-direction: column; }
+      .frow { flex-wrap: wrap; }
+      .frow > .srow { flex: 1 1 calc(50% - 12px); }
+      .mp__row { flex-direction: column; }
+      .mp__hero { width: 100%; }
+      .choice { white-space: normal; text-align: left; }
+      .prev__head { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header id="topbar" class="topbar"></header>
+    <div class="shell">
+      <aside id="sidebar" class="sidebar"></aside>
+      <div class="main">
+      <main class="content">
+        <div class="page-head">
+          <div class="page-head__title">
+            <h1>Opret ny aktivering</h1>
+            <p class="page-head__sub" id="step-subtitle"></p>
+          </div>
+        </div>
+        <div id="stepper" class="stepper"></div>
+
+        <div class="wizard">
+          <div class="wizard__form" id="form"></div>
+          <aside id="summary" class="summary"></aside>
+        </div>
+
+      </main>
+      <div id="wizard-footer" class="wizard__footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/wizard.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const D = window.P360, W = D.wizard.init(5), esc = D.esc, icon = D.icon;
+      const M = D.materials[W.partner.id] || D.materials.salling;
+
+      /* Kit-detaljer der mangler i data.js (kun Bilka og Skoda findes der) */
+      const kitFallback = {
+        salling: { primary: ['#0A3F6E', 'Salling blå'], secondary: ['#1A1A1A', 'Salling sort'], font: 'Salling Sans', logos: '2 logofiler (svg)' },
+        fotex: { primary: ['#131E37', 'føtex navy'], secondary: ['#FFFFFF', 'Hvid'], font: 'føtex Grotesk', logos: '2 logofiler (svg)' },
+        netto: { primary: ['#1A1A1A', 'Netto sort'], secondary: ['#FFC20E', 'Netto gul'], font: 'Netto Sans', logos: '2 logofiler (svg)' },
+      };
+      const kitDetails = (id) => M.kitDetails[id] || kitFallback[id] || M.kitDetails[Object.keys(M.kitDetails)[0]];
+      const currentKit = () => M.kits.find((k) => k.id === W.state.brandKit) || M.kits[0];
+
+      const srow = (l, v) => `<div class="srow"><span class="srow__label">${esc(l)}</span><span class="srow__value">${esc(v)}</span></div>`;
+      const check = (key, label, wrap) => `<button type="button" class="choice${wrap ? ' choice--wrap' : ''}" data-toggle="${key}"><span class="checkbox">${icon('check')}</span><span>${esc(label)}</span></button>`;
+      const kitCard = (k, fixed) => `<button type="button" class="kit${fixed ? ' kit--fixed' : ''}" data-single="brandKit" data-value="${k.id}">
+          <span class="kit__logo"${k.bg ? ` style="background:${k.bg}"` : ''}><img src="${k.logo}" alt="${esc(k.name)}"></span>
+          <span class="kit__row"><span class="radio"></span><span class="kit__text"><span class="kit__name">${esc(k.name)}</span><span class="kit__assets">${esc(k.assets)}</span></span></span>
+        </button>`;
+      const kitCols = (d) => `<div class="kitsel__cols">
+          <div class="kitsel__col"><span class="kitsel__label">Primær farve</span><span class="kitsel__value"><span class="swatch" style="background:${d.primary[0]}"></span>${esc(d.primary[1])}</span></div>
+          <div class="kitsel__col"><span class="kitsel__label">Sekundær farve</span><span class="kitsel__value"><span class="swatch" style="background:${d.secondary[0]}"></span>${esc(d.secondary[1])}</span></div>
+          <div class="kitsel__col"><span class="kitsel__label">Skrifttype</span><span class="kitsel__value">${esc(d.font)}</span></div>
+          <div class="kitsel__col"><span class="kitsel__label">Logo</span><span class="kitsel__value">${esc(d.logos)}</span></div>
+        </div>`;
+      const coBrandLabel = (k) => `Brug DBU-logo sammen med ${k.name}-logo (co-branding)`;
+
+      /* ---------- Branding-kort ---------- */
+      function brandingCard() {
+        const k = currentKit(), d = kitDetails(k.id);
+        if (W.flow === 'event') {
+          return `<div class="card">
+            <div class="brand__head"><div class="card__title">Branding og visuel identitet</div><div class="card__desc">${esc(M.intro)}</div></div>
+            <div class="brand__single">
+              ${M.kits.map((kit) => kitCard(kit, true)).join('')}
+              <div class="kitsel" id="kitsel">
+                ${kitCols(d)}
+                <div class="kitsel__checks kitsel__checks--col">${check('coBranding', coBrandLabel(k))}${check('brandColors', 'Kun brand-godkendte farver')}</div>
+              </div>
+            </div>
+          </div>`;
+        }
+        return `<div class="card">
+          <div class="brand__head"><div class="card__title">Branding og visuel identitet</div><div class="card__desc">${esc(M.intro)}</div></div>
+          <div class="kits">${M.kits.map((kit) => kitCard(kit)).join('')}</div>
+          <div class="kitsel" id="kitsel">${kitselInner(k, d)}</div>
+        </div>`;
+      }
+      function kitselInner(k, d) {
+        return `<div class="kitsel__title">Valgt brand-kit: ${esc(k.name)}</div>
+          ${kitCols(d)}
+          <div class="kitsel__checks">${check('coBranding', coBrandLabel(k))}${check('brandColors', 'Kun brand-godkendte farver')}</div>`;
+      }
+
+      /* ---------- Preview-kort ---------- */
+      const prevHead = (n, title, meta) => `<div class="prev__head">
+          <div class="prev__id"><span class="num">${n}</span><div class="prev__text"><div class="prev__title">${esc(title)}</div><div class="prev__meta">${esc(meta)}</div></div></div>
+          <div class="prev__actions"><button type="button" class="btn btn--ghost btn--sm">Forhåndsvisning</button><button type="button" class="btn btn--sm">Rediger</button></div>
+        </div>`;
+
+      const barcode = [2,1,2,1,1,2,1,2,1,1,2,1,2,2,1,1,2,1,1,2,1,2,1,1,2,1,2,1,2,1].map((w) => `<i style="width:${w}px"></i>`).join('');
+
+      function walletCard() {
+        return `<div class="prev" style="--prev-h:603px">
+          ${prevHead(1, 'Wallet-kupon', 'DBU appen  ·  Min wallet  ·  Brand: Bilka')}
+          <div class="prev__body">
+            <div class="phone">
+              <span class="phone__btn" style="left:-4px;top:80px;height:18px"></span>
+              <span class="phone__btn" style="left:-4px;top:112px;height:34px"></span>
+              <span class="phone__btn" style="left:-4px;top:152px;height:34px"></span>
+              <span class="phone__btn" style="right:-4px;top:120px;height:52px"></span>
+              <div class="phone__screen">
+                <div class="phone__hdr">
+                  <div class="phone__status">
+                    <span class="phone__time">9:41</span>
+                    <span class="phone__island"></span>
+                    <span class="phone__icons">
+                      <span class="phone__signal"><i style="height:3px"></i><i style="height:5px"></i><i style="height:7px"></i><i style="height:9px"></i></span>
+                      ${icon('wifi', 'phone__wifi')}
+                      <span class="phone__battery"><i></i><b></b></span>
+                    </span>
+                  </div>
+                  <div class="phone__nav">${icon('chevron-left')}<span class="phone__nav-title">Min wallet</span><span class="phone__more">•••</span></div>
+                </div>
+                <div class="phone__body">
+                  <div class="coupon">
+                    <div class="coupon__top"><span class="coupon__logo"><img src="assets/logo-bilka.png" alt="Bilka"></span><span class="coupon__app">DBU Partner360</span></div>
+                    <img class="coupon__img" src="assets/bilka-fodbold-hero.jpg" alt="">
+                    <div class="coupon__title">10% på alle indkøb i Bilka</div>
+                    <div class="coupon__desc">Få 10% på hele dit køb i alle Bilka-varehuse og på bilka.dk. Vis kuponen ved kassen eller brug koden online.</div>
+                    <div class="coupon__code"><span class="barcode">${barcode}</span><span class="coupon__codetxt">DBU-BILKA-10</span><span class="coupon__valid">Gyldig 1. okt - 30. nov 2026</span></div>
+                    <div class="coupon__btn">Gem i wallet</div>
+                    <div class="coupon__terms">Vilkår: Ét køb pr. kunde. Gælder ikke tobak, medicin og gavekort.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="prev__fields">
+              <div class="prev__fields-title">Indhold i kuponen</div>
+              ${srow('Overskrift', '10% på alle indkøb i Bilka')}
+              ${srow('Beskrivelse', 'Få 10% på hele dit køb i alle Bilka-varehuse og på bilka.dk. Vis kuponen ved kassen eller brug koden online.')}
+              <div class="frow">${srow('Kuponkode', 'DBU-BILKA-10')}${srow('Knaptekst', 'Gem i wallet')}${srow('Gyldighed', '1. okt - 30. nov 2026')}</div>
+              ${srow('Billede', 'bilka-fodbold-hero.jpg  ·  1200×700  ·  logo indsættes fra brand-kit')}
+              ${srow('Vilkår', 'Ét køb pr. kunde. Kan ikke kombineres med andre rabatter. Gælder ikke tobak, medicin og gavekort.')}
+            </div>
+          </div>
+        </div>`;
+      }
+
+      function pushCard() {
+        return `<div class="prev" style="--prev-h:427px">
+          ${prevHead(2, 'Push-notifikation', 'DBU appen  ·  Låseskærm  ·  Udsendes 12. okt og 14. nov kl. 17:00')}
+          <div class="prev__body">
+            <div class="lock">
+              <div class="lock__time"><b>17:00</b><span>mandag 12. oktober</span></div>
+              <div class="notif">
+                <span class="notif__icon"><img src="assets/dbu-app-icon.png" alt="DBU"></span>
+                <div class="notif__text">
+                  <div class="notif__row"><span class="notif__title">Kampdag i Bilka ⚽</span><span class="notif__when">nu</span></div>
+                  <div class="notif__msg">Kampdag! Få 10% på alle dine indkøb<br>i Bilka med din DBU-kupon.</div>
+                </div>
+              </div>
+            </div>
+            <div class="prev__fields">
+              <div class="prev__fields-title">Indhold i notifikationen</div>
+              ${srow('Titel (maks. 40 tegn)', 'Kampdag i Bilka ⚽')}
+              ${srow('Besked (maks. 120 tegn)', 'Kampdag! Få 10% på alle dine indkøb i Bilka med din DBU-kupon. Åbn din wallet og vis koden ved kassen.')}
+              <div class="frow">${srow('Udsendes', '12. okt kl. 17:00  ·  14. nov kl. 17:00')}${srow('Modtagere', '≈ 380.000 (valgt målgruppe)')}</div>
+              ${srow('Deep link', 'dbuapp://wallet/bilka-10  ·  åbner kuponen i wallet')}
+              ${srow('Afsender', 'DBU  ·  i samarbejde med Bilka')}
+            </div>
+          </div>
+        </div>`;
+      }
+
+      function marketplaceCard() {
+        return `<div class="prev" style="--prev-h:743px">
+          ${prevHead(3, 'Marketplace-tilbud', 'marketplace.dbu.dk  ·  Partnerfordele  ·  Vises for 1.240 klubber')}
+          <div class="prev__body prev__body--col">
+            <div class="browser">
+              <div class="browser__bar"><span class="browser__dot"></span><span class="browser__dot"></span><span class="browser__dot"></span><span class="browser__url">marketplace.dbu.dk/partnerfordele/bilka-10-procent</span></div>
+              <div class="mp__hdr">
+                <span class="mp__brand">DBU MARKEDSPLADS</span><span class="mp__nav">Udforsk</span><span class="mp__nav mp__nav--active">Partnerfordele</span><span class="mp__nav">Min klub</span>
+                <span class="mp__spacer"></span>
+                <span class="mp__search">${icon('search')}Søg</span><span class="mp__avatar">TT</span>
+              </div>
+              <div class="mp__sub"><span>Alle</span><span>Tøj</span><span>Sko</span><span>Udstyr</span><b>Partnerfordele</b><span>Events &amp; rejser</span><span>Uddannelse</span></div>
+              <div class="mp__content">
+                <div class="mp__crumb">Hjem  ›  Partnerfordele  ›  Salling Group  ›  Bilka 10%</div>
+                <div class="mp__row">
+                  <div class="mp__hero"><img src="assets/bilka-fodbold-hero.jpg" alt=""><span class="mp__tag">BILKA</span><span class="mp__badge">Partnerfordel</span></div>
+                  <div class="mp__text">
+                    <div class="mp__meta">Partnerfordele  ·  Bilka  ·  Gælder til 30. nov 2026</div>
+                    <div class="mp__title">Bilka giver 10% til alle i klubben</div>
+                    <div class="mp__desc">Som DBU-klub får alle jeres medlemmer og forældre 10% på hele købet i Bilka frem til 30. november. Del kuponen i klubbens kanaler og lad den tælle med i klubbens fodboldpulje.</div>
+                    <div class="mp__btns"><span class="mp__btn mp__btn--blue">Hent kupon til klubben</span><span class="mp__btn mp__btn--ghost">Del i klubbens kanaler</span><span class="mp__link">bilka.dk/dbu</span></div>
+                    <div class="mp__steps">
+                      <div class="mp__step"><i>1</i>Klubben henter kuponen</div>
+                      <div class="mp__step"><i>2</i>Deles til medlemmer og forældre</div>
+                      <div class="mp__step"><i>3</i>Indløses i Bilka eller på bilka.dk</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mp__other">Andre fordele fra Salling Group</div>
+                <div class="mp__logos">
+                  <div class="mp__logo"><div class="mp__logo-box mp__logo-box--fotex"><img src="assets/logo-fotex.png" alt="føtex"></div><span class="mp__logo-cap">føtex: Gratis frugt til stævner</span></div>
+                  <div class="mp__logo"><div class="mp__logo-box mp__logo-box--netto"><img src="assets/logo-netto.png" alt="Netto"></div><span class="mp__logo-cap">Netto: Klubrabat på drikkevarer</span></div>
+                  <div class="mp__logo"><div class="mp__logo-box mp__logo-box--salling"><img src="assets/logo-salling.png" alt="Salling Group"></div><span class="mp__logo-cap">Salling Group: Landskampsbilletter</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="frow">
+              ${srow('Overskrift', 'Bilka giver 10% til alle i klubben')}
+              ${srow('Kategori', 'Partnerfordele  ·  Salling Group')}
+              ${srow('Knap og link', 'Hent kupon til klubben  ·  bilka.dk/dbu')}
+              ${srow('Billede', 'bilka-fodbold-hero.jpg (genbruges fra kuponen)')}
+            </div>
+          </div>
+        </div>`;
+      }
+
+      function campaignCard() {
+        return `<div class="prev">
+          ${prevHead(1, 'Kampagnebillede: Peaq ved banen', 'Stand ved stævner  ·  Push til hold  ·  Klubportal  ·  Brand: Skoda')}
+          <div class="prev__body">
+            <img class="campaign-img" src="assets/skoda-peaq-bane.jpg" alt="Skoda Peaq ved banen">
+            <div class="prev__fields">
+              <div class="prev__fields-title">Indhold i materialet</div>
+              ${srow('Overskrift', 'Få plads til hele holdet.')}
+              ${srow('Beskrivelse', 'Skoda Peaq kommer ud til DBU stævnerne i foråret 2027. Kig forbi standen ved banen og book en prøvekørsel på dagen.')}
+              <div class="frow">${srow('Bruges i', 'Stand, push, klubportal')}${srow('Knaptekst', 'Book en prøvetur')}${srow('Periode', '20. mar - 13. jun 2027')}</div>
+              ${srow('Billede', 'skoda-peaq-bane.jpg  ·  1087×1447  ·  logo indsættes fra brand-kit')}
+              ${srow('Vilkår', 'Prøvekørsel kræver gyldigt kørekort. Booking bekræftes af nærmeste Skoda-forhandler.')}
+            </div>
+          </div>
+        </div>`;
+      }
+
+      function approvalCard() {
+        return `<div class="card card--p20">
+          <div class="card__title card__title--s">Godkendelse af materiale</div>
+          ${check('approvalPartner', M.approvalLabel)}
+          ${check('approvalDbu', 'DBU brand-team skal godkende co-branding')}
+          <div class="card__desc">Materialet låses ikke før begge godkendelser er på plads. Du kan stadig se forhåndsvisningen i næste trin.</div>
+        </div>`;
+      }
+
+      /* ---------- Render ---------- */
+      const isEvent = W.flow === 'event';
+      document.getElementById('form').innerHTML = brandingCard() +
+        `<div class="mat-head"><div class="mat-head__title">${isEvent ? 'Materiale  ·  forhåndsvisning' : 'Materiale pr. kanal  ·  forhåndsvisning'}</div><div class="mat-head__hint">Klik Rediger for at ændre tekst, billede og kode</div></div>` +
+        (isEvent ? campaignCard() : walletCard() + pushCard() + marketplaceCard()) +
+        approvalCard();
+
+      /* Skift af brand-kit opdaterer "Valgt brand-kit"-blokken (kun kupon-flow har flere kits) */
+      W.onChange((k) => {
+        if (k !== 'brandKit' || isEvent) return;
+        const kit = currentKit();
+        document.getElementById('kitsel').innerHTML = kitselInner(kit, kitDetails(kit.id));
+        W.sync();
+        D.icons();
+      });
+
+      W.sync();
+      D.icons();
+    })();
+  </script>
+</body>
+</html>

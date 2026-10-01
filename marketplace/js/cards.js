@@ -6,9 +6,14 @@ function productCard(p) {
   const statusKind = p.statusKind ? `badge--${p.statusKind}` : "badge--success";
   const status = p.status ? `<span class="card__status badge ${statusKind}">${p.status}</span>` : "";
   const meta = (p.meta || []).map((m) => `<span class="chip">${m}</span>`).join("");
-  const fit = p.fit ? ' style="object-fit:contain"' : (p.cover ? ' style="object-fit:cover"' : "");
+  const desc = p.desc ? `<p class="card__desc">${p.desc}</p>` : "";
+  // Icon cards (digital tools) show a line icon on the app's own tint instead of a photo. Swap `icon` for `img` when artwork exists.
+  const isIcon = !!p.icon;
+  const src = p.icon || p.img;
+  const fit = isIcon ? "" : (p.fit ? ' style="object-fit:contain"' : (p.cover ? ' style="object-fit:cover"' : ""));
   // Contain-fit products (equipment, tech, balls) sit on a plain card background — the accent tint is for apparel.
-  const mediaCls = (p.fit || p.cover) ? "card__media card__media--plain" : "card__media";
+  const mediaCls = isIcon ? "card__media card__media--icon" : ((p.fit || p.cover) ? "card__media card__media--plain" : "card__media");
+  const mediaStyle = p.tint ? ` style="background:${p.tint}"` : "";
   // Non-deal product cards open the product detail page by default; deal/partner cards opt in via explicit href.
   const detail = p.href || (p.deal ? "#" : "product.html");
   const btn = p.deal
@@ -16,13 +21,14 @@ function productCard(p) {
     : `<a class="btn btn--sm" href="${detail}"><i data-lucide="shopping-cart" class="icon"></i> Køb</a>`;
   return `
   <article class="card">
-    <div class="${mediaCls}">
-      <img src="${p.img}" alt="${p.title}"${fit} />
+    <div class="${mediaCls}"${mediaStyle}>
+      <img src="${src}" alt="${p.title}"${fit} />
       ${status}${fav}
     </div>
     <div class="card__body">
       <div class="card__cat"><i data-lucide="shield" class="icon"></i><span>${p.cat}</span></div>
       <h3 class="card__title"><a href="${detail}">${p.title}</a></h3>
+      ${desc}
       <div class="card__meta">${meta}</div>
       <div class="card__divider"></div>
       <div class="card__footer">

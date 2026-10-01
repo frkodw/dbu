@@ -261,6 +261,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .card__media { position: relative; height: 200px; background: var(--accent); }
 .card__media--plain { background: var(--card); }
 .card__media img { width: 100%; height: 100%; object-fit: cover; }
+.card__media--icon img { object-fit: contain; padding: 56px; box-sizing: border-box; }
 .card__status {
   position: absolute; top: 14px; left: 14px;
 }
@@ -275,7 +276,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .card__fav.is-faved .icon { color: #fff; fill: #fff; }
 .fav-btn.is-faved { background: var(--accent) !important; border-color: var(--primary) !important; }
 .fav-btn.is-faved .icon { color: var(--primary) !important; fill: var(--primary); }
-.card__body { display: flex; flex-direction: column; gap: 10px; padding: 18px; }
+.card__body { display: flex; flex-direction: column; gap: 10px; padding: 18px; flex: 1; }
 .card__cat { display: flex; align-items: center; gap: 6px; }
 .card__cat .icon { width: 14px; height: 14px; color: var(--primary); }
 .card__cat span {
@@ -286,12 +287,16 @@ ul { margin: 0; padding: 0; list-style: none; }
   font-family: var(--font-primary); font-size: 19px; font-weight: 600;
   line-height: 1.2; color: var(--foreground); margin: 0;
 }
+.card__desc {
+  margin: -2px 0 0; font-size: 14px; line-height: 1.45; color: var(--muted-foreground);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
 .card__meta { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
   font-size: 12px; font-weight: 500; color: var(--muted-foreground);
   background: var(--background); border-radius: var(--radius-s); padding: 4px 10px;
 }
-.card__divider { height: 1px; background: var(--border); }
+.card__divider { height: 1px; background: var(--border); margin-top: auto; }
 .card__footer { display: flex; align-items: center; justify-content: space-between; }
 .card__price-label { font-size: 11px; color: var(--muted-foreground); }
 .card__price { font-family: var(--font-primary); font-size: 22px; font-weight: 700; }

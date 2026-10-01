@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Partner360 — Partner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .overview { display: flex; align-items: flex-start; gap: 24px; width: 100%; }
+    .overview .card { flex: 1; min-width: 0; }
+    .overview__cols { display: flex; gap: 32px; width: 100%; }
+    .overview__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+    .kpis { width: 300px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+    @media (max-width: 1024px) { .overview { flex-direction: column; } .kpis { width: 100%; } }
+    @media (max-width: 720px) { .overview__cols { flex-direction: column; gap: 12px; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header id="topbar" class="topbar"></header>
+    <div class="shell">
+      <aside id="sidebar" class="sidebar"></aside>
+      <main class="content">
+        <div class="page-head">
+          <div class="page-head__title">
+            <div class="page-head__row"><h1 id="p-name"></h1><span class="badge">Aktiv partner</span></div>
+            <p class="page-head__sub" id="p-sub"></p>
+          </div>
+          <div class="page-head__actions">
+            <a class="btn btn--ghost" href="#">Rediger stamdata</a>
+            <a class="btn" data-plink="aktivering-1.html" href="aktivering-1.html">Opret ny aktivering</a>
+          </div>
+        </div>
+
+        <div class="overview">
+          <div class="card">
+            <div class="card__title">Stamoplysninger</div>
+            <div class="overview__cols">
+              <div class="overview__col" id="stam-a"></div>
+              <div class="overview__col" id="stam-b"></div>
+            </div>
+          </div>
+          <div class="kpis" id="kpis"></div>
+        </div>
+
+        <section class="section" id="sec-pending" hidden>
+          <h2 class="section__title">Afventer godkendelse</h2>
+          <div class="table" id="tbl-pending"></div>
+          <p class="muted" style="font-size:12px" id="pending-note"></p>
+        </section>
+
+        <section class="section">
+          <h2 class="section__title">Igangværende aktiveringer</h2>
+          <div class="table" id="tbl-current"></div>
+        </section>
+        <section class="section">
+          <h2 class="section__title">Tidligere aktiveringer</h2>
+          <div class="table" id="tbl-past"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const D = window.P360, p = D.partner();
+      document.title = `DBU Partner360 — ${p.name}`;
+      D.renderTopbar({ variant: 'partner', partner: p });
+      D.renderSidebar('Oversigt', p);
+      document.getElementById('p-name').textContent = p.name;
+      document.getElementById('p-sub').textContent = `Partner siden ${p.since}  ·  Ansvarlig: ${p.owner}`;
+      const srow = ([l, v]) => `<div class="srow"><span class="srow__label">${D.esc(l)}</span><span class="srow__value">${D.esc(v)}</span></div>`;
+      document.getElementById('stam-a').innerHTML = p.stamdata.slice(0, 3).map(srow).join('');
+      document.getElementById('stam-b').innerHTML = p.stamdata.slice(3).map(srow).join('');
+      document.getElementById('kpis').innerHTML = p.kpis.map(([v, l]) => `<div class="kpi"><span class="kpi__value">${v}</span><span class="kpi__label">${l}</span></div>`).join('');
+
+      const W = [330, 130, 170, 190, 110, 152];
+      const head = ['Aktivering', 'Type', 'Kanal', 'Periode', 'Status', 'Resultat'];
+      function table(rows) {
+        const h = `<div class="table__row table__row--head">${head.map((c, i) => `<div class="table__cell" style="width:${W[i]}px">${c}</div>`).join('')}</div>`;
+        return h + rows.map((r) => {
+          const tag = r.link ? 'a' : 'div';
+          const hrefAttr = r.link ? ` href="${D.href(r.link, p.id)}"` : '';
+          const statusCls = r.status === 'Live' ? 'table__cell--success' : 'table__cell--muted';
+          return `<${tag} class="table__row${r.link ? ' table__row--link' : ''}"${hrefAttr}>
+            <div class="table__cell table__cell--strong" style="width:${W[0]}px">${D.esc(r.name)}</div>
+            <div class="table__cell" style="width:${W[1]}px">${D.esc(r.type)}</div>
+            <div class="table__cell" style="width:${W[2]}px">${D.esc(r.channel)}</div>
+            <div class="table__cell" style="width:${W[3]}px">${D.esc(r.period)}</div>
+            <div class="table__cell ${statusCls}" style="width:${W[4]}px">${D.esc(r.status)}</div>
+            <div class="table__cell" style="width:${W[5]}px">${D.esc(r.result)}</div>
+          </${tag}>`;
+        }).join('');
+      }
+      document.getElementById('tbl-current').innerHTML = table(p.current);
+
+      /* Aktivering sendt til godkendelse fra wizard'ens trin 7 */
+      let pending = null;
+      try { pending = JSON.parse(sessionStorage.getItem(`p360.pending.${p.id}`) || 'null'); } catch (e) {}
+      if (pending) {
+        const sec = document.getElementById('sec-pending');
+        sec.hidden = false;
+        sec.querySelector('.section__title').innerHTML = `Afventer godkendelse <span class="badge badge--warning" style="margin-left:8px;vertical-align:middle">1</span>`;
+        document.getElementById('tbl-pending').innerHTML =
+          `<div class="table__row table__row--head">${head.map((c, i) => `<div class="table__cell" style="width:${W[i]}px">${c}</div>`).join('')}</div>
+           <a class="table__row table__row--link" href="${D.href('aktivering-7.html', p.id)}">
+            <div class="table__cell table__cell--strong" style="width:${W[0]}px">${D.esc(pending.name)}</div>
+            <div class="table__cell" style="width:${W[1]}px">${D.esc(pending.type)}</div>
+            <div class="table__cell" style="width:${W[2]}px">${D.esc(pending.channel)}</div>
+            <div class="table__cell" style="width:${W[3]}px">${D.esc(pending.period)}</div>
+            <div class="table__cell" style="width:${W[4]}px"><span class="badge badge--warning">Afventer</span></div>
+            <div class="table__cell" style="width:${W[5]}px">${D.esc(pending.price)}</div>
+          </a>`;
+        document.getElementById('pending-note').textContent = `Sendt til godkendelse hos ${pending.sentTo} (${p.name}) den ${pending.sentAt}. Aktiveringen går live når partneren har godkendt materiale og pris.`;
+      }
+      document.getElementById('tbl-past').innerHTML = table(p.past);
+      D.decorateLinks();
+      D.icons();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Klubmarked — Digitale værktøjer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .p-cat .cat-body { display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start; }
+    .p-cat .cat-title { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+    .p-cat .cat-title h1 { font-family: var(--font-primary); font-size: 34px; font-weight: 700; margin: 0; }
+    .p-cat .cat-title span { font-size: 15px; color: var(--muted-foreground); }
+    .p-cat .cat-intro { margin: 10px 0 0; max-width: 640px; font-size: 15px; line-height: 1.5; color: var(--muted-foreground); }
+    .p-cat .sidebar { display: flex; flex-direction: column; gap: 8px; }
+    .p-cat .side-head { font-family: var(--font-primary); font-size: 13px; font-weight: 600; letter-spacing: 1px; color: var(--muted-foreground); }
+    .p-cat .side-menu { display: flex; flex-direction: column; }
+    .p-cat .side-menu a { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-radius: var(--radius-s); font-size: 14px; color: var(--foreground); }
+    .p-cat .side-menu a:hover { background: var(--background); }
+    .p-cat .side-menu a.is-active { background: var(--accent); color: var(--primary); font-family: var(--font-primary); font-weight: 600; }
+    .p-cat .side-menu a.is-active .icon { width: 16px; height: 16px; }
+    .p-cat .side-menu a .count { font-size: 12px; color: var(--muted-foreground); }
+    .p-cat .side-div { height: 1px; background: var(--border); margin: 8px 0; }
+    .p-cat .filter-bar { display: flex; flex-wrap: wrap; gap: 12px; }
+    .p-cat .filter-pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: var(--radius-pill); background: var(--card); border: 1px solid var(--border); font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--foreground); cursor: pointer; }
+    .p-cat .filter-pill .icon { width: 16px; height: 16px; color: var(--muted-foreground); }
+    .p-cat .filter-pill--dark { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+    .p-cat .filter-pill--dark .icon { color: #fff; }
+    .p-cat .results-count { font-size: 14px; color: var(--muted-foreground); margin: 16px 0; }
+    @media (max-width: 1100px) { .p-cat .cat-body { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body data-active="udforsk" class="p-cat">
+  <div class="page">
+    <div data-include="header"></div>
+
+    <!-- Group strip: category switch -->
+    <div class="strip">
+      <span class="strip__pill"><i data-lucide="layers" class="icon"></i> ALLE KATEGORIER</span>
+      <span class="strip__sep"></span>
+      <a href="category-shirts.html">Tøj</a>
+      <a href="#">Sko</a>
+      <a href="#">Udstyr</a>
+      <a href="category-sportstech.html">Tech</a>
+      <a href="category-digital.html" class="is-active">Digitale værktøjer</a>
+      <a href="category-sponsor.html">Sponsor &amp; fundraising</a>
+      <a href="#">Faciliteter &amp; drift</a>
+      <a href="#">Events &amp; rejser</a>
+      <a href="#">Uddannelse</a>
+      <a href="#">Sundhed &amp; trivsel</a>
+    </div>
+
+    <section class="section" style="padding:28px 40px 40px">
+      <!-- Breadcrumb -->
+      <div class="crumb" style="margin-bottom:18px">
+        <a href="index.html">Alle</a>
+        <i data-lucide="chevron-right" class="icon"></i>
+        <span style="color:var(--primary);font-weight:600">Digitale værktøjer</span>
+      </div>
+
+      <div class="cat-body">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="side-head">DIGITALE VÆRKTØJER</div>
+          <nav class="side-menu">
+            <a href="#" class="is-active" data-filter="">Alle <i data-lucide="chevron-right" class="icon"></i></a>
+            <a href="#" data-filter="ai-assistenter">AI-assistenter</a>
+            <a href="#" data-filter="integrationer">Integrationer</a>
+            <a href="#" data-filter="data &amp; api">Data &amp; API</a>
+            <a href="#" data-filter="analyse">Analyse &amp; indsigt</a>
+            <a href="#" data-filter="planlægning">Planlægning</a>
+          </nav>
+          <div class="side-div"></div>
+          <div class="side-head">PRISMODEL</div>
+          <nav class="side-menu">
+            <a href="#">Gratis <span class="count">1</span></a>
+            <a href="#">Gratis prøveperiode <span class="count">5</span></a>
+            <a href="#">Abonnement <span class="count">7</span></a>
+            <a href="#">Til partnere <span class="count">1</span></a>
+          </nav>
+          <div class="side-div"></div>
+          <div class="side-head">PASSER TIL</div>
+          <nav class="side-menu">
+            <a href="#">Klubadministration <span class="count">6</span></a>
+            <a href="#">Trænere &amp; hold <span class="count">3</span></a>
+            <a href="#">Kommunikation &amp; web <span class="count">3</span></a>
+            <a href="#">Lokalunioner &amp; DBU <span class="count">1</span></a>
+            <a href="#">Leverandører &amp; medier <span class="count">1</span></a>
+          </nav>
+        </aside>
+
+        <!-- Main -->
+        <div>
+          <div class="cat-title">
+            <h1>Digitale værktøjer</h1>
+            <span data-cat-count>8 apps &amp; plugins</span>
+          </div>
+          <p class="cat-intro">Apps, integrationer og AI-assistenter, der forbinder klubbens værktøjer med DBU's data. Du bestemmer selv, hvilke data en app får adgang til, og de fleste kan prøves gratis.</p>
+
+          <div class="filter-bar" style="margin-top:18px">
+            <button class="filter-pill" data-cat-sort><span data-lbl>Sortér efter</span> <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Kategori <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill" data-cat-price><span data-lbl>Pris</span> <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Prismodel <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Leverandør <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Platform <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill">Dataadgang <i data-lucide="chevron-down" class="icon"></i></button>
+            <button class="filter-pill filter-pill--dark"><i data-lucide="sliders-horizontal" class="icon"></i> Alle filtre</button>
+          </div>
+
+          <p class="results-count" data-cat-count>8 apps &amp; plugins</p>
+
+          <div class="grid grid--3" id="digital-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <div data-include="footer"></div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/store.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/tweaks.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/category.js"></script>
+  <script>
+    /* Indhold fra DBU Markedsplads · Apps & plugins (konceptprototype).
+       Artwork ligger i assests/digital/ (2:1). Ikon-varianten findes stadig i assests/app-icon-*.svg:
+       brug `icon: "...svg", tint: "#hex"` i stedet for `img`/`cover`, hvis et kort skal vise ikon på farveflade.
+       Chips: [prismodel, målgruppe]. Hold dem korte, så de står på én linje og CTA'en flugter på tværs af rækken. */
+    initCategory({ grid: "#digital-grid", countSuffix: " apps & plugins", items: [
+      { img: "assests/digital/komm.png", cover: true, cat: "AI-ASSISTENTER", title: "Klubbens kommunikationsassistent", desc: "Lav udkast til klubnyheder, kampoptakter og ugens overblik med klubbens egne data.", meta: ["Prøv gratis", "Klubber"], priceLabel: "Pr. klub, ekskl. moms", price: "149 kr/md.", status: "POPULÆR", statusKind: "warning", href: "#" },
+      { img: "assests/digital/kalender-2.png", cover: true, cat: "INTEGRATIONER", title: "Holdkalender", desc: "Få holdets kampe direkte i Outlook, Google Kalender eller Apple Kalender.", meta: ["Gratis", "Trænere & forældre"], priceLabel: "Pr. klub", price: "Gratis", status: "GRATIS", href: "#" },
+      { img: "assests/digital/regler-2.png", cover: true, cat: "AI-ASSISTENTER", title: "Regelassistenten", desc: "Find vej i regler og turneringsbestemmelser med svar, der henviser til kilden.", meta: ["Prøv gratis", "Klubber"], priceLabel: "Pr. klub, ekskl. moms", price: "99 kr/md.", status: "PRØV GRATIS", statusKind: "info", href: "#" },
+      { img: "assests/digital/hjemmeside-2.png", cover: true, cat: "INTEGRATIONER", title: "Klubbens hjemmeside", desc: "Vis opdaterede kampe, resultater og stillinger på klubbens hjemmeside.", meta: ["Plugin", "Klubber"], priceLabel: "Pr. klub, ekskl. moms", price: "79 kr/md.", status: "ABONNEMENT", statusKind: "info", href: "#" },
+      { img: "assests/digital/indsigt-2.png", cover: true, cat: "ANALYSE & INDSIGT", title: "Fodboldindsigt", desc: "Følg udviklingen i deltagelse og få et fælles grundlag for klubbens næste beslutning.", meta: ["Prøv gratis", "Klubber & unioner"], priceLabel: "Pr. organisation, ekskl. moms", price: "399 kr/md.", status: "PRØV GRATIS", statusKind: "info", href: "#" },
+      { img: "assests/digital/infoskaerm-2.png", cover: true, cat: "INTEGRATIONER", title: "Klubhusets infoskærm", desc: "Giv spillere og gæster overblik over dagens kampe og baner i klubhuset.", meta: ["Prøv gratis", "Klubber"], priceLabel: "Pr. klub, ekskl. moms", price: "129 kr/md.", status: "PRØV GRATIS", statusKind: "info", href: "#" },
+      { img: "assests/digital/api-2.png", cover: true, cat: "DATA & API", title: "Fodbolddata API", desc: "Byg egne løsninger med strukturerede kampprogrammer, resultater og stillinger.", meta: ["50.000 kald/md.", "Partnere"], priceLabel: "Pr. organisation, ekskl. moms", price: "999 kr/md.", status: "TIL PARTNERE", statusKind: "info", href: "#" },
+      { img: "assests/digital/kmapplan-1.png", cover: true, cat: "PLANLÆGNING", title: "Kampplanlægger", desc: "Få forslag til en bedre kampplan og opdag sammenfald, før de bliver et problem.", meta: ["Prøv gratis", "Klubber"], priceLabel: "Pr. klub, ekskl. moms", price: "249 kr/md.", status: "NY", statusKind: "info", href: "#" }
+    ]});
+  </script>
+</body>
+</html>

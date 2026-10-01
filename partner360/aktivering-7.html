@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Partner360 — Opret ny aktivering · Trin 7</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* ---------- Gennemgang (tabel-kort) ---------- */
+    .review { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden; display: flex; flex-direction: column; }
+    .review__row { display: flex; align-items: flex-start; gap: 16px; padding: 16px 24px; border-bottom: 1px solid var(--border); }
+    .review__row:last-child { border-bottom: 0; }
+    .review__label { width: 130px; flex-shrink: 0; font-family: var(--font-primary); font-weight: 700; font-size: 14px; line-height: normal; }
+    .review__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    .review__value { font-size: 14px; line-height: normal; white-space: pre-wrap; }
+    .review__meta { font-size: 12px; line-height: normal; color: var(--muted-foreground); white-space: pre-wrap; }
+    .review__edit { flex-shrink: 0; }
+
+    /* ---------- Materiale pr. kanal ---------- */
+    .card__head { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .previews { display: flex; align-items: flex-start; gap: 24px; width: 100%; }
+    .preview { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .preview__text { display: flex; flex-direction: column; gap: 2px; }
+    .preview__title { font-family: var(--font-primary); font-weight: 700; font-size: 14px; white-space: nowrap; }
+    .preview__meta { font-size: 11px; color: var(--muted-foreground); white-space: pre; }
+    .thumb {
+      width: 330px; max-width: 100%; height: 240px; background: var(--background); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; padding-top: 16px; position: relative;
+    }
+    .thumb--left { justify-content: flex-start; padding-left: 16px; }
+    .thumb--cover { padding: 0; }
+    .thumb--cover img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* iPhone (wallet) */
+    .ph { background: #1a1a1a; border: 1.2px solid #595959; border-radius: 26.4px; padding: 6px; position: relative; flex-shrink: 0; filter: drop-shadow(0 7.2px 7.2px rgba(0,0,0,.25)); }
+    .ph__btn { position: absolute; width: 1.8px; background: #404040; border-radius: 1.2px; left: -3.6px; }
+    .ph__btn--power { left: auto; right: -3.6px; top: 72px; height: 31.2px; }
+    .ph__screen { width: 144px; background: #fff; border-radius: 20.4px; overflow: hidden; display: flex; flex-direction: column; }
+    .ph__head { background: var(--primary); color: #fff; padding: 4.8px 0 7.2px; display: flex; flex-direction: column; }
+    .ph__status { display: flex; align-items: center; justify-content: space-between; padding: 0 9.6px 0 10.8px; }
+    .ph__time { font-family: var(--font-secondary); font-weight: 600; font-size: 6px; line-height: normal; }
+    .ph__island { width: 33.6px; height: 8.4px; border-radius: 999px; background: #1a1a1a; }
+    .ph__icons { display: flex; align-items: center; gap: 2.4px; }
+    .ph__signal { display: flex; align-items: flex-end; gap: .6px; }
+    .ph__signal i { display: block; width: 1.2px; background: #fff; border-radius: .3px; }
+    .ph__wifi { width: 7.2px; height: 7.2px; stroke-width: 2.5; }
+    .ph__batt { position: relative; width: 10.8px; height: 5.4px; border: .6px solid rgba(255,255,255,.5); border-radius: 1.5px; }
+    .ph__batt::after { content: ""; position: absolute; left: .6px; top: .6px; width: 7.2px; height: 3px; background: #fff; border-radius: .6px; }
+    .ph__nav { display: flex; align-items: center; gap: 3.6px; padding: 7.2px 7.2px 0; }
+    .ph__nav .icon { width: 8.4px; height: 8.4px; stroke-width: 3; }
+    .ph__nav b { font-family: var(--font-primary); font-weight: 700; font-size: 7.8px; line-height: normal; flex: 1; }
+    .ph__nav span { font-weight: 600; font-size: 7.2px; line-height: normal; }
+    .ph__body { background: #f6f5f4; padding: 7.2px; }
+    .kupon { background: #fff; border: .6px solid var(--border); border-radius: 9.6px; padding: 7.2px; display: flex; flex-direction: column; gap: 4.8px; }
+    .kupon__top { display: flex; align-items: center; justify-content: space-between; }
+    .kupon__logo { width: 30px; height: 12px; overflow: hidden; display: flex; align-items: center; }
+    .kupon__logo img { width: 100%; height: 100%; object-fit: contain; }
+    .kupon__app { font-size: 4.8px; color: var(--muted-foreground); line-height: normal; }
+    .kupon__img { height: 66px; border-radius: 4.8px; overflow: hidden; }
+    .kupon__img img { width: 100%; height: 100%; object-fit: cover; }
+    .kupon__title { font-family: var(--font-primary); font-weight: 700; font-size: 7.8px; line-height: normal; }
+    .kupon__desc { font-size: 4.8px; line-height: normal; color: var(--muted-foreground); }
+    .kupon__code { display: flex; flex-direction: column; align-items: center; gap: 2.4px; padding-top: 2.4px; }
+    .barcode { display: flex; gap: .6px; }
+    .barcode i { display: block; height: 14.4px; background: #000; border-radius: .6px; }
+    .kupon__codeTxt { font-family: var(--font-primary); font-weight: 700; font-size: 6px; line-height: normal; }
+    .kupon__valid { font-size: 4.2px; line-height: normal; color: var(--muted-foreground); }
+    .kupon__btn { background: #0090d0; border-radius: 3.6px; padding: 4.8px 0; text-align: center; color: #fff; font-family: var(--font-primary); font-weight: 600; font-size: 6px; line-height: normal; }
+    .kupon__terms { font-size: 4.2px; line-height: normal; color: var(--muted-foreground); }
+
+    /* Låseskærm (push) */
+    .lock { width: 156px; height: 294px; background: #4a4a4a; border-radius: 13px; padding: 7.8px; display: flex; flex-direction: column; gap: 25.35px; color: #fff; flex-shrink: 0; overflow: hidden; }
+    .lock__clock { display: flex; flex-direction: column; align-items: center; gap: 1.3px; padding-top: 7.8px; white-space: nowrap; }
+    .lock__time { font-family: var(--font-primary); font-weight: 700; font-size: 18.2px; line-height: normal; }
+    .lock__date { font-size: 6.5px; line-height: normal; }
+    .notif { background: #fff; color: var(--foreground); border-radius: 7.8px; padding: 6.5px; display: flex; align-items: flex-start; gap: 5.2px; }
+    .notif__icon { width: 20.8px; height: 20.8px; border-radius: 5.943px; background: var(--primary); display: grid; place-items: center; flex-shrink: 0; }
+    .notif__icon img { width: 16.342px; height: 16.342px; object-fit: cover; }
+    .notif__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1.3px; }
+    .notif__row { display: flex; align-items: flex-start; gap: 1.3px; }
+    .notif__title { font-family: var(--font-primary); font-weight: 700; font-size: 6.5px; line-height: normal; white-space: nowrap; }
+    .notif__time { flex: 1; text-align: right; font-size: 4.55px; line-height: 7.8px; color: var(--muted-foreground); }
+    .notif__text { font-size: 5.2px; line-height: normal; }
+
+    /* Browser (marketplace) */
+    .browser { width: 451.36px; height: 100%; background: #fff; border: .62px solid var(--border); border-radius: 7.44px; overflow: hidden; display: flex; flex-direction: column; flex-shrink: 0; color: var(--foreground); }
+    .browser__bar { background: var(--background); display: flex; align-items: center; gap: 4.96px; padding: 4.96px 7.44px; }
+    .browser__dot { width: 6.2px; height: 6.2px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+    .browser__url { flex: 1; min-width: 0; background: #fff; border-radius: 999px; padding: 2.48px 6.2px; font-size: 6.2px; line-height: normal; color: var(--muted-foreground); white-space: nowrap; }
+    .mp__nav { background: var(--primary); color: #fff; height: 26.04px; display: flex; align-items: center; gap: 14.88px; padding: 0 14.88px; white-space: nowrap; }
+    .mp__nav b { font-family: var(--font-primary); font-weight: 700; font-size: 6.82px; }
+    .mp__nav span { font-size: 6.2px; }
+    .mp__nav .b2 { font-family: var(--font-primary); font-weight: 700; font-size: 6.2px; }
+    .mp__nav .grow { flex: 1; }
+    .mp__search { background: #fff; color: var(--muted-foreground); border-radius: 999px; width: 52.7px; padding: 2.48px 6.2px; display: flex; align-items: center; gap: 3.72px; font-size: 5.58px; }
+    .mp__search .icon { width: 6.2px; height: 6.2px; }
+    .mp__avatar { width: 12.4px; height: 12.4px; border-radius: 50%; background: var(--yellow); color: var(--foreground); display: grid; place-items: center; font-family: var(--font-primary); font-weight: 700; font-size: 6.82px; }
+    .mp__cats { background: var(--primary-deep); color: #fff; display: flex; gap: 11.16px; padding: 4.96px 14.88px; font-size: 5.58px; line-height: normal; white-space: nowrap; }
+    .mp__cats b { font-family: var(--font-primary); font-weight: 700; }
+    .mp__page { padding: 14.88px; display: flex; flex-direction: column; gap: 9.92px; }
+    .mp__crumb { font-size: 5.58px; line-height: normal; color: var(--muted-foreground); white-space: pre; }
+    .mp__hero { display: flex; gap: 14.88px; align-items: flex-start; }
+    .mp__img { position: relative; width: 198.4px; height: 124px; border-radius: 7.44px; border: .62px solid var(--border); overflow: hidden; flex-shrink: 0; }
+    .mp__img img { width: 100%; height: 100%; object-fit: cover; }
+    .mp__tag { position: absolute; left: 7.44px; top: 7.44px; background: #0090d0; color: #fff; border-radius: 2.48px; padding: 2.48px 4.96px; font-family: var(--font-primary); font-weight: 700; font-size: 6.82px; line-height: normal; }
+    .mp__badge { position: absolute; left: 116.56px; top: 7.44px; background: var(--primary-subtle); color: var(--primary-dark); border-radius: 999px; padding: 3.1px 7.44px; font-family: var(--font-primary); font-weight: 600; font-size: 6.82px; letter-spacing: .8px; text-transform: uppercase; line-height: normal; white-space: nowrap; }
+    .mp__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6.2px; }
+    .mp__kicker { font-size: 5.58px; line-height: normal; color: var(--muted-foreground); white-space: pre; }
+    .mp__title { font-family: var(--font-primary); font-weight: 700; font-size: 12.4px; line-height: normal; white-space: nowrap; }
+    .mp__desc { font-size: 6.2px; line-height: normal; color: var(--muted-foreground); }
+    .mp__ctas { display: flex; align-items: center; gap: 6.2px; white-space: nowrap; }
+    .mp__cta { border-radius: 999px; padding: 3.72px 7.44px; font-family: var(--font-primary); font-weight: 600; font-size: 6.2px; line-height: normal; }
+    .mp__cta--p { background: #0090d0; color: #fff; }
+    .mp__cta--g { border: .62px solid var(--border); }
+    .mp__ctas span { font-size: 5.58px; color: var(--muted-foreground); }
+    .mp__steps { display: flex; flex-direction: column; gap: 7.44px; }
+    .mp__step { display: flex; align-items: center; gap: 3.72px; font-size: 4.96px; line-height: normal; color: var(--muted-foreground); white-space: nowrap; }
+    .mp__step i { width: 9.92px; height: 9.92px; border-radius: 50%; background: var(--background); color: var(--foreground); display: grid; place-items: center; font-style: normal; font-family: var(--font-primary); font-weight: 700; font-size: 4.96px; }
+    .mp__more { font-family: var(--font-primary); font-weight: 700; font-size: 6.82px; line-height: normal; }
+    .mp__cards { display: flex; gap: 7.44px; width: 100%; }
+    .mp__card { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3.72px; }
+    .mp__cimg { height: 37.2px; border-radius: 4.96px; border: .62px solid var(--border); overflow: hidden; display: grid; place-items: center; }
+    .mp__cimg--dark { background: #131e37; }
+    .mp__cimg img { width: 100%; height: 100%; object-fit: cover; }
+    .mp__cimg--logo img { width: 60%; height: auto; object-fit: contain; }
+    .mp__card span { font-size: 4.96px; line-height: normal; color: var(--muted-foreground); white-space: nowrap; }
+
+    /* ---------- Tjekliste ---------- */
+    .checklist { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+    .check { display: flex; align-items: center; gap: 12px; cursor: pointer; text-align: left; }
+    .check--top { align-items: flex-start; }
+    .check__body { display: flex; flex-direction: column; gap: 2px; }
+    .check__text { font-size: 14px; line-height: normal; }
+    .check__sub { font-size: 12px; line-height: normal; color: var(--muted-foreground); }
+
+    @media (max-width: 1200px) {
+      .previews { flex-wrap: wrap; }
+      .preview { flex: 0 0 auto; }
+    }
+    @media (max-width: 720px) {
+      .review__row { flex-wrap: wrap; }
+      .review__label { width: 100%; }
+      .thumb { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header id="topbar" class="topbar"></header>
+    <div class="shell">
+      <aside id="sidebar" class="sidebar"></aside>
+      <div class="main">
+      <main class="content">
+        <div class="page-head">
+          <div class="page-head__title">
+            <h1>Opret ny aktivering</h1>
+            <p class="page-head__sub" id="step-subtitle"></p>
+          </div>
+        </div>
+        <div id="stepper" class="stepper"></div>
+
+        <div class="wizard">
+          <div class="wizard__form">
+            <div class="review" id="review"></div>
+
+            <div class="card">
+              <div class="card__head">
+                <div class="card__title">Materiale pr. kanal</div>
+                <a class="link" id="edit-material" href="aktivering-5.html">Redigér materiale (trin 5)</a>
+              </div>
+              <div class="previews" id="previews"></div>
+            </div>
+
+            <div class="checklist">
+              <div class="fsection"><div class="fsection__title">Tjekliste før pris og publicering</div></div>
+              <div id="checks" style="display:contents"></div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+      <div id="wizard-footer" class="wizard__footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/wizard.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const D = window.P360, W = D.wizard.init(7), s = W.state, esc = D.esc;
+      const names = D.steps[W.flow];
+
+      /* ---------- Gennemgang ---------- */
+      const isDefaultChannels = (s.channels || []).length === W.defaults.channels.length && s.channels.every((c) => W.defaults.channels.includes(c));
+      const chanList = D.channels[W.flow].list.filter((c) => (s.channels || []).includes(c.id));
+      const typeMeta = s.type === W.defaults.type && s.goal === W.defaults.goal && s.goalValue === W.defaults.goalValue ? s.typeMeta : `${W.typeText()}  ·  Mål: ${W.goalText()}`;
+      const channelsLong = isDefaultChannels ? s.channelsLong : chanList.map((c) => c.title).join('  ·  ');
+      const priceLong = `${W.priceText()}  ·  Prisramme ${s.priceMin} - ${s.priceMax} kr.`;
+      const priceMeta = `Vejledende pris fordelt på ${chanList.length} kanaler  ·  Godkendes af ${W.partner.owner} (partneransvarlig)`;
+      const rows = [
+        ['Type og mål', s.name, typeMeta, 1],
+        ['Målgruppe', s.audienceTouched ? W.audienceText() : s.audienceLong, s.audienceTouched ? '' : s.audienceMeta, 2],
+        ['Kanaler', channelsLong, isDefaultChannels ? s.channelsMeta : '', 3],
+        ['Materiale', s.materialLong, s.materialMeta, 5],
+        [names[3], s.periodTouched ? W.periodText() : s.periodLong, '', 4],
+        ['Pris', priceLong, priceMeta, 6],
+      ];
+      document.getElementById('review').innerHTML = rows.map(([l, v, m, step]) => `
+        <div class="review__row">
+          <div class="review__label">${esc(l)}</div>
+          <div class="review__body">
+            <div class="review__value">${esc(v)}</div>
+            ${m ? `<div class="review__meta">${esc(m)}</div>` : ''}
+          </div>
+          <a class="link review__edit" href="${D.href('aktivering-' + step + '.html', W.partner.id)}">Ret</a>
+        </div>`).join('');
+
+      document.getElementById('edit-material').href = D.href('aktivering-5.html', W.partner.id);
+
+      /* ---------- Materiale pr. kanal ---------- */
+      const bars = [1.2,.6,1.2,.6,.6,1.2,.6,1.2,.6,.6,1.2,.6,1.2,1.2,.6,.6,1.2,.6,.6,1.2,.6,1.2,.6,.6,1.2,.6,1.2,.6,1.2,.6];
+      const walletThumb = `
+        <div class="thumb">
+          <div class="ph">
+            <span class="ph__btn" style="top:48px;height:10.8px"></span>
+            <span class="ph__btn" style="top:67.2px;height:20.4px"></span>
+            <span class="ph__btn" style="top:91.2px;height:20.4px"></span>
+            <span class="ph__btn ph__btn--power"></span>
+            <div class="ph__screen">
+              <div class="ph__head">
+                <div class="ph__status">
+                  <span class="ph__time">9:41</span>
+                  <span class="ph__island"></span>
+                  <span class="ph__icons">
+                    <span class="ph__signal"><i style="height:1.8px"></i><i style="height:3px"></i><i style="height:4.2px"></i><i style="height:5.4px"></i></span>
+                    ${D.icon('wifi', 'ph__wifi')}
+                    <span class="ph__batt"></span>
+                  </span>
+                </div>
+                <div class="ph__nav">${D.icon('chevron-left')}<b>Min wallet</b><span>•••</span></div>
+              </div>
+              <div class="ph__body">
+                <div class="kupon">
+                  <div class="kupon__top"><span class="kupon__logo"><img src="assets/logo-bilka.png" alt="Bilka"></span><span class="kupon__app">DBU Partner360</span></div>
+                  <div class="kupon__img"><img src="assets/bilka-fodbold-hero.jpg" alt=""></div>
+                  <div class="kupon__title">10% på alle indkøb i Bilka</div>
+                  <div class="kupon__desc">Få 10% på hele dit køb i alle Bilka-varehuse og på bilka.dk. Vis kuponen ved kassen eller brug koden online.</div>
+                  <div class="kupon__code">
+                    <span class="barcode">${bars.map((w) => `<i style="width:${w}px"></i>`).join('')}</span>
+                    <span class="kupon__codeTxt">DBU-BILKA-10</span>
+                    <span class="kupon__valid">Gyldig 1. okt - 30. nov 2026</span>
+                  </div>
+                  <div class="kupon__btn">Gem i wallet</div>
+                  <div class="kupon__terms">Vilkår: Ét køb pr. kunde. Gælder ikke tobak, medicin og gavekort.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+      const pushThumb = `
+        <div class="thumb">
+          <div class="lock">
+            <div class="lock__clock"><span class="lock__time">17:00</span><span class="lock__date">mandag 12. oktober</span></div>
+            <div class="notif">
+              <span class="notif__icon"><img src="assets/dbu-app-icon.png" alt=""></span>
+              <div class="notif__body">
+                <div class="notif__row"><span class="notif__title">Kampdag i Bilka ⚽</span><span class="notif__time">nu</span></div>
+                <div class="notif__text">Kampdag! Få 10% på alle dine indkøb<br>i Bilka med din DBU-kupon.</div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+      const mpThumb = `
+        <div class="thumb thumb--left">
+          <div class="browser">
+            <div class="browser__bar"><span class="browser__dot"></span><span class="browser__dot"></span><span class="browser__dot"></span><span class="browser__url">marketplace.dbu.dk/partnerfordele/bilka-10-procent</span></div>
+            <div class="mp__nav"><b>DBU MARKEDSPLADS</b><span>Udforsk</span><span class="b2">Partnerfordele</span><span>Min klub</span><span class="grow"></span><span class="mp__search">${D.icon('search')}Søg</span><span class="mp__avatar">TT</span></div>
+            <div class="mp__cats"><span>Alle</span><span>Tøj</span><span>Sko</span><span>Udstyr</span><b>Partnerfordele</b><span>Events &amp; rejser</span><span>Uddannelse</span></div>
+            <div class="mp__page">
+              <div class="mp__crumb">Hjem  ›  Partnerfordele  ›  Salling Group  ›  Bilka 10%</div>
+              <div class="mp__hero">
+                <div class="mp__img"><img src="assets/bilka-fodbold-hero.jpg" alt=""><span class="mp__tag">BILKA</span><span class="mp__badge">Partnerfordel</span></div>
+                <div class="mp__info">
+                  <div class="mp__kicker">Partnerfordele  ·  Bilka  ·  Gælder til 30. nov 2026</div>
+                  <div class="mp__title">Bilka giver 10% til alle i klubben</div>
+                  <div class="mp__desc">Som DBU-klub får alle jeres medlemmer og forældre 10% på hele købet i Bilka frem til 30. november. Del kuponen i klubbens kanaler og lad den tælle med i klubbens fodboldpulje.</div>
+                  <div class="mp__ctas"><span class="mp__cta mp__cta--p">Hent kupon til klubben</span><span class="mp__cta mp__cta--g">Del i klubbens kanaler</span><span>bilka.dk/dbu</span></div>
+                  <div class="mp__steps">
+                    <div class="mp__step"><i>1</i>Klubben henter kuponen</div>
+                    <div class="mp__step"><i>2</i>Deles til medlemmer og forældre</div>
+                    <div class="mp__step"><i>3</i>Indløses i Bilka eller på bilka.dk</div>
+                  </div>
+                </div>
+              </div>
+              <div class="mp__more">Andre fordele fra Salling Group</div>
+              <div class="mp__cards">
+                <div class="mp__card"><div class="mp__cimg mp__cimg--dark mp__cimg--logo"><img src="assets/logo-fotex.png" alt=""></div><span>føtex: Gratis frugt til stævner</span></div>
+                <div class="mp__card"><div class="mp__cimg mp__cimg--logo"><img src="assets/logo-netto.png" alt=""></div><span>Netto: Klubrabat på drikkevarer</span></div>
+                <div class="mp__card"><div class="mp__cimg"><img src="assets/bilka-fodbold-hero.jpg" alt=""></div><span>Salling Group: Landskampsbilletter</span></div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+      const preview = (title, meta, thumb) => `
+        <div class="preview">
+          <div class="preview__text"><div class="preview__title">${esc(title)}</div><div class="preview__meta">${esc(meta)}</div></div>
+          ${thumb}
+        </div>`;
+
+      let previews;
+      if (W.flow === 'event') {
+        previews = preview('Kampagnebillede', 'Stand ved stævner  ·  Push til hold  ·  Klubportal',
+          `<div class="thumb thumb--cover"><img src="assets/skoda-peaq-bane.jpg" alt="Skoda Peaq ved banen"></div>`);
+      } else {
+        previews = preview('Wallet-kupon', 'DBU appen  ·  Min wallet', walletThumb)
+          + preview('Push-notifikation', 'DBU appen  ·  12. okt + 14. nov kl. 17:00', pushThumb)
+          + preview('Marketplace-tilbud', 'marketplace.dbu.dk  ·  Partnerfordele', mpThumb);
+      }
+      document.getElementById('previews').innerHTML = previews;
+
+      /* ---------- Tjekliste ---------- */
+      ['check1', 'check2', 'check3'].forEach((k) => { if (s[k] === undefined) s[k] = true; });
+      W.save();
+      document.getElementById('checks').innerHTML = (s.checklist || []).map(([text, sub], i) => `
+        <button type="button" class="check${sub ? ' check--top' : ''}" data-toggle="check${i + 1}">
+          <span class="checkbox">${D.icon('check')}</span>
+          <span class="check__body"><span class="check__text">${esc(text)}</span>${sub ? `<span class="check__sub">${esc(sub)}</span>` : ''}</span>
+        </button>`).join('');
+
+      W.sync();
+      D.icons();
+    })();
+  </script>
+</body>
+</html>

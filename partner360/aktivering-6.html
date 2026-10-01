@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Partner360 — Opret ny aktivering · Trin 6</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .opt--h96 { height: 96px; }
+    .price-table .table__cell { white-space: pre; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header id="topbar" class="topbar"></header>
+    <div class="shell">
+      <aside id="sidebar" class="sidebar"></aside>
+      <div class="main">
+      <main class="content">
+        <div class="page-head">
+          <div class="page-head__title">
+            <h1>Opret ny aktivering</h1>
+            <p class="page-head__sub" id="step-subtitle"></p>
+          </div>
+        </div>
+        <div id="stepper" class="stepper"></div>
+
+        <div class="wizard">
+          <div class="wizard__form">
+            <div class="fgroup">
+              <div class="fsection"><div class="fsection__title">Prismodel</div></div>
+              <div class="options" id="models"></div>
+            </div>
+
+            <div class="fgroup">
+              <div class="fsection">
+                <div class="fsection__title">Prisramme</div>
+                <div class="fsection__desc">Prisrammen fastsættes sammen med partneren. Den endelige pris godkendes af partneransvarlig før publicering.</div>
+              </div>
+              <div class="field-row">
+                <label class="field"><span class="field__label">Minimum</span><input class="field__control" type="text" data-field="priceMin" /></label>
+                <label class="field"><span class="field__label">Maksimum</span><input class="field__control" type="text" data-field="priceMax" /></label>
+                <div class="field"><span class="field__label">Valuta</span><button type="button" class="select" data-dropdown="currency" data-options="DKK|EUR|SEK|NOK"><span id="sel-currency"></span><i data-lucide="chevron-down" class="icon"></i></button></div>
+                <div class="field"><span class="field__label">Faktureres</span><button type="button" class="select" data-dropdown="billing" data-options="Ved afslutning|Ved start|50% ved start, 50% ved afslutning|Pr. måned"><span id="sel-billing"></span><i data-lucide="chevron-down" class="icon"></i></button></div>
+              </div>
+            </div>
+
+            <div class="fgroup">
+              <div class="fsection"><div class="fsection__title">Vejledende pris pr. kanal</div></div>
+              <div class="table price-table" id="price-table"></div>
+            </div>
+
+            <div class="card card--p20">
+              <div class="card__title card__title--s" id="value-title"></div>
+              <div class="stats" id="value-stats"></div>
+            </div>
+          </div>
+          <aside id="summary" class="summary"></aside>
+        </div>
+
+      </main>
+      <div id="wizard-footer" class="wizard__footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/wizard.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const D = window.P360, W = D.wizard.init(6);
+      const P = D.pricing[W.partner.id] || D.pricing.salling;
+      const chans = D.channels[W.flow].list;
+
+      document.getElementById('models').innerHTML = P.models.map((m) =>
+        `<button type="button" class="opt opt--h96" data-single="priceModel" data-value="${m.id}">
+          <span class="opt__head"><span class="radio"></span>${D.esc(m.title)}</span>
+          <span class="opt__desc">${D.esc(m.desc)}</span>
+        </button>`).join('');
+      document.getElementById('sel-currency').textContent = W.state.currency;
+      document.getElementById('sel-billing').textContent = W.state.billing;
+
+      const Wd = [250, 210, 160, 110];
+      const sel = chans.filter((c) => (W.state.channels || []).includes(c.id));
+      const isDefault = sel.length === 3 && sel.every((c) => (W.defaults.channels || []).includes(c.id));
+      const total = isDefault ? P.total : sel.reduce((a, c) => a + c.priceNum, 0).toLocaleString('da-DK') + ' kr.';
+      const cell = (v, i, cls) => `<div class="table__cell${cls ? ' ' + cls : ''}" style="width:${Wd[i]}px">${D.esc(v)}</div>`;
+      document.getElementById('price-table').innerHTML =
+        `<div class="table__row table__row--head">${['Kanal', 'Rækkevidde', 'Periode', 'Pris'].map((h, i) => cell(h, i)).join('')}</div>` +
+        sel.map((c) => `<div class="table__row">${cell(c.title, 0, 'table__cell--strong')}${c.priceRow.map((v, i) => cell(v, i + 1)).join('')}</div>`).join('') +
+        `<div class="table__row">${cell('I alt (vejledende)', 0, 'table__cell--strong')}${cell('', 1)}${cell('', 2)}${cell(total, 3, 'table__cell--strong')}</div>`;
+
+      document.getElementById('value-title').textContent = P.valueTitle;
+      document.getElementById('value-stats').innerHTML = P.value.map(([v, l]) => `<div class="stat"><span class="stat__value">${v}</span><span class="stat__label">${l}</span></div>`).join('');
+      W.sync();
+      D.icons();
+    })();
+  </script>
+</body>
+</html>

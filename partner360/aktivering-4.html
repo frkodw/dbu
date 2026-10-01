@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Partner360 — Opret ny aktivering · Trin 4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* ---------- Fælles for trin 4 ---------- */
+    .variant { display: flex; flex-direction: column; gap: 28px; width: 100%; }
+
+    /* Begivenheder i perioden (kort med dato + tekst) */
+    .evcard { padding: 20px; gap: 10px; }
+    .evrow { display: flex; gap: 16px; align-items: flex-start; font-size: 13px; line-height: normal; width: 100%; }
+    .evrow__date { width: 84px; flex-shrink: 0; font-family: var(--font-primary); font-weight: 700; color: var(--foreground); }
+    .evrow__text { flex: 1; min-width: 0; color: var(--muted-foreground); white-space: pre-wrap; overflow-wrap: anywhere; }
+
+    /* ---------- A · Periode (kupon): to måneds-kalendere ---------- */
+    .cals { display: flex; gap: 24px; align-items: stretch; width: 100%; }
+    .cal {
+      flex: 1; min-width: 0; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l);
+      padding: 16px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .cal__head { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .cal__title { font-family: var(--font-primary); font-weight: 700; font-size: 14px; white-space: nowrap; }
+    .cal__nav { width: 16px; height: 16px; display: grid; place-items: center; color: var(--foreground); }
+    .cal__nav .icon { width: 20px; height: 20px; }
+    .cal__grid { display: flex; flex-direction: column; gap: 4px; width: 100%; max-width: 343px; }
+    .cal__row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+    .cal__day {
+      height: 30px; border-radius: var(--radius-s); display: grid; place-items: center;
+      font-size: 13px; color: var(--foreground); background: var(--card); white-space: nowrap;
+    }
+    .cal__day--head { height: 21px; font-size: 11px; color: var(--muted-foreground); background: transparent; }
+    .cal__day--period { background: var(--primary-subtle); color: var(--primary-dark); font-family: var(--font-primary); font-weight: 600; }
+    .cal__day--match { background: var(--primary); color: #fff; font-family: var(--font-primary); font-weight: 600; }
+    .cal__legend { display: flex; align-items: center; gap: 16px; }
+    .cal__legend span { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted-foreground); white-space: nowrap; }
+    .cal__legend i { width: 10px; height: 10px; border-radius: 2px; background: var(--primary-subtle); flex-shrink: 0; }
+    .cal__legend i.is-match { background: var(--primary); }
+
+    /* ---------- B · Events (Skoda): kalender-liste ---------- */
+    .klist { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden; width: 100%; }
+    .klist__toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px; border-bottom: 1px solid var(--border); }
+    .klist__title { display: flex; flex-direction: column; gap: 4px; line-height: normal; }
+    .klist__title b { font-family: var(--font-primary); font-weight: 700; font-size: 16px; white-space: nowrap; }
+    .klist__title span { font-size: 12px; color: var(--muted-foreground); white-space: pre; }
+    .klist__controls { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .fpill {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: var(--radius-pill);
+      background: #fff; border: 1px solid var(--border); font-size: 13px; white-space: nowrap; line-height: normal;
+    }
+    .fpill .icon { width: 16px; height: 16px; }
+    .seg { display: flex; gap: 2px; padding: 2px; border-radius: var(--radius-pill); background: var(--background); }
+    .seg__item { padding: 6px 12px; border-radius: var(--radius-pill); font-size: 12px; white-space: nowrap; line-height: normal; }
+    .seg__item.is-active { background: var(--primary); color: #fff; font-family: var(--font-primary); font-weight: 600; }
+    .klist__nav { display: flex; gap: 4px; }
+    .klist__nav button { width: 30px; height: 30px; border-radius: var(--radius-pill); border: 1px solid var(--border); display: grid; place-items: center; color: var(--foreground); }
+    .klist__nav .icon { width: 16px; height: 16px; }
+    .klist__month {
+      padding: 6px 20px; background: var(--background); font-family: var(--font-primary); font-weight: 600;
+      font-size: 11px; letter-spacing: .8px; text-transform: uppercase; color: var(--muted-foreground); white-space: nowrap;
+    }
+    .klist__day { display: flex; gap: 16px; align-items: flex-start; padding: 12px 20px; border-bottom: 1px solid var(--border); }
+    .klist__day:last-child { border-bottom: 0; }
+    .klist__date { width: 56px; flex-shrink: 0; display: flex; flex-direction: column; line-height: normal; white-space: nowrap; }
+    .klist__date b { font-family: var(--font-primary); font-weight: 700; font-size: 18px; }
+    .klist__date span { font-size: 10px; letter-spacing: .5px; text-transform: uppercase; color: var(--muted-foreground); }
+    .klist__events { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+    .klist__event { display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left; }
+    .klist__event[data-multi] { cursor: pointer; }
+    .klist__dot { width: 8px; height: 14px; flex-shrink: 0; display: grid; place-items: center; }
+    .klist__dot::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--input-border); }
+    .klist__dot--red::before { background: var(--primary); }
+    .klist__time { width: 70px; flex-shrink: 0; font-size: 11px; color: var(--muted-foreground); line-height: normal; }
+    .klist__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; line-height: normal; }
+    .klist__head { display: flex; align-items: center; gap: 8px; }
+    .klist__name { font-weight: 500; font-size: 14px; color: var(--foreground); white-space: pre; }
+    .tagchip { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: var(--radius-s); background: var(--background); font-weight: 500; font-size: 12px; color: var(--muted-foreground); white-space: nowrap; }
+    .klist__meta { font-size: 12px; color: var(--muted-foreground); white-space: pre; }
+    .klist__event .checkbox { margin-left: auto; }
+
+    @media (max-width: 1200px) {
+      .klist__name, .klist__meta, .klist__title span { white-space: normal; }
+    }
+    @media (max-width: 1024px) {
+      .cals { flex-direction: column; }
+      .cal__grid { max-width: none; }
+      .klist__toolbar { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header id="topbar" class="topbar"></header>
+    <div class="shell">
+      <aside id="sidebar" class="sidebar"></aside>
+      <div class="main">
+      <main class="content">
+        <div class="page-head">
+          <div class="page-head__title">
+            <h1>Opret ny aktivering</h1>
+            <p class="page-head__sub" id="step-subtitle"></p>
+          </div>
+        </div>
+        <div id="stepper" class="stepper"></div>
+
+        <div class="wizard">
+          <div class="wizard__form">
+
+            <!-- A · Periode (kupon / Salling) -->
+            <section id="v-kupon" class="variant" hidden>
+              <div class="fgroup">
+                <div class="fsection">
+                  <div class="fsection__title">Forslag til perioder</div>
+                  <div class="fsection__desc">Baseret på landsholdets kampprogram og DBU-events i perioden.</div>
+                </div>
+                <div class="chips" id="period-chips"></div>
+              </div>
+
+              <div class="field-row">
+                <label class="field"><span class="field__label">Startdato</span><input class="field__control" type="text" data-field="periodStart" /></label>
+                <label class="field"><span class="field__label">Slutdato</span><input class="field__control" type="text" data-field="periodEnd" /></label>
+                <label class="field"><span class="field__label">Varighed</span><input class="field__control" type="text" data-field="periodDuration" /></label>
+              </div>
+
+              <div class="cals" id="cals"></div>
+
+              <div class="card evcard">
+                <div class="card__title card__title--s">Begivenheder i perioden</div>
+                <div id="period-events" style="display:contents"></div>
+              </div>
+            </section>
+
+            <!-- B · Events (Skoda) -->
+            <section id="v-event" class="variant" hidden>
+              <div class="fgroup">
+                <div class="fsection">
+                  <div class="fsection__title">Forslag til events</div>
+                  <div class="fsection__desc">Baseret på DBU's stævnekalender i foråret og hvor børnefamilier (U6-U12) møder talstærkt op.</div>
+                </div>
+                <div class="chips" id="event-chips"></div>
+              </div>
+
+              <div class="field-row">
+                <label class="field"><span class="field__label">Startdato</span><input class="field__control" type="text" data-field="periodStart" /></label>
+                <label class="field"><span class="field__label">Slutdato</span><input class="field__control" type="text" data-field="periodEnd" /></label>
+                <label class="field"><span class="field__label">Valgte events</span><input class="field__control" type="text" data-field="periodDuration" /></label>
+              </div>
+
+              <div class="card evcard">
+                <div class="card__title card__title--s">DBU begivenheder i perioden relevant for den valgte målgruppe</div>
+                <div id="relevant-events" style="display:contents"></div>
+              </div>
+
+              <div class="klist">
+                <div class="klist__toolbar">
+                  <div class="klist__title"><b>Kalender</b><span id="klist-meta"></span></div>
+                  <div class="klist__controls">
+                    <button type="button" class="fpill" data-dropdown="eventType" data-options="Alle typer|Stævne|Info"><span>Alle typer</span> <i data-lucide="chevron-down" class="icon"></i></button>
+                    <div class="seg">
+                      <button type="button" class="seg__item is-active">Liste</button>
+                      <button type="button" class="seg__item">Måned</button>
+                    </div>
+                    <div class="klist__nav">
+                      <button type="button" aria-label="Forrige"><i data-lucide="chevron-left" class="icon"></i></button>
+                      <button type="button" aria-label="Næste"><i data-lucide="chevron-right" class="icon"></i></button>
+                    </div>
+                  </div>
+                </div>
+                <div id="klist-body"></div>
+              </div>
+            </section>
+
+          </div>
+          <aside id="summary" class="summary"></aside>
+        </div>
+
+      </main>
+      <div id="wizard-footer" class="wizard__footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/wizard.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const D = window.P360, W = D.wizard.init(4), esc = D.esc, icon = D.icon;
+      const isEvent = W.flow === 'event';
+      document.getElementById(isEvent ? 'v-event' : 'v-kupon').hidden = false;
+
+      const chips = (list) => list.map((s) => `<button type="button" class="chip" data-single="periodSuggestion" data-value="${esc(s)}">${esc(s)}</button>`).join('');
+      const evrows = (rows) => rows.map(([d, t]) => `<div class="evrow"><span class="evrow__date">${esc(d)}</span><span class="evrow__text">${esc(t)}</span></div>`).join('');
+
+      if (!isEvent) {
+        /* ---------- A · Periode ---------- */
+        const P = D.periode;
+        document.getElementById('period-chips').innerHTML = chips(P.suggestions);
+        document.getElementById('period-events').innerHTML = evrows(P.events);
+
+        function month(m) {
+          const first = new Date(m.year, m.month, 1);
+          const days = new Date(m.year, m.month + 1, 0).getDate();
+          const offset = (first.getDay() + 6) % 7; // mandag = 0
+          const cells = [];
+          for (let i = 0; i < offset; i++) cells.push('');
+          for (let d = 1; d <= days; d++) cells.push(d);
+          while (cells.length % 7) cells.push('');
+          const rows = [];
+          for (let i = 0; i < cells.length; i += 7) rows.push(cells.slice(i, i + 7));
+          const day = (d) => {
+            if (d === '') return `<span class="cal__day"></span>`;
+            const cls = m.matchDays.includes(d) ? ' cal__day--match' : ' cal__day--period';
+            return `<span class="cal__day${cls}">${d}</span>`;
+          };
+          return `<div class="cal">
+            <div class="cal__head">
+              <button type="button" class="cal__nav" aria-label="Forrige måned">${icon('chevron-left')}</button>
+              <span class="cal__title">${esc(m.title)}</span>
+              <button type="button" class="cal__nav" aria-label="Næste måned">${icon('chevron-right')}</button>
+            </div>
+            <div class="cal__grid">
+              <div class="cal__row">${['M', 'T', 'O', 'T', 'F', 'L', 'S'].map((h) => `<span class="cal__day cal__day--head">${h}</span>`).join('')}</div>
+              ${rows.map((r) => `<div class="cal__row">${r.map(day).join('')}</div>`).join('')}
+            </div>
+            <div class="cal__legend"><span><i></i>Valgt periode</span><span><i class="is-match"></i>Landskamp</span></div>
+          </div>`;
+        }
+        document.getElementById('cals').innerHTML = P.months.map(month).join('');
+      } else {
+        /* ---------- B · Events ---------- */
+        const E = D.events;
+        document.getElementById('relevant-events').innerHTML = evrows(E.relevant);
+        document.getElementById('event-chips').innerHTML = chips(E.suggestions);
+        document.getElementById('klist-meta').textContent = E.calendarMeta;
+
+        const item = (it) => {
+          const sel = ` data-multi="events" data-value="${esc(it.id)}" data-tag="${esc(it.tag)}"`;
+          return `<div class="klist__event"${sel}>
+            <span class="klist__dot${it.dot === 'red' ? ' klist__dot--red' : ''}"></span>
+            <span class="klist__time">${esc(it.time)}</span>
+            <span class="klist__body">
+              <span class="klist__head"><span class="klist__name">${esc(it.title)}</span><span class="tagchip">${esc(it.tag)}</span></span>
+              <span class="klist__meta">${esc(it.meta)}</span>
+            </span>
+            <span class="checkbox">${icon('check')}</span>
+          </div>`;
+        };
+        document.getElementById('klist-body').innerHTML = E.calendar.map((mo) =>
+          `<div class="klist__month">${esc(mo.month)}</div>` +
+          mo.days.map((d) => `<div class="klist__day">
+            <div class="klist__date"><b>${esc(d.day)}</b><span>${esc(d.dow)}</span></div>
+            <div class="klist__events">${d.items.map(item).join('')}</div>
+          </div>`).join('')
+        ).join('');
+
+        /* Live-tælling af valgte events + typefilter */
+        const allItems = E.calendar.flatMap((mo) => mo.days.flatMap((d) => d.items));
+        function renderCount() {
+          const sel = (W.state.events || []);
+          const n = sel.length;
+          const staevner = allItems.filter((it) => it.tag === 'Stævne' && sel.includes(it.id)).length;
+          const f = document.querySelector('[data-field="periodDuration"]');
+          if (f) { f.value = `${n} ${n === 1 ? 'begivenhed' : 'begivenheder'}`; W.state.periodDuration = f.value; }
+          document.getElementById('klist-meta').textContent = `1. mar til 1. jun 2027  ·  ${allItems.length} begivenheder  ·  ${staevner} ${staevner === 1 ? 'stævne' : 'stævner'} valgt`;
+        }
+        function applyTypeFilter() {
+          const t = W.state.eventType || 'Alle typer';
+          document.querySelectorAll('.klist__event').forEach((el) => { el.hidden = t !== 'Alle typer' && el.getAttribute('data-tag') !== t; });
+          document.querySelectorAll('.klist__day').forEach((d) => { d.hidden = !Array.from(d.querySelectorAll('.klist__event')).some((el) => !el.hidden); });
+        }
+        W.onChange((k) => {
+          if (k === 'events') { if (!W.state.eventsTouched) W.state.eventsTouched = true; renderCount(); W.save(); W.renderSummary(); }
+          if (k === 'eventType') applyTypeFilter();
+        });
+        if (W.state.eventsTouched) renderCount();
+        applyTypeFilter();
+      }
+
+      W.sync();
+      D.icons();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Partner360 — Opret ny aktivering · Trin 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* ---- Senest anvendte segmenter ---- */
+    .seg-card { padding: 20px; gap: 16px; }
+    .seg-card__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .seg-card__title { display: flex; flex-direction: column; gap: 4px; white-space: nowrap; }
+    .seg-link {
+      display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+      font-family: var(--font-secondary); font-weight: 600; font-size: 14px; color: var(--primary);
+    }
+    .seg-link .icon { width: 16px; height: 16px; }
+    .segments { display: flex; gap: 12px; align-items: stretch; width: 100%; }
+    .seg {
+      flex: 1; min-width: 0; padding: 16px; border-radius: var(--radius-l);
+      background: var(--card); border: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+    }
+    .seg__title { font-family: var(--font-primary); font-weight: 700; font-size: 14px; }
+    .seg__source { font-size: 11px; color: var(--muted-foreground); white-space: pre-wrap; }
+    .seg__tags { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; }
+    .tag {
+      display: inline-flex; align-items: center; padding: 4px 10px; border-radius: var(--radius-s);
+      background: var(--background); font-weight: 500; font-size: 12px; color: var(--muted-foreground); white-space: nowrap;
+    }
+    .seg__spacer { height: 4px; }
+    .seg__size { font-family: var(--font-primary); font-weight: 700; font-size: 13px; white-space: nowrap; }
+
+    /* ---- Opret segment header ---- */
+    .seg-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; }
+    .seg-head__actions { display: flex; gap: 8px; align-items: flex-start; }
+
+    /* ---- Roller ---- */
+    .roles { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-l); overflow: hidden; display: flex; flex-direction: column; }
+    .role { display: flex; align-items: flex-start; gap: 24px; padding: 14px 20px; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .role:last-child { border-bottom: 0; }
+    .role__left { flex: 1; min-width: 0; display: flex; align-items: flex-start; gap: 12px; }
+    .role__body { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+    .role__title { font-weight: 500; font-size: 14px; white-space: nowrap; }
+    .role__desc { font-size: 12px; color: var(--muted-foreground); }
+    .role__sub { display: flex; gap: 6px; padding-top: 4px; flex-wrap: wrap; }
+    .role__size { font-size: 12px; color: var(--muted-foreground); white-space: nowrap; }
+
+    /* ---- Geografi ---- */
+    .geo-fields { display: flex; gap: 16px; width: 100%; }
+    .geo-fields > .field { flex: 1; min-width: 0; }
+    .geo-fields .select { gap: 0; }
+    .select__value { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tip { font-size: 12px; color: var(--muted-foreground); }
+
+    /* ---- Interesser ---- */
+    .igroups { display: flex; flex-direction: column; width: 100%; }
+    .igroup { display: flex; align-items: flex-start; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .igroup:last-child { border-bottom: 0; }
+    .igroup__label { width: 150px; flex-shrink: 0; font-size: 12px; color: var(--muted-foreground); }
+    .igroup .chips { flex: 1; min-width: 0; align-items: flex-start; }
+    .chip--add { color: var(--muted-foreground); cursor: default; }
+
+    /* ---- Aldersspænd / range slider ---- */
+    .range { position: relative; height: 64px; width: 100%; overflow: hidden; }
+    .range__track { position: absolute; left: 0; right: 0; top: 29px; height: 6px; border-radius: var(--radius-pill); background: var(--border); }
+    .range__fill { position: absolute; top: 29px; height: 6px; border-radius: var(--radius-pill); background: var(--primary); }
+    .range__handle {
+      position: absolute; top: 23px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%;
+      background: #fff; border: 2px solid var(--primary); box-shadow: 0 1px 2px rgba(0,0,0,.12);
+    }
+    .range__val { position: absolute; top: 2px; transform: translateX(-50%); font-family: var(--font-primary); font-weight: 600; font-size: 12px; white-space: nowrap; }
+    .range__tick { position: absolute; top: 44px; transform: translateX(-50%); font-size: 11px; color: var(--muted-foreground); white-space: nowrap; }
+    .range__val--end { transform: none; left: auto !important; right: 0; }
+    .range__tick--first { transform: none; left: 0 !important; }
+    .range__tick--last { transform: none; left: auto !important; right: 0; }
+
+    @media (max-width: 1100px) {
+      .segments { flex-wrap: wrap; }
+      .seg { flex-basis: calc(50% - 6px); }
+      .geo-fields { flex-wrap: wrap; }
+      .geo-fields > .field { flex-basis: calc(50% - 8px); }
+    }
+    @media (max-width: 720px) {
+      .seg-card__head, .seg-head { flex-direction: column; align-items: flex-start; }
+      .seg { flex-basis: 100%; }
+      .geo-fields > .field { flex-basis: 100%; }
+      .role { flex-direction: column; gap: 8px; }
+      .role__title { white-space: normal; }
+      .igroup { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header id="topbar" class="topbar"></header>
+    <div class="shell">
+      <aside id="sidebar" class="sidebar"></aside>
+      <div class="main">
+      <main class="content">
+        <div class="page-head">
+          <div class="page-head__title">
+            <h1>Opret ny aktivering</h1>
+            <p class="page-head__sub" id="step-subtitle"></p>
+          </div>
+        </div>
+        <div id="stepper" class="stepper"></div>
+
+        <div class="wizard">
+          <div class="wizard__form">
+
+            <!-- Senest anvendte segmenter -->
+            <div class="card seg-card">
+              <div class="seg-card__head">
+                <div class="seg-card__title">
+                  <div class="card__title">Senest anvendte segmenter</div>
+                  <div class="card__desc">Genbrug et segment fra tidligere aktiveringer, eller byg dit eget nedenfor.</div>
+                </div>
+                <a class="seg-link" href="#">Se alle gemte segmenter (12) <i data-lucide="arrow-right" class="icon"></i></a>
+              </div>
+              <div class="segments" id="segments"></div>
+            </div>
+
+            <div class="or" style="gap:12px">eller</div>
+
+            <!-- Opret segment -->
+            <div class="seg-head">
+              <div class="seg-card__title">
+                <div class="card__title">Opret segment</div>
+                <div class="card__desc" id="seg-summary"></div>
+              </div>
+              <div class="seg-head__actions">
+                <button type="button" class="btn btn--ghost btn--sm">Navngiv og gem segment</button>
+                <button type="button" class="btn btn--ghost btn--sm" data-reset>Nulstil</button>
+              </div>
+            </div>
+
+            <!-- Rolle i fodbolden -->
+            <div class="fgroup">
+              <div class="fsection">
+                <div class="fsection__title">Rolle i fodbolden</div>
+                <div class="fsection__desc">Del målgruppen op efter relation til spillet. Budskab og kanal er forskellige for hver rolle.</div>
+              </div>
+              <div class="roles" id="roles"></div>
+            </div>
+
+            <!-- Geografi -->
+            <div class="fgroup">
+              <div class="fsection">
+                <div class="fsection__title">Geografi</div>
+                <div class="fsection__desc">Byg geolister ud fra DBU’s 1.600+ klubadresser, eller vælg region og postnumre.</div>
+              </div>
+              <div class="chips" id="geo"></div>
+              <div class="geo-fields">
+                <div class="field">
+                  <span class="field__label">Klubudvalg</span>
+                  <button type="button" class="select" data-dropdown="clubSelect" data-options="Alle klubber i Nordjylland (212)|Alle klubber i Danmark (1.612)|Ungdomsklubber U6-U15 (640)|Klubber i Hovedstaden (298)|Serie- og breddeklubber (910)"><span class="select__value" id="sel-club"></span><i data-lucide="chevron-down" class="icon"></i></button>
+                </div>
+                <div class="field">
+                  <span class="field__label">Radius om baner og stadions</span>
+                  <button type="button" class="select" data-dropdown="radius" data-options="5 km|10 km|15 km|25 km|50 km"><span class="select__value" id="sel-radius"></span><i data-lucide="chevron-down" class="icon"></i></button>
+                </div>
+                <div class="field">
+                  <span class="field__label">Områdetype</span>
+                  <button type="button" class="select" data-dropdown="areaType" data-options="Landdistrikter og mindre byer|Alle områdetyper|Storbyer|Forstæder|Provinsbyer"><span class="select__value" id="sel-area"></span><i data-lucide="chevron-down" class="icon"></i></button>
+                </div>
+              </div>
+              <p class="tip">Tip: Landdistrikter og mindre byer er i praksis næsten rent breddefodbold. Radius om klubberne rammer forældre, tilskuere og lokale fans der bor tæt på banen.</p>
+            </div>
+
+            <!-- Interesse og adfærd -->
+            <div class="fgroup">
+              <div class="fsection">
+                <div class="fsection__title">Interesse og adfærd</div>
+                <div class="fsection__desc">Bruges som interesse-targeting. Kombineres med rolle og geografi.</div>
+              </div>
+              <div class="igroups" id="interests"></div>
+            </div>
+
+            <!-- Aldersspænd -->
+            <div class="fgroup">
+              <div class="fsection">
+                <div class="fsection__title">Aldersspænd</div>
+                <div class="fsection__desc">Rollevalget foreslår et spænd. Justér manuelt for betalte kanaler.</div>
+              </div>
+              <div class="chips" id="ages"></div>
+              <div class="range" id="range">
+                <div class="range__track"></div>
+                <div class="range__fill" id="range-fill"></div>
+                <div class="range__handle" id="range-h1"></div>
+                <div class="range__handle" id="range-h2"></div>
+                <span class="range__val" id="range-v1"></span>
+                <span class="range__val" id="range-v2"></span>
+                <span class="range__tick range__tick--first">6</span>
+                <span class="range__tick" data-age="18">18</span>
+                <span class="range__tick" data-age="30">30</span>
+                <span class="range__tick" data-age="40">40</span>
+                <span class="range__tick" data-age="50">50</span>
+                <span class="range__tick" data-age="60">60</span>
+                <span class="range__tick range__tick--last">70+</span>
+              </div>
+            </div>
+
+            <!-- Estimat -->
+            <div class="card card--p20">
+              <div class="stats" id="stats"></div>
+            </div>
+
+          </div>
+          <aside id="summary" class="summary"></aside>
+        </div>
+
+      </main>
+      <div id="wizard-footer" class="wizard__footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/wizard.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const D = window.P360, esc = D.esc, A = D.audience;
+      const W = D.wizard.init(2);
+      const pid = W.partner.id;
+
+      /* Senest anvendte segmenter */
+      document.getElementById('segments').innerHTML = A.savedSegments.map((s) =>
+        `<div class="seg">
+          <div class="seg__title">${esc(s.title)}</div>
+          <div class="seg__source">${esc(s.source[pid] || s.source.salling)}</div>
+          <div class="seg__tags">${s.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+          <div class="seg__spacer"></div>
+          <div class="seg__size">${esc(s.size)}</div>
+          <button type="button" class="btn btn--ghost btn--sm">Brug segment</button>
+        </div>`).join('');
+
+      /* Roller */
+      document.getElementById('roles').innerHTML = A.roles.map((r) =>
+        `<div class="role" data-multi="roles" data-value="${r.id}">
+          <div class="role__left">
+            <span class="checkbox">${D.icon('check')}</span>
+            <div class="role__body">
+              <div class="role__title">${esc(r.title)}</div>
+              <div class="role__desc">${esc(r.desc)}</div>
+              ${r.sub ? `<div class="role__sub">${r.sub.map((s) => `<button type="button" class="chip" data-single="roleSub" data-value="${esc(s)}">${esc(s)}</button>`).join('')}</div>` : ''}
+            </div>
+          </div>
+          <div class="role__size">${esc(r.size)}</div>
+        </div>`).join('');
+
+      /* Geografi */
+      document.getElementById('geo').innerHTML = A.geo.map((g) =>
+        `<button type="button" class="chip" data-single="geo" data-value="${esc(g)}">${esc(g)}</button>`).join('');
+      function renderSelects() {
+        document.getElementById('sel-club').textContent = W.state.clubSelect;
+        document.getElementById('sel-radius').textContent = W.state.radius;
+        document.getElementById('sel-area').textContent = W.state.areaType;
+      }
+
+      /* Interesser (multi-select pr. gruppe, egen state: interests{label:[...]}) */
+      function renderInterests() {
+        const sel = W.state.interests || {};
+        document.getElementById('interests').innerHTML = A.interests.map((g) =>
+          `<div class="igroup">
+            <div class="igroup__label">${esc(g.label)}</div>
+            <div class="chips">
+              ${g.chips.map((c) => `<button type="button" class="chip${(sel[g.label] || []).includes(c) ? ' is-selected' : ''}" data-interest="${esc(g.label)}" data-value="${esc(c)}">${esc(c)}</button>`).join('')}
+              <span class="chip chip--add">+ Tilføj</span>
+            </div>
+          </div>`).join('');
+      }
+      document.getElementById('interests').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-interest]'); if (!b) return;
+        const g = b.getAttribute('data-interest'), v = b.getAttribute('data-value');
+        const obj = JSON.parse(JSON.stringify(W.state.interests || {}));
+        const arr = obj[g] || (obj[g] = []);
+        const i = arr.indexOf(v); if (i >= 0) arr.splice(i, 1); else arr.push(v);
+        b.classList.toggle('is-selected', i < 0);
+        W.set('interests', obj);
+      });
+
+      /* Aldersspænd */
+      document.getElementById('ages').innerHTML = A.ageRanges.map((a) =>
+        `<button type="button" class="chip" data-single="ageRange" data-value="${a.id}">${esc(a.label)}</button>`).join('');
+
+      /* Range slider: aksen følger Figma (778 px bred, ankre pr. alder) */
+      const anchors = [[6, 4], [18, 130], [30, 258], [40, 388], [50, 518], [60, 647], [70, 765]];
+      function pct(age) {
+        age = Math.max(6, Math.min(70, Number(age)));
+        for (let i = 1; i < anchors.length; i++) {
+          if (age <= anchors[i][0]) {
+            const [a0, p0] = anchors[i - 1], [a1, p1] = anchors[i];
+            return ((p0 + (p1 - p0) * (age - a0) / (a1 - a0)) / 778 * 100) + '%';
+          }
+        }
+        return '100%';
+      }
+      document.querySelectorAll('.range__tick[data-age]').forEach((t) => { t.style.left = pct(t.getAttribute('data-age')); });
+      function renderRange() {
+        const lo = W.state.ageMin, hi = W.state.ageMax, l = pct(lo), h = pct(hi);
+        const fill = document.getElementById('range-fill');
+        fill.style.left = l; fill.style.width = `calc(${h} - ${l})`;
+        document.getElementById('range-h1').style.left = l;
+        document.getElementById('range-h2').style.left = h;
+        const v1 = document.getElementById('range-v1'), v2 = document.getElementById('range-v2');
+        v1.style.left = l; v1.textContent = `${lo} år`;
+        v2.style.left = h; v2.textContent = `${hi >= 70 ? '70+' : hi} år`; v2.classList.toggle('range__val--end', hi >= 70);
+      }
+
+      /* Opret segment-undertekst */
+      function renderSegSummary() {
+        const s = W.state;
+        const n = (s.roles || []).length;
+        const ints = Object.values(s.interests || {}).reduce((sum, a) => sum + a.length, 0);
+        const geo = s.geo === 'Radius om klubber' ? `${s.radius} om 212 klubber` : s.geo;
+        document.getElementById('seg-summary').textContent =
+          `${n} ${n === 1 ? 'rolle' : 'roller'} · ${geo} · ${ints} ${ints === 1 ? 'interesse' : 'interesser'} · ${s.ageMin} til ${s.ageMax} år`;
+      }
+
+      /* Estimat */
+      document.getElementById('stats').innerHTML = A.stats.map(([v, l]) =>
+        `<div class="stat"><span class="stat__value">${esc(v)}</span><span class="stat__label">${esc(l)}</span></div>`).join('');
+
+      W.onChange((k) => {
+        if (k === 'roles' && !W.state.audienceTouched) W.set('audienceTouched', true);
+        if (k === 'ageRange') {
+          const a = A.ageRanges.find((x) => x.id === W.state.ageRange);
+          if (a) { W.state.ageMin = a.min; W.set('ageMax', a.max); }
+        }
+        if (k === 'ageMax' || k === 'ageMin') renderRange();
+        if (k === 'radius' || k === 'clubSelect' || k === 'areaType') renderSelects();
+        renderSegSummary();
+      });
+
+      renderInterests();
+      renderSelects();
+      renderRange();
+      renderSegSummary();
+      W.sync();
+      D.icons();
+    })();
+  </script>
+</body>
+</html>

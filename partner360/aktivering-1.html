@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBU Partner360 — Opret ny aktivering · Trin 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header id="topbar" class="topbar"></header>
+    <div class="shell">
+      <aside id="sidebar" class="sidebar"></aside>
+      <div class="main">
+      <main class="content">
+        <div class="page-head">
+          <div class="page-head__title">
+            <h1>Opret ny aktivering</h1>
+            <p class="page-head__sub" id="step-subtitle"></p>
+          </div>
+        </div>
+        <div id="stepper" class="stepper"></div>
+
+        <div class="wizard">
+          <div class="wizard__form">
+            <label class="field">
+              <span class="field__label">Navn på aktivering</span>
+              <input class="field__control" type="text" data-field="name" />
+            </label>
+
+            <div class="fgroup">
+              <div class="fsection"><div class="fsection__title">Aktiveringstype</div></div>
+              <div class="options" id="types"></div>
+            </div>
+
+            <label class="field">
+              <span class="field__label">Beskrivelse</span>
+              <textarea class="field__control" data-field="description"></textarea>
+            </label>
+
+            <div class="fgroup">
+              <div class="fsection">
+                <div class="fsection__title">Mål for aktiveringen</div>
+                <div class="fsection__desc">Vælg hvad succes måles på. Målet vises i performance-overblikket når aktiveringen er live.</div>
+              </div>
+              <div class="choice-row" id="goals"></div>
+              <div class="field-row">
+                <label class="field"><span class="field__label">Målværdi</span><input class="field__control" type="text" data-field="goalValue" /></label>
+                <label class="field"><span class="field__label">Enhed</span><input class="field__control" type="text" data-field="goalUnit" /></label>
+                <label class="field"><span class="field__label">Sekundært mål (valgfrit)</span><input class="field__control" type="text" data-field="goalSecondary" id="goal-secondary" /></label>
+              </div>
+            </div>
+          </div>
+          <aside id="summary" class="summary"></aside>
+        </div>
+
+      </main>
+      <div id="wizard-footer" class="wizard__footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/wizard.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const D = window.P360, W = D.wizard.init(1);
+      document.getElementById('types').innerHTML = D.activationTypes.map((t) =>
+        `<button type="button" class="opt" data-single="type" data-value="${t.id}">
+          <span class="opt__head"><span class="radio"></span>${D.esc(t.title)}</span>
+          <span class="opt__desc">${D.esc(t.desc)}</span>
+        </button>`).join('');
+      document.getElementById('goals').innerHTML = D.goals.map((g) =>
+        `<button type="button" class="choice" data-single="goal" data-value="${g.id}"><span class="radio"></span>${D.esc(g.label)}</button>`).join('');
+      document.getElementById('goal-secondary').placeholder = W.state.goalSecondaryPlaceholder;
+      W.onChange((k, v) => {
+        if (k !== 'goal') return;
+        const unit = v === W.defaults.goal ? W.defaults.goalUnit : (D.goals.find((g) => g.id === v) || {}).unit;
+        document.querySelector('[data-field="goalUnit"]').value = unit;
+        W.set('goalUnit', unit);
+      });
+      W.sync();
+      D.icons();
+    })();
+  </script>
+</body>
+</html>
